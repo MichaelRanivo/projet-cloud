@@ -40,8 +40,10 @@ jobs:
         run: cd ../T-CLO-901-LYO_13/sample-app/
 
       - name: Composer
-        run: composer install 
-        
+        run: |
+          ls 
+          composer install 
+
 #       - cd sample-app/
 #       - cat ${ENV} > .env
 #       - composer install

@@ -6,7 +6,16 @@ jobs:
     runs-on: ubuntu-20.04
     #need php8
     steps:
+      #Cette ligne nous sert à extraire le repo sur notre workflow  
       - uses: actions/checkout@v3
+
+      #cette ligne nous sert à setup PHP sur notre workflow
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      - run: php --version
       - run: pwd
       - run: ls ../T-CLO-901-LYO_13/
 #       - cd sample-app/

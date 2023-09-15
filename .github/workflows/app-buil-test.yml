@@ -33,8 +33,11 @@ jobs:
       #   with:
       #     php-version: '8.2'
 
-      - run: php --version
+      - name: Check the version of PHP 
+        run: php --version
 
+      - name: Composer 
+        run: composer install 
 #       - cd sample-app/
 #       - cat ${ENV} > .env
 #       - composer install

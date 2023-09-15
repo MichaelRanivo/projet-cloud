@@ -37,7 +37,7 @@ jobs:
         run: php --version
 
       - name: Go to the directory
-        run: cd ../T-CLO-901-LYO_13/sample-app/
+        run: cd sample-app/
 
       - name: Composer
         run: |

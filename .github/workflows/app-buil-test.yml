@@ -7,7 +7,7 @@ jobs:
     #need php8
     steps:
       - run: pwd
-      - run: ls 
+      - run: ls ../ 
 #       - cd sample-app/
 #       - cat ${ENV} > .env
 #       - composer install

@@ -3,7 +3,8 @@ run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
 on: [push]
 jobs:
   build-sample-app:
-    runs-on: registry.infra.connectwork.fr/expressweb/devops/php8:main
+    runs-on: ubuntu-20.04
+    #need php8
     steps:
       - run: pwd
       - run: ls 

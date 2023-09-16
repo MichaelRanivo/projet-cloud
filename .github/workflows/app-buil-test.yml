@@ -47,7 +47,7 @@ jobs:
       - name: Build Laravel Application
         run: |
           cd sample-app/
-          php artisan build
+          php artisan migrate
 
 #       - cd sample-app/
 #       - cat ${ENV} > .env

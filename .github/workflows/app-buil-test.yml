@@ -49,6 +49,12 @@ jobs:
         run: |
           cd sample-app/
           npm run dev
+      
+      - name: Upload artefact
+        uses: actions/upload-artifact@v3
+        with:
+          name: sample-app-builded
+          path: sample-app/
 
 #       - cd sample-app/
 #       - cat ${ENV} > .env
@@ -75,6 +81,10 @@ jobs:
       - name: Check the version of PHP 
         run: php --version
 
+      - uses: actions/download-artifact@v3
+        with:
+          name: sample-app-builded
+
       # - name: Create .env file
       #   #Définir les variable d'env
       #   env:
@@ -88,15 +98,11 @@ jobs:
       #     cd sample-app/
       #     echo ${}
 
-      - name: Composer
-        run: |
-          cd sample-app/
-          npm install
-
       - name: Test Laravel Application
         run: |
           cd sample-app/
           php artisan test
+
 # test_sample-app:
 #   stage: test
 #   image: registry.infra.connectwork.fr/expressweb/devops/php8:main

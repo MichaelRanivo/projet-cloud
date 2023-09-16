@@ -43,11 +43,12 @@ jobs:
         run: |
           cd sample-app/
           composer install 
+          npm install
 
       - name: Build Laravel Application
         run: |
           cd sample-app/
-          php artisan migrate
+          npm run dev
 
 #       - cd sample-app/
 #       - cat ${ENV} > .env

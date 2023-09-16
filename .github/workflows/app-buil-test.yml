@@ -45,7 +45,9 @@ jobs:
           composer install 
 
       - name: Build Laravel Application
-        run: php artisan build # Replace with your build command
+        run: |
+          cd sample-app/
+          php artisan build
 
 #       - cd sample-app/
 #       - cat ${ENV} > .env

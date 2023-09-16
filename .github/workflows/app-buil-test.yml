@@ -57,6 +57,46 @@ jobs:
 #       paths:
 #         - sample-app/
 
+  test-sample-app:
+    #utiliser l'os Ubuntut pour le job
+    runs-on: ubuntu-20.04 
+    #Installer PHP8, composer install, créer un artefact
+    steps:
+      #Cette ligne nous sert à extraire le repo sur notre workflow  
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # #cette ligne nous sert à setup PHP sur notre workflow
+      # - name: Install PHP
+      #   uses: shivammathur/setup-php@v2
+      #   with:
+      #     php-version: '8.2'
+
+      - name: Check the version of PHP 
+        run: php --version
+
+      # - name: Create .env file
+      #   #Définir les variable d'env
+      #   env:
+      #     DB_CONNECTION: mysql
+      #     DB_HOST: xxx.xxx.xxx.xxx
+      #     DB_PORT: 3306
+      #     DB_DATABASE: db_name
+      #     DB_USERNAME: username
+      #     DB_PASSWORD: passwd
+      #   run: |
+      #     cd sample-app/
+      #     echo ${}
+
+      - name: Composer
+        run: |
+          cd sample-app/
+          npm install
+
+      - name: Test Laravel Application
+        run: |
+          cd sample-app/
+          php artisant test
 # test_sample-app:
 #   stage: test
 #   image: registry.infra.connectwork.fr/expressweb/devops/php8:main

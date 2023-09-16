@@ -96,7 +96,7 @@ jobs:
       - name: Test Laravel Application
         run: |
           cd sample-app/
-          php artisant test
+          php artisan test
 # test_sample-app:
 #   stage: test
 #   image: registry.infra.connectwork.fr/expressweb/devops/php8:main

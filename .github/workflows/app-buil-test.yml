@@ -52,6 +52,14 @@ jobs:
 
       - name: List file
         run: ls -al sample-app/
+
+      - name: Test 
+        run: |
+          cd sample-app/
+          phpunit
+
+      - name: List file
+        run: ls -al sample-app/
       
       # - name: Upload artefact
       #   uses: actions/upload-artifact@v3
@@ -66,46 +74,46 @@ jobs:
 #       paths:
 #         - sample-app/
 
-  test-sample-app:
-    needs: build-sample-app
-    #utiliser l'os Ubuntut pour le job
-    runs-on: ubuntu-20.04 
-    #Installer PHP8, composer install, créer un artefact
-    steps:
-      #Cette ligne nous sert à extraire le repo sur notre workflow  
-      - name: Checkout repository
-        uses: actions/checkout@v3
+  # test-sample-app:
+  #   needs: build-sample-app
+  #   #utiliser l'os Ubuntut pour le job
+  #   runs-on: ubuntu-20.04 
+  #   #Installer PHP8, composer install, créer un artefact
+  #   steps:
+  #     #Cette ligne nous sert à extraire le repo sur notre workflow  
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v3
 
-      # #cette ligne nous sert à setup PHP sur notre workflow
-      # - name: Install PHP
-      #   uses: shivammathur/setup-php@v2
-      #   with:
-      #     php-version: '8.2'
+  #     # #cette ligne nous sert à setup PHP sur notre workflow
+  #     # - name: Install PHP
+  #     #   uses: shivammathur/setup-php@v2
+  #     #   with:
+  #     #     php-version: '8.2'
 
-      - name: Check the version of PHP 
-        run: php --version
+  #     - name: Check the version of PHP 
+  #       run: php --version
 
-      - uses: actions/download-artifact@v3
-        with:
-          name: sample-app-builded
+  #     - uses: actions/download-artifact@v3
+  #       with:
+  #         name: sample-app-builded
 
-      # - name: Create .env file
-      #   #Définir les variable d'env
-      #   env:
-      #     DB_CONNECTION: mysql
-      #     DB_HOST: xxx.xxx.xxx.xxx
-      #     DB_PORT: 3306
-      #     DB_DATABASE: db_name
-      #     DB_USERNAME: username
-      #     DB_PASSWORD: passwd
-      #   run: |
-      #     cd sample-app/
-      #     echo ${}
+  #     # - name: Create .env file
+  #     #   #Définir les variable d'env
+  #     #   env:
+  #     #     DB_CONNECTION: mysql
+  #     #     DB_HOST: xxx.xxx.xxx.xxx
+  #     #     DB_PORT: 3306
+  #     #     DB_DATABASE: db_name
+  #     #     DB_USERNAME: username
+  #     #     DB_PASSWORD: passwd
+  #     #   run: |
+  #     #     cd sample-app/
+  #     #     echo ${}
 
-      - name: Test Laravel Application
-        run: |
-          cd sample-app/
-          php artisan test
+  #     - name: Test Laravel Application
+  #       run: |
+  #         cd sample-app/
+  #         php artisan test
 
 
 # test_sample-app:

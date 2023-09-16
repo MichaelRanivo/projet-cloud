@@ -49,12 +49,15 @@ jobs:
         run: |
           cd sample-app/
           npm run dev
+
+      - name: List file
+        run: ls -al sample-app/
       
-      - name: Upload artefact
-        uses: actions/upload-artifact@v3
-        with:
-          name: sample-app-builded
-          path: sample-app/
+      # - name: Upload artefact
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: sample-app-builded
+      #     path: sample-app/
 
 #       - cd sample-app/
 #       - cat ${ENV} > .env
@@ -64,6 +67,7 @@ jobs:
 #         - sample-app/
 
   test-sample-app:
+    needs: build-sample-app
     #utiliser l'os Ubuntut pour le job
     runs-on: ubuntu-20.04 
     #Installer PHP8, composer install, créer un artefact
@@ -102,6 +106,7 @@ jobs:
         run: |
           cd sample-app/
           php artisan test
+
 
 # test_sample-app:
 #   stage: test

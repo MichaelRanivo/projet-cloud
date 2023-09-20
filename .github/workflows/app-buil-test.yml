@@ -62,13 +62,10 @@ jobs:
         with:
           name: sample-app-builded
       
-      - name: Refresh the migration
+      - name: Create DB and schemas
         run: |
-          php artisan migrate:fresh
-
-      - name: Seed the db
-        run: |
-          php artisan db:seed
+          touch database/db.sqlite
+          php artisan migrate
 
       - name: Run the test
         run: |

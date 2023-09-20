@@ -65,7 +65,7 @@ jobs:
       - name: Create DB and schemas
         run: |
           touch database/db.sqlite
-          php artisan migrate
+          php artisan migrate --force
 
       - name: Run the test
         run: |

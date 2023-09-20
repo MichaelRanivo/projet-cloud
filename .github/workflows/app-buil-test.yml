@@ -19,10 +19,11 @@ jobs:
 
       # On ne peut pas utiliser cette façon de faire car le Github Actions de Epitech est limité
       # cette ligne nous sert à setup PHP sur notre workflow
-      # - name: Install PHP
-      #   uses: shivammathur/setup-php@v2
-      #   with:
-      #     php-version: '8.2'
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer
 
       - name: Check the version of PHP 
         run: php --version

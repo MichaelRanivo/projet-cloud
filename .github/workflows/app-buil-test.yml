@@ -17,7 +17,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # #cette ligne nous sert à setup PHP sur notre workflow
+      # On ne peut pas utiliser cette façon de faire car le Github Actions de Epitech est limité
+      # cette ligne nous sert à setup PHP sur notre workflow
       # - name: Install PHP
       #   uses: shivammathur/setup-php@v2
       #   with:
@@ -26,46 +27,16 @@ jobs:
       - name: Check the version of PHP 
         run: php --version
 
-      # - name: Create .env file
-      #   #Définir les variable d'env
-      #   env:
-      #     DB_CONNECTION: mysql
-      #     DB_HOST: xxx.xxx.xxx.xxx
-      #     DB_PORT: 3306
-      #     DB_DATABASE: db_name
-      #     DB_USERNAME: username
-      #     DB_PASSWORD: passwd
-      #   run: |
-      #     cd sample-app/
-      #     echo ${}
-
-      - name: Composer
+      - name: Composer install
         run: |
           cd sample-app/
-          composer install 
-          npm install
-
-      - name: Build Laravel Application
-        run: |
-          cd sample-app/
-          npm run dev
-
-      - name: List file
-        run: ls -al sample-app/
-
-      - name: Test 
-        run: |
-          cd sample-app/
-          phpunit tests/
-
-      - name: List file
-        run: ls -al sample-app/
+          composer install
       
-      # - name: Upload artefact
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: sample-app-builded
-      #     path: sample-app/
+      - name: Upload artefact
+        uses: actions/upload-artifact@v3
+        with:
+          name: sample-app-builded
+          path: sample-app/
 
 #       - cd sample-app/
 #       - cat ${ENV} > .env

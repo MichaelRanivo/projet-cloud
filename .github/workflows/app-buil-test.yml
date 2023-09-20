@@ -45,11 +45,11 @@ jobs:
       - name: Check the version of Composer
         # run: composer --version
         run: php composer.phar --version
-        
+
       - name: Composer install
         run: |
           cd sample-app/
-          composer install
+          php composer.phar install
       
       - name: Upload artefact
         uses: actions/upload-artifact@v3

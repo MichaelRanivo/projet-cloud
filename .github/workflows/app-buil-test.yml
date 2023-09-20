@@ -43,8 +43,9 @@ jobs:
           php -r "unlink('composer-setup.php');"
 
       - name: Check the version of Composer
-        run: composer --version
-
+        # run: composer --version
+        run: php composer.phar --version
+        
       - name: Composer install
         run: |
           cd sample-app/

@@ -58,7 +58,7 @@ jobs:
       - name: Upload artefact
         uses: actions/upload-artifact@v3
         with:
-          name: sample-app-builded
+          name: app.tar.gz
           path: app.tar.gz
 
   test-sample-app:
@@ -102,10 +102,12 @@ jobs:
 
       - uses: actions/download-artifact@v3
         with:
-          name: sample-app-builded
+          name: app.tar.gz
 
       - name: Unpack Artifact
-        run: tar xzf sample-app-builded -C sample-app/
+        run: |
+          ls -al
+          tar xzf app.tar.gz -C sample-app/
        
       # code test
       - name: Generate key

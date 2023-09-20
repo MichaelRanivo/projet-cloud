@@ -48,7 +48,7 @@ jobs:
 
       - name: Composer install
         run: |
-          cd sample-app/
+          ls
           php composer.phar install
       
       - name: Upload artefact

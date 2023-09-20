@@ -102,10 +102,10 @@ jobs:
 
       - uses: actions/download-artifact@v3
         with:
-          name: app.tar.gz
+          name: sample-app-builded
 
       - name: Unpack Artifact
-        run: tar xzf app.tar.gz -C sample-app/
+        run: tar xzf sample-app-builded -C sample-app/
        
       # code test
       - name: Generate key

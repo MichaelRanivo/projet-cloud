@@ -50,12 +50,16 @@ jobs:
         run: |
           cd sample-app/
           composer install
+
+      - name: Compresse the project
+        run: |
+          tar -czf app.tar.gz sample-app/*
       
       - name: Upload artefact
         uses: actions/upload-artifact@v3
         with:
           name: sample-app-builded
-          path: sample-app/
+          path: app.tar.gz
 
   test-sample-app:
     needs: build-sample-app

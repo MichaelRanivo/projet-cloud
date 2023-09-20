@@ -8,35 +8,35 @@ on:
       - dev
 
 jobs:
-  # build-sample-app:
-  #   #utiliser l'os Ubuntut pour le job
-  #   runs-on: ubuntu-20.04 
-  #   #Installer PHP8, composer install, créer un artefact
-  #   steps:
-  #     #Cette ligne nous sert à extraire le repo sur notre workflow  
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v3
+  build-sample-app:
+    #utiliser l'os Ubuntut pour le job
+    runs-on: ubuntu-20.04 
+    #Installer PHP8, composer install, créer un artefact
+    steps:
+      #Cette ligne nous sert à extraire le repo sur notre workflow  
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-  #     # On ne peut pas utiliser cette façon de faire car le Github Actions de Epitech est limité
-  #     # cette ligne nous sert à setup PHP sur notre workflow
-  #     # - name: Install PHP
-  #     #   uses: shivammathur/setup-php@v2
-  #     #   with:
-  #     #     php-version: '8.2'
+      # On ne peut pas utiliser cette façon de faire car le Github Actions de Epitech est limité
+      # cette ligne nous sert à setup PHP sur notre workflow
+      # - name: Install PHP
+      #   uses: shivammathur/setup-php@v2
+      #   with:
+      #     php-version: '8.2'
 
-  #     - name: Check the version of PHP 
-  #       run: php --version
+      - name: Check the version of PHP 
+        run: php --version
 
-  #     - name: Composer install
-  #       run: |
-  #         cd sample-app/
-  #         composer install
+      - name: Composer install
+        run: |
+          cd sample-app/
+          composer install
       
-  #     - name: Upload artefact
-  #       uses: actions/upload-artifact@v3
-  #       with:
-  #         name: sample-app-builded
-  #         path: sample-app/
+      - name: Upload artefact
+        uses: actions/upload-artifact@v3
+        with:
+          name: sample-app-builded
+          path: sample-app/
 
   test-sample-app:
     # needs: build-sample-app

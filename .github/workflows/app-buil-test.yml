@@ -48,8 +48,8 @@ jobs:
 
       - name: Composer install
         run: |
-          ls
-          php composer.phar install
+          cd sample-app/
+          php ../composer.phar install
       
       - name: Upload artefact
         uses: actions/upload-artifact@v3

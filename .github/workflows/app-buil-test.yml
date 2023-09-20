@@ -62,15 +62,17 @@ jobs:
         with:
           name: sample-app-builded
       
-      - name: Check la liste des fichiers
+      - name: Refresh the migration
         run: |
-          ls
-          
-      # - name: Test Laravel Application
-      #   run: |
-      #     cd sample-app/
-      #     php artisan test
+          php artisan migrate:fresh
 
+      - name: Seed the db
+        run: |
+          php artisan db:seed
+
+      - name: Run the test
+        run: |
+          vendor/bin/phpunit
 
 # test_sample-app:
 #   stage: test

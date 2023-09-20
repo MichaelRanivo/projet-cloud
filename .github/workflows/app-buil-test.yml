@@ -9,7 +9,7 @@ on:
 
 jobs:
   build-sample-app:
-    #utiliser l'os Ubuntut pour le job
+    #utiliser un runner auto heberger pour lancer le job
     runs-on: self-hosted 
     #Installer PHP8, composer install, créer un artefact
     steps:
@@ -43,7 +43,6 @@ jobs:
           php -r "unlink('composer-setup.php');"
 
       - name: Check the version of Composer
-        # run: composer --version
         run: php composer.phar --version
 
       - name: Composer install
@@ -57,47 +56,65 @@ jobs:
           name: sample-app-builded
           path: sample-app/
 
-  # test-sample-app:
-  #   needs: build-sample-app
-  #   #utiliser l'os Ubuntut pour le job
-  #   runs-on: ubuntu-20.04 
-  #   #Installer PHP8, composer install, créer un artefact
-  #   steps:
-  #     #Cette ligne nous sert à extraire le repo sur notre workflow  
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v3
+  test-sample-app:
+    needs: build-sample-app
+    #utiliser un runner auto heberger pour lancer le job
+    runs-on: self-hosted
+    #Installer PHP8, composer install, créer un artefact
+    steps:
+      #Cette ligne nous sert à extraire le repo sur notre workflow  
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-  #     # On ne peut pas utiliser cette façon de faire car le Github Actions de Epitech est limité
-  #     # cette ligne nous sert à setup PHP sur notre workflow
-  #     # - name: Install PHP
-  #     #   uses: shivammathur/setup-php@v2
-  #     #   with:
-  #     #     php-version: '8.2'
+      # On ne peut pas utiliser cette façon de faire car le Github Actions de Epitech est limité
+      # cette ligne nous sert à setup PHP sur notre workflow
+      # - name: Install PHP
+      #   uses: shivammathur/setup-php@v2
+      #   with:
+      #     php-version: '8.2'
 
-  #     - name: Check the version of PHP 
-  #       run: php --version
-
-  #     - uses: actions/download-artifact@v3
-  #       with:
-  #         name: sample-app-builded
+      - name: Set up PHP
+        run: |
+          sudo apt update && sudo apt upgrade -y
+          sudo add-apt-repository ppa:ondrej/php
+          sudo apt update
+          sudo apt install php8.2 -y
+          sudo apt-get install -y php8.2-cli php8.2-common php8.2-fpm php8.2-mysql php8.2-zip php8.2-gd php8.2-mbstring php8.2-curl php8.2-xml php8.2-bcmath
           
-  #     - name: Generate key
-  #       run: php artisan key:generate
+      - name: Check the version of PHP 
+        run: php --version
+        
+      - name: install composer 
+        run: |
+          php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+          php -r "if (hash_file('sha384', 'composer-setup.php') === 'e21205b207c3ff031906575712edab6f13eb0b361f2085f1f1237b7126d785e826a450292b6cfd1d64d92e6563bbde02') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;"
+          php composer-setup.php
+          php -r "unlink('composer-setup.php');"
 
-  #     - name: Directory Permissions
-  #       run: chmod -R 777 storage bootstrap/cache
+      - name: Check the version of Composer
+        run: php composer.phar --version
 
-  #     - name: Create DB and schemas
-  #       run: |
-  #         touch database/db.sqlite
-          
-  #       # php artisan migrate --force
+      - uses: actions/download-artifact@v3
+        with:
+          name: sample-app-builded
+       
+      # code test
+      - name: Generate key
+        run: php artisan key:generate
 
-  #     - name: Run the test
-  #       env:
-  #         DB_CONNECTION: sqlite
-  #         DB_DATABASE: database/database.sqlite
-  #       run: vendor/bin/phpunit
+      - name: Directory Permissions
+        run: chmod -R 777 storage bootstrap/cache
+
+      - name: Create Database
+        run: |
+          mkdir -p database
+          touch database/database.sqlite
+
+      - name: Execute tests (Unit and Feature tests) via PHPUnit
+        env:
+          DB_CONNECTION: sqlite
+          DB_DATABASE: database/database.sqlite
+        run: vendor/bin/phpunit
 
 # test_sample-app:
 #   stage: test

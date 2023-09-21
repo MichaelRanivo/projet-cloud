@@ -102,6 +102,7 @@ jobs:
       
       - name: Unpack Artifact
         run: |
+          sudo systemctl status mysql
           mkdir sample-app/
           tar xzf app.tar.gz
         

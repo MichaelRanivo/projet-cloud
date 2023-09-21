@@ -32,7 +32,7 @@ jobs:
           envkey_APP_ENV: local
           envkey_APP_KEY: ${{ secrets.APP_KEY }}
           envkey_DB_CONNECTION: mysql
-          envkey_DB_HOST: 127.0.0.1
+          envkey_DB_HOST: gec_mysql_1#127.0.0.1
           envkey_DB_PORT: 33306
           envkey_DB_DATABASE: laravel
           envkey_DB_USERNAME: dev
@@ -134,6 +134,7 @@ jobs:
       - name: Migrate 
         run: |
           cd sample-app/
+          ls -al
           php artisan migrate --force
           php artisan db:seed --force
        

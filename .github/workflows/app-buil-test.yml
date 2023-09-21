@@ -79,8 +79,7 @@ jobs:
           MYSQL_USER: dev
           MYSQL_PASSWORD: AzAzAz@
         ports:
-          - 33306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+          - 3306:3306
 
     steps:
       #Cette ligne nous sert à extraire le repo sur notre workflow  
@@ -132,7 +131,7 @@ jobs:
         with:
           envkey_APP_DEBUG: true
           envkey_APP_ENV: local
-          envkey_APP_KEY: "123456abcdef"
+          envkey_APP_KEY: ${{ secrets.APP_KEY }}
           envkey_DB_CONNECTION: mysql
           envkey_DB_HOST: localhost
           envkey_DB_PORT: 3306
@@ -144,35 +143,39 @@ jobs:
           fail_on_empty: false
           sort_keys: false
 
-      - name: List directory
+      # - name: List directory
+      #   run: |
+      #     ls -al sample-app/
+      #     cat sample-app/.env
+
+      - name: Migrate 
         run: |
-          ls -al sample-app/
-          cat sample-app/.env
+          cd sample-app/
+          php artisan migrate:fresh
+          php artisan db:seed
        
       # code test
-      - name: Generate key
-        run: |
-          cd sample-app/
-          php artisan key:generate
+      # - name: Generate key
+      #   run: |
+      #     cd sample-app/
+      #     php artisan key:generate
 
-      - name: Directory Permissions
-        run: |
-          cd sample-app/
-          chmod -R 777 storage bootstrap/cache
+      # - name: Directory Permissions
+      #   run: |
+      #     cd sample-app/
+      #     chmod -R 777 storage bootstrap/cache
 
-      - name: Create Database
-        run: |
-          cd sample-app/
-          mkdir -p database
-          touch database/database.sqlite
+      # - name: Create Database
+      #   run: |
+      #     cd sample-app/
+      #     mkdir -p database
+      #     touch database/database.sqlite
 
       - name: Execute tests (Unit and Feature tests) via PHPUnit
-        env:
-          DB_CONNECTION: laravel
-          DB_DATABASE: database/database.sqlite
-        run: |
-          cd sample-app/
-          vendor/bin/phpunit
+        # env:
+        #   DB_CONNECTION: laravel
+        #   DB_DATABASE: database/database.sqlite
+        run: sample-app/vendor/bin/phpunit
 
 # test_sample-app:
 #   stage: test

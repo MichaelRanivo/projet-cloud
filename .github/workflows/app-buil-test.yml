@@ -67,20 +67,20 @@ jobs:
     runs-on: self-hosted
     #Installer PHP8, composer install, créer un artefact
 
-    container:
-      image: kirschbaumdevelopment/laravel-test-runner:8.2
+    # container:
+    #   image: kirschbaumdevelopment/laravel-test-runner:8.2
 
-    services:
-      mysql:
-        image: mysql:5.7
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: laravel
-          MYSQL_USER: dev
-          MYSQL_PASSWORD: AzAzAz@
-        ports:
-          - 33306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    # services:
+    #   mysql:
+    #     image: mysql:5.7
+    #     env:
+    #       MYSQL_ROOT_PASSWORD: root
+    #       MYSQL_DATABASE: laravel
+    #       MYSQL_USER: dev
+    #       MYSQL_PASSWORD: AzAzAz@
+    #     ports:
+    #       - 33306:3306
+    #     options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
       #Cette ligne nous sert à extraire le repo sur notre workflow  
@@ -149,11 +149,11 @@ jobs:
         run: |
           ls -al sample-app/
        
-      # # code test
-      # - name: Generate key
-      #   run: |
-      #     cd sample-app/
-      #     php artisan key:generate
+      # code test
+      - name: Generate key
+        run: |
+          cd sample-app/
+          php artisan key:generate
 
       # - name: Directory Permissions
       #   run: |

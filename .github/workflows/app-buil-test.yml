@@ -45,7 +45,7 @@ jobs:
       - name: Composer install
         run: |
           cd sample-app/
-          ls -al
+          composer update
           composer install
 
       - name: Compresse the project
@@ -134,8 +134,8 @@ jobs:
       - name: Migrate 
         run: |
           cd sample-app/
-          php artisan migrate:fresh
-          php artisan db:seed
+          php artisan migrate:fresh --force
+          php artisan db:seed --class=CustomSeeder --force
        
       # code test
       # - name: Generate key

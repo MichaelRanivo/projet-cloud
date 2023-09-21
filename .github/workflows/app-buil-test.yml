@@ -165,12 +165,12 @@ jobs:
           cd sample-app/
           mkdir -p database
           touch database/database.sqlite
-        # php artisan migrate
+          php artisan migrate
 
       - name: Execute tests (Unit and Feature tests) via PHPUnit
-        # env:
-        #   DB_CONNECTION: mysql
-        #   DB_DATABASE: database/database.sqlite
+        env:
+          DB_CONNECTION: laravel
+          DB_DATABASE: database/database.sqlite
         run: |
           cd sample-app/
           vendor/bin/phpunit

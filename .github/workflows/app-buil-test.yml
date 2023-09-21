@@ -51,7 +51,7 @@ jobs:
 
       - name: Compresse the project
         run: |
-          tar -czf app.tar.gz sample-app/*
+          tar -czf app.tar.gz sample-app/
       
       - name: Upload artefact
         uses: actions/upload-artifact@v3

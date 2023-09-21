@@ -121,10 +121,10 @@ jobs:
           mkdir sample-app/
           tar xzf app.tar.gz
         
-      - name: Check Laravel version
+      - name: Check all the framework
         run: |
           cd sample-app/
-          php artisan --version
+          php -m
 
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v2.0
@@ -133,7 +133,7 @@ jobs:
           envkey_APP_ENV: local
           envkey_APP_KEY: ${{ secrets.APP_KEY }}
           envkey_DB_CONNECTION: mysql
-          envkey_DB_HOST: localhost
+          envkey_DB_HOST: 127.0.0.1
           envkey_DB_PORT: 3306
           envkey_DB_DATABASE: laravel
           envkey_DB_USERNAME: dev

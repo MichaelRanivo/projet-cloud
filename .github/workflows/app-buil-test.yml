@@ -100,7 +100,7 @@ jobs:
 
       - name: Unpack Artifact
         run: |
-          ls -al
+          ls -al sample-app/
           tar xzf app.tar.gz -C sample-app/
           ls -al sample-app/
        

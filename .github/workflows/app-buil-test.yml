@@ -101,7 +101,8 @@ jobs:
       - name: Unpack Artifact
         run: |
           ls -al sample-app/
-        # rm -rf sample-app/
+          rm -rf sample-app/
+          ls -al
         # mkdir sample-app/
         # tar xzf app.tar.gz -C sample-app/
         # ls -al sample-app/

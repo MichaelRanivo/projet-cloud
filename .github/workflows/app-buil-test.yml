@@ -98,7 +98,6 @@ jobs:
       
       - name: Test connection Mysql
         run: |
-          sudo /etc/init.d/mysql start
           mysql -e 'CREATE DATABASE test;' -udev -pAzAzAz@
         
       - name: Remove Sample-app

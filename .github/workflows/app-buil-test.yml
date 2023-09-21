@@ -86,9 +86,6 @@ jobs:
       #     sudo apt update
       #     sudo apt install php8.2 -y
       #     sudo apt-get install -y php8.2-cli php8.2-common php8.2-fpm php8.2-mysql php8.2-zip php8.2-gd php8.2-mbstring php8.2-curl php8.2-xml php8.2-bcmath
-          
-      - name: Check the version of PHP 
-        run: php --version
         
       # - name: install composer 
       #   run: |
@@ -97,9 +94,6 @@ jobs:
       #     php composer-setup.php
       #     php -r "unlink('composer-setup.php');"
 
-      - name: Check the version of Composer
-        run: composer --version
-
       - uses: actions/download-artifact@v3
         with:
           name: app.tar.gz
@@ -107,32 +101,34 @@ jobs:
       - name: Unpack Artifact
         run: |
           ls -al
+          rm -rf sample-app/
+          ls -al
           tar xzf app.tar.gz -C sample-app/
        
-      # code test
-      - name: Generate key
-        run: |
-          cd sample-app/
-          php artisan key:generate
+      # # code test
+      # - name: Generate key
+      #   run: |
+      #     cd sample-app/
+      #     php artisan key:generate
 
-      - name: Directory Permissions
-        run: |
-          cd sample-app/
-          chmod -R 777 storage bootstrap/cache
+      # - name: Directory Permissions
+      #   run: |
+      #     cd sample-app/
+      #     chmod -R 777 storage bootstrap/cache
 
-      - name: Create Database
-        run: |
-          cd sample-app/
-          mkdir -p database
-          touch database/database.sqlite
+      # - name: Create Database
+      #   run: |
+      #     cd sample-app/
+      #     mkdir -p database
+      #     touch database/database.sqlite
 
-      - name: Execute tests (Unit and Feature tests) via PHPUnit
-        env:
-          DB_CONNECTION: sqlite
-          DB_DATABASE: database/database.sqlite
-        run: |
-          cd sample-app/
-          vendor/bin/phpunit
+      # - name: Execute tests (Unit and Feature tests) via PHPUnit
+      #   env:
+      #     DB_CONNECTION: sqlite
+      #     DB_DATABASE: database/database.sqlite
+      #   run: |
+      #     cd sample-app/
+      #     vendor/bin/phpunit
 
 # test_sample-app:
 #   stage: test

@@ -134,9 +134,8 @@ jobs:
       - name: Migrate 
         run: |
           cd sample-app/
-          php artisan config:clear
-          php artisan migrate:fresh --force
-          php artisan db:seed --class=CustomSeeder --force
+          php artisan migrate --force
+          php artisan db:seed --force
        
       # code test
       # - name: Generate key

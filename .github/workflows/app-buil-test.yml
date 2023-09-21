@@ -65,7 +65,7 @@ jobs:
     #Installer PHP8, composer install, créer un artefact
 
     container:
-      image: mysql:latest
+      image: kirschbaumdevelopment/laravel-test-runner:8.2
 
     services:
       mysql:
@@ -95,6 +95,10 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: app.tar.gz
+      
+      - name: Test connection Mysql
+        run: |
+          mysql
         
       - name: Remove Sample-app
         run: rm -rf sample-app/

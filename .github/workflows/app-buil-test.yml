@@ -65,19 +65,19 @@ jobs:
     #Installer PHP8, composer install, créer un artefact
 
     container:
-      image: kirschbaumdevelopment/laravel-test-runner:8.2
+      image: registry.infra.connectwork.fr/expressweb/devops/php8:main
 
-    services:
-      mysql:
-        image: mysql:latest
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: laravel
-          MYSQL_USER: dev
-          MYSQL_PASSWORD: AzAzAz@
-        ports:
-          - 3306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+    # services:
+    #   mysql:
+    #     image: mysql:latest
+    #     env:
+    #       MYSQL_ROOT_PASSWORD: root
+    #       MYSQL_DATABASE: laravel
+    #       MYSQL_USER: dev
+    #       MYSQL_PASSWORD: AzAzAz@
+    #     ports:
+    #       - 3306:3306
+    #     options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
       #Cette ligne nous sert à extraire le repo sur notre workflow  
@@ -134,8 +134,8 @@ jobs:
       - name: Migrate 
         run: |
           cd sample-app/
-          php artisan migrate:fresh --force
-          php artisan db:seed --class=CustomSeeder --force
+          php artisan migrate:fresh
+          php artisan db:seed
        
       # code test
       # - name: Generate key

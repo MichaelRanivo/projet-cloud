@@ -21,16 +21,16 @@ jobs:
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v2.0
         with:
-          envkey_APP_DEBUG: true
-          envkey_APP_ENV: local
+          envkey_APP_DEBUG: ${{ secrets.APP_DEBUG }}
+          envkey_APP_ENV: ${{ secrets.APP_ENV }}
           envkey_APP_KEY: ${{ secrets.APP_KEY }}
-          envkey_APP_URL: http://localhost
-          envkey_DB_CONNECTION: mysql
-          envkey_DB_HOST: mysql
-          envkey_DB_PORT: 3306
-          envkey_DB_DATABASE: laravel
-          envkey_DB_USERNAME: dev
-          envkey_DB_PASSWORD: AzAzAz@
+          envkey_APP_URL: ${{ secrets.APP_URL }}
+          envkey_DB_CONNECTION: ${{ secrets.DB_CONNECTION }}
+          envkey_DB_HOST: ${{ secrets.DB_HOST }}
+          envkey_DB_PORT: ${{ secrets.DB_PORT }}
+          envkey_DB_DATABASE: ${{ secrets.DB_DATABASE }}
+          envkey_DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          envkey_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
           directory: sample-app/
           file_name: .env
           fail_on_empty: false
@@ -58,10 +58,10 @@ jobs:
       mysql:
         image: mysql:latest
         env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: laravel
-          MYSQL_USER: dev
-          MYSQL_PASSWORD: AzAzAz@
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+          MYSQL_USER: ${{ secrets.MYSQL_USER }}
+          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
         ports:
           - 3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3

@@ -101,9 +101,8 @@ jobs:
       - name: Unpack Artifact
         run: |
           ls -al
-          rm -rf sample-app/
-          ls -al
           tar xzf app.tar.gz -C sample-app/
+          ls -al sample-app/
        
       # # code test
       # - name: Generate key

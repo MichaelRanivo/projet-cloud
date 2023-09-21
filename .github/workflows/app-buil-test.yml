@@ -33,7 +33,7 @@ jobs:
           envkey_APP_KEY: ${{ secrets.APP_KEY }}
           envkey_DB_CONNECTION: mysql
           envkey_DB_HOST: 127.0.0.1
-          envkey_DB_PORT: 3306
+          envkey_DB_PORT: 33306
           envkey_DB_DATABASE: laravel
           envkey_DB_USERNAME: dev
           envkey_DB_PASSWORD: AzAzAz@
@@ -76,7 +76,7 @@ jobs:
           MYSQL_USER: dev
           MYSQL_PASSWORD: AzAzAz@
         ports:
-          - 3306:3306
+          - 33306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
@@ -98,8 +98,8 @@ jobs:
       
       - name: Test connection Mysql
         run: |
-          docker ps -a
-          mysql -h localhost -P 3306 -u dev -p AzAzAz@
+          sudo /etc/init.d/mysql start
+          mysql -e 'CREATE DATABASE test;' -udev -pAzAzAz@
         
       - name: Remove Sample-app
         run: rm -rf sample-app/

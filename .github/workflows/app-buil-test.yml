@@ -34,7 +34,7 @@ jobs:
           envkey_APP_URL: http://localhost
           envkey_DB_CONNECTION: mysql
           envkey_DB_HOST: mysql
-          envkey_DB_PORT: 33306
+          envkey_DB_PORT: 3306
           envkey_DB_DATABASE: laravel
           envkey_DB_USERNAME: dev
           envkey_DB_PASSWORD: AzAzAz@
@@ -78,7 +78,7 @@ jobs:
           MYSQL_USER: dev
           MYSQL_PASSWORD: AzAzAz@
         ports:
-          - 33306:3306
+          - 3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:

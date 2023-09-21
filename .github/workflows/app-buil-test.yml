@@ -98,10 +98,11 @@ jobs:
         with:
           name: app.tar.gz
 
+      - name: Remove Sample-app
+        run: rm -rf sample-app/
+
       - name: Unpack Artifact
         run: |
-          ls -al sample-app/
-          rm -rf sample-app/
           ls -al
         # mkdir sample-app/
         # tar xzf app.tar.gz -C sample-app/

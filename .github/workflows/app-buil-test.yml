@@ -105,7 +105,7 @@ jobs:
         run: |
           ls -al
           mkdir sample-app/
-          tar xzf app.tar.gz .
+          tar xzf app.tar.gz
           ls -al
           ls -al sample-app/
        

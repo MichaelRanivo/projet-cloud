@@ -95,10 +95,6 @@ jobs:
       - uses: actions/download-artifact@v3
         with:
           name: app.tar.gz
-      
-      - name: Test connection Mysql
-        run: |
-          mysql -e 'CREATE DATABASE test;' -udev -pAzAzAz@
         
       - name: Remove Sample-app
         run: rm -rf sample-app/
@@ -138,6 +134,7 @@ jobs:
       - name: Migrate 
         run: |
           cd sample-app/
+          php artisan config:cache
           php artisan migrate:fresh --force
           php artisan db:seed --class=CustomSeeder --force
        

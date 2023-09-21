@@ -33,7 +33,7 @@ jobs:
           envkey_APP_KEY: ${{ secrets.APP_KEY }}
           envkey_DB_CONNECTION: mysql
           envkey_DB_HOST: 127.0.0.1
-          envkey_DB_PORT: 33306
+          envkey_DB_PORT: 3306
           envkey_DB_DATABASE: laravel
           envkey_DB_USERNAME: dev
           envkey_DB_PASSWORD: AzAzAz@
@@ -65,21 +65,6 @@ jobs:
     runs-on: ubuntu-latest
     #Installer PHP8, composer install, créer un artefact
 
-    container:
-      image: kirschbaumdevelopment/laravel-test-runner:8.2
-
-    services:
-      mysql:
-        image: mysql:latest
-        env:
-          MYSQL_ROOT_PASSWORD: root
-          MYSQL_DATABASE: laravel
-          MYSQL_USER: dev
-          MYSQL_PASSWORD: AzAzAz@
-        ports:
-          - 33306:3306
-        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-
     steps:
       #Cette ligne nous sert à extraire le repo sur notre workflow  
       # - name: Checkout repository
@@ -92,6 +77,18 @@ jobs:
       #   with:
       #     php-version: '8.2'
       #     tools: composer
+      
+      - uses: mirromutth/mysql-action@v1.1
+        with:
+          host port: 3306
+          container port: 3306
+          character set server: 'utf8' 
+          collation server: 'utf8_general_ci' 
+          mysql version: '8.0' 
+          mysql database: 'laravel' 
+          mysql root password: root
+          mysql user: 'dev'
+          mysql password: AzAzAz@
 
       - uses: actions/download-artifact@v3
         with:
@@ -102,7 +99,6 @@ jobs:
       
       - name: Unpack Artifact
         run: |
-          systemctl status mysql
           mkdir sample-app/
           tar xzf app.tar.gz
         

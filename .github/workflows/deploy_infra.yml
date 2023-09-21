@@ -1,0 +1,17 @@
+name: Pipeline deployment Infra
+
+run-name: ${{ github.actor }} is launching the deployment of the infra
+
+on:
+    push:
+        branches:
+            - terraform
+
+jobs:
+    back-plan:
+
+    back-apply:
+
+    infra-plan:
+
+    infra-apply:

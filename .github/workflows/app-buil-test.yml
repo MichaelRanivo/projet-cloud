@@ -86,11 +86,11 @@ jobs:
 
       # On ne peut pas utiliser cette façon de faire car le Github Actions de Epitech est limité
       # cette ligne nous sert à setup PHP sur notre workflow
-      - name: Install PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.2'
-          tools: composer
+      # - name: Install PHP
+      #   uses: shivammathur/setup-php@v2
+      #   with:
+      #     php-version: '8.2'
+      #     tools: composer
 
       - uses: actions/download-artifact@v3
         with:
@@ -98,7 +98,7 @@ jobs:
       
       - name: Test connection Mysql
         run: |
-          mysql
+          mysql -h localhost -P 3306 -u dev -p AzAzAz@
         
       - name: Remove Sample-app
         run: rm -rf sample-app/

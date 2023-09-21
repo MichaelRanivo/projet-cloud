@@ -134,7 +134,7 @@ jobs:
       - name: Migrate 
         run: |
           cd sample-app/
-          php artisan config:cache
+          php artisan config:clear
           php artisan migrate:fresh --force
           php artisan db:seed --class=CustomSeeder --force
        

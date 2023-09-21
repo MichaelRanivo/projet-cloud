@@ -82,18 +82,6 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     steps:
-      #Cette ligne nous sert à extraire le repo sur notre workflow  
-      # - name: Checkout repository
-      #   uses: actions/checkout@v3
-
-      # On ne peut pas utiliser cette façon de faire car le Github Actions de Epitech est limité
-      # cette ligne nous sert à setup PHP sur notre workflow
-      # - name: Install PHP
-      #   uses: shivammathur/setup-php@v2
-      #   with:
-      #     php-version: '8.2'
-      #     tools: composer
-
       - uses: actions/download-artifact@v3
         with:
           name: app.tar.gz
@@ -105,62 +93,14 @@ jobs:
         run: |
           mkdir sample-app/
           tar xzf app.tar.gz
-        
-      # - name: Check all the framework
-      #   run: |
-      #     cd sample-app/
-      #     php -m
-
-      # - name: Make envfile
-      #   uses: SpicyPizza/create-envfile@v2.0
-      #   with:
-      #     envkey_APP_DEBUG: true
-      #     envkey_APP_ENV: local
-      #     envkey_APP_KEY: ${{ secrets.APP_KEY }}
-      #     envkey_DB_CONNECTION: mysql
-      #     envkey_DB_HOST: 127.0.0.1
-      #     envkey_DB_PORT: 3306
-      #     envkey_DB_DATABASE: laravel
-      #     envkey_DB_USERNAME: dev
-      #     envkey_DB_PASSWORD: AzAzAz@
-      #     directory: sample-app/
-      #     file_name: .env
-      #     fail_on_empty: false
-      #     sort_keys: false
-
-      # - name: List directory
-      #   run: |
-      #     ls -al sample-app/
-      #     cat sample-app/.env
 
       - name: Migrate 
         run: |
           cd sample-app/
-          cat .env
           php artisan migrate --force
           php artisan db:seed --force
-       
-      # code test
-      # - name: Generate key
-      #   run: |
-      #     cd sample-app/
-      #     php artisan key:generate
-
-      # - name: Directory Permissions
-      #   run: |
-      #     cd sample-app/
-      #     chmod -R 777 storage bootstrap/cache
-
-      # - name: Create Database
-      #   run: |
-      #     cd sample-app/
-      #     mkdir -p database
-      #     touch database/database.sqlite
 
       - name: Execute tests (Unit and Feature tests) via PHPUnit
-        # env:
-        #   DB_CONNECTION: laravel
-        #   DB_DATABASE: database/database.sqlite
         run: |
           cd sample-app/
           vendor/bin/phpunit tests/

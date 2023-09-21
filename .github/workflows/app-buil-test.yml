@@ -1,6 +1,6 @@
-name: CI 
+name: CI Build and Test
 
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+run-name: ${{ github.actor }} is launching the Build and test 🚀
 
 on:
   push:
@@ -9,22 +9,15 @@ on:
 
 jobs:
   build-sample-app:
-    #utiliser un runner auto heberger pour lancer le job
     runs-on: self-hosted 
-    #Installer PHP8, composer install, créer un artefact
     steps:
-      #Cette ligne nous sert à extraire le repo sur notre workflow  
       - name: Checkout repository
         uses: actions/checkout@v3
-
-      # On ne peut pas utiliser cette façon de faire car le Github Actions de Epitech est limité
-      # cette ligne nous sert à setup PHP sur notre workflow
-      - name: Set up PHP
+      - name: Set up PHP and composer
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
           tools: composer
-
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v2.0
         with:
@@ -42,19 +35,15 @@ jobs:
           file_name: .env
           fail_on_empty: false
           sort_keys: false
-
-      - name: Composer install
+      - name: Update and install dependencies
         run: |
           cd sample-app/
-          ls -al 
           composer update
           composer install
-
-      - name: Compresse the project
+      - name: Compresse the app
         run: |
           tar -czf app.tar.gz sample-app/
-      
-      - name: Upload artefact
+      - name: Upload artefact of the app
         uses: actions/upload-artifact@v3
         with:
           name: app.tar.gz
@@ -62,13 +51,9 @@ jobs:
 
   test-sample-app:
     needs: build-sample-app
-    #utiliser un runner auto heberger pour lancer le job
     runs-on: ubuntu-latest
-    #Installer PHP8, composer install, créer un artefact
-
     container:
       image: kirschbaumdevelopment/laravel-test-runner:8.2
-
     services:
       mysql:
         image: mysql:latest
@@ -80,99 +65,23 @@ jobs:
         ports:
           - 3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-
     steps:
-      - uses: actions/download-artifact@v3
+      - name: Download the artefact of the app
+        uses: actions/download-artifact@v3
         with:
           name: app.tar.gz
-        
-      - name: Remove Sample-app
+      - name: Remove the sample-app directory
         run: rm -rf sample-app/
-      
-      - name: Unpack Artifact
+      - name: Unpack the artifact
         run: |
           mkdir sample-app/
           tar xzf app.tar.gz
-
-      - name: Migrate 
+      - name: Migrate and seed the DB 
         run: |
           cd sample-app/
           php artisan migrate --force
           php artisan db:seed --force
-
-      - name: Execute tests (Unit and Feature tests) via PHPUnit
+      - name: Execute tests via PHPUnit
         run: |
           cd sample-app/
           vendor/bin/phpunit tests/
-
-# test_sample-app:
-#   stage: test
-#   image: registry.infra.connectwork.fr/expressweb/devops/php8:main
-#   script:
-#     - cd sample-app/
-#     - php artisan migrate:fresh
-#     - php artisan db:seed
-#     - vendor/bin/phpunit
-#   needs:
-#     - job: "build_sample-app"
-#       artifacts: true
-
-# name: GitHub Actions Demo
-# run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-# on: [push]
-# jobs:
-#   Explore-GitHub-Actions:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
-#       - run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
-#       - run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
-#       - name: Check out repository code
-#         uses: actions/checkout@v3
-#       - run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
-#       - run: echo "🖥️ The workflow is now ready to test your code on the runner."
-#       - name: List files in the repository
-#         run: |
-#           ls ${{ github.workspace }}
-#       - run: echo "🍏 This job's status is ${{ job.status }}."
-
-
-# docker_php_sample-app:
-#   stage: package
-#   image: "quay.io/buildah/stable:v1.21.0"
-#   variables:
-#     BUILD_NAME: "sample-app"
-#     DOCKER_PATH: ${CI_PROJECT_DIR}/server/images/Dockerfile
-#     DOCKER_CONTEXT: ${CI_PROJECT_DIR}/
-#     BUILD_VERSION: ${CI_COMMIT_REF_SLUG}
-#     BUILD_REGISTRY: ${CI_REGISTRY_IMAGE}
-#     FULL_IMAGE_NAME: ${BUILD_REGISTRY}/${BUILD_NAME}:${BUILD_VERSION}
-#     DOCKER_OPTIONS: ""
-#   script:
-#     - buildah login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-#     - buildah login -u "$CI_DEPENDENCY_PROXY_USER" -p "$CI_DEPENDENCY_PROXY_PASSWORD" $CI_DEPENDENCY_PROXY_SERVER
-#     - buildah bud --pull ${DOCKER_OPTIONS} -t "$FULL_IMAGE_NAME" -f ${DOCKER_PATH} ${DOCKER_CONTEXT}
-#     - buildah push $FULL_IMAGE_NAME
-#   needs:
-#     - job: "build_sample-app"
-#       artifacts: true
-
-# deploy-test:
-#   stage: deploy
-#   image:
-#     name: line/kubectl-kustomize:1.23.6-4.5.4
-#     entrypoint: [""]
-#   variables:
-#     KUBECONFIG: /tmp/kubeconfig
-#     GIT_STRATEGY: fetch
-#     GIT_SUBMODULE_STRATEGY: none
-#     KUBE_CLUSTER: cw-hosting-dev
-#     DEPLOY_ENV: dev
-#     KUBE_NAMESPACE: epitech
-#   before_script:
-#     - if [ -z "${KUBECONFIG_DEV}" ]; then echo "The KUBECONFIG_DEV var is unset" && exit 1; else echo ${KUBECONFIG_DEV} | base64 -d > ${KUBECONFIG}; fi
-#     - apk add --no-cache gettext libintl
-#   script:
-#     - kustomize build . | envsubst | kubectl diff -n ${KUBE_NAMESPACE} -f - || true
-#     - kustomize build . | envsubst | kubectl apply -n ${KUBE_NAMESPACE} -f -
-#   needs: ["docker_php_sample-app"]

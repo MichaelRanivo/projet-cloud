@@ -135,7 +135,7 @@ jobs:
       - name: Migrate 
         run: |
           cd sample-app/
-          ls -al
+          cat .env
           php artisan migrate --force
           php artisan db:seed --force
        

@@ -161,7 +161,9 @@ jobs:
         # env:
         #   DB_CONNECTION: laravel
         #   DB_DATABASE: database/database.sqlite
-        run: sample-app/vendor/bin/phpunit
+        run: |
+          cd sample-app/
+          vendor/bin/phpunit tests/
 
 # test_sample-app:
 #   stage: test

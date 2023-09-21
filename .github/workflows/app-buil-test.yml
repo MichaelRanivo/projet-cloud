@@ -66,6 +66,19 @@ jobs:
     #utiliser un runner auto heberger pour lancer le job
     runs-on: self-hosted
     #Installer PHP8, composer install, créer un artefact
+
+    services:
+      mysql:
+        image: mysql:5.7
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: laravel
+          MYSQL_USER: dev
+          MYSQL_PASSWORD: AzAzAz@
+        ports:
+          - 33306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
     steps:
       #Cette ligne nous sert à extraire le repo sur notre workflow  
       # - name: Checkout repository
@@ -103,11 +116,29 @@ jobs:
 
       - name: Unpack Artifact
         run: |
-          ls -al
           mkdir sample-app/
           tar xzf app.tar.gz
+
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v2.0
+        with:
+          envkey_APP_DEBUG: true
+          envkey_APP_ENV: local
+          envkey_APP_KEY: "123456abcdef"
+          envkey_DB_CONNECTION: mysql
+          envkey_DB_HOST: localhost
+          envkey_DB_PORT: 3306
+          envkey_DB_DATABASE: laravel
+          envkey_DB_USERNAME: dev
+          envkey_DB_PASSWORD: AzAzAz@
+          directory: sample-app/
+          file_name: .env
+          fail_on_empty: false
+          sort_keys: false
+
+      - name: List directory
+        run: |
           ls -al
-          ls -al sample-app/
        
       # # code test
       # - name: Generate key

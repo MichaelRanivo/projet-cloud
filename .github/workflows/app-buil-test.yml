@@ -126,7 +126,7 @@ jobs:
       - name: Check Laravel version
         run: |
           cd sample-app/
-          php artisan about
+          php artisan --version
 
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v2.0

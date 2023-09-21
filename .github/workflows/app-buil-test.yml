@@ -45,6 +45,7 @@ jobs:
       - name: Composer install
         run: |
           cd sample-app/
+          ls -al 
           composer update
           composer install
 

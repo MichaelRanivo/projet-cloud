@@ -40,11 +40,10 @@ jobs:
         run: |
           pwd 
           ls
-
-    # cd ${{ TF_ROOT }}
-    # terraform init
-    # terraform validate
-    # terraform plan -var-file=variables.tf
+          cd ${{ vars.TF_ROOT }}
+          terraform init
+          terraform validate
+          terraform plan -var-file=${{ vars.TFVARS_FILE }} -out 
 
     # back-apply:
     #     runs-on: self-host

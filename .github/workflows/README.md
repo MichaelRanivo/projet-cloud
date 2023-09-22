@@ -1,5 +1,7 @@
 # Sample app pipeline CI/CD
 
+Azure Region (Europe) North Europe
+
 ## CI Build and Test
 
 This pipeline build and test the app in the branch dev.

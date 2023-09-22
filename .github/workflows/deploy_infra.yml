@@ -10,7 +10,7 @@ on:
 jobs:
     terraform-back-plan:
         name: Plan the TF
-        runs-on: self-host
+        runs-on: self-hosted
         steps:
             - name: Checkout
               uses: actions/checkout@v3

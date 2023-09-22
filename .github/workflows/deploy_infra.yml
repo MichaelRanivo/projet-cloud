@@ -42,7 +42,8 @@ jobs:
 
       - name: Connexion Azure
         run: |
-          az login --service-principal -u ${{ secrets.AZURE_CLIENT_ID }} -p ${{ secrets.AZURE_CLIENT_SECRET }} --tenant ${{ secrets.AZURE_TENANT_ID }}
+          az login -u ${{ secrets.TECK_MAIL }} -p ${{ secrets.TECK_MDP }}  
+         # --tenant ${{ secrets.AZURE_TENANT_ID }}
          # az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
 

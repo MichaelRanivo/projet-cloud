@@ -15,7 +15,7 @@ permissions:
 jobs:
   terraform-back-plan:
     name: Plan the TF
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout 
         uses: actions/checkout@v3

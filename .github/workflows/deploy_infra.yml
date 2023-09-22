@@ -41,9 +41,10 @@ jobs:
           pwd 
           ls
           cd ${{ vars.TF_ROOT }}
+          pwd
           terraform init
           terraform validate
-          terraform plan -var-file=${{ vars.TFVARS_FILE }} -out 
+          terraform plan -var-file=${{ vars.TFVARS_FILE }} -out tfplan
 
     # back-apply:
     #     runs-on: self-host

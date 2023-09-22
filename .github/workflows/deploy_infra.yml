@@ -31,7 +31,7 @@ jobs:
             #     az --version
 
             - name: 'Az CLI login'
-              uses: azure/login@v1
+              uses: azure/actions/login@v1
               with:
                 creds: ${{ secrets.AZURE_CREDENTIALS }}
                 # client-id: ${{ secrets.AZURE_CLIENT_ID }}

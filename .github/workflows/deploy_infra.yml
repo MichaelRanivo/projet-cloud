@@ -20,44 +20,31 @@ jobs:
       - name: Checkout 
         uses: actions/checkout@v3
 
-      # - name: Install Azure cli
-      #   run: |
-      #     sudo apt-get install ca-certificates curl apt-transport-https lsb-release gnupg
-      #     curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/microsoft.gpg > /dev/null
-      #     AZ_REPO=$(lsb_release -cs)
-      #     echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $AZ_REPO main" | sudo tee /etc/apt/sources.list.d/azure-cli.list
-      #     sudo apt-get update
-      #     sudo apt-get install azure-cli 
-      #     az --version
-
       - name: 'Az CLI login'
         uses: azure/login@v1
         with:
-      #      creds: ${{ secrets.AZURE_CREDENTIALS }} 
           client-id: ${{ secrets.AZURE_CLIENT_ID }}
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-          # enable-AzPSSession: true 
-          # allow-no-subscriptions: true
-
-      # - name: Connexion Azure
-      #   run: |
-      #     az login -u ${{ secrets.TECK_MAIL }} -p ${{ secrets.TECK_MDP }}  
-         # --tenant ${{ secrets.AZURE_TENANT_ID }}
-         # az account set --subscription ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
 
       - name: 'Run Azure CLI commands' 
+        run: az --version
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform test 
+        run: terraform --version
+      
+      - name: Terraform test plan
         run: |
-          az account show
-          az group list
           pwd 
+          ls
 
-      # - name: Setup Terraform
-      #   uses: hashicorp/setup-terraform@v2
-
-      # - name: Terraform Init
-      #   run: terraform --version
+    # cd ${{ TF_ROOT }}
+    # terraform init
+    # terraform validate
+    # terraform plan -var-file=variables.tf
 
     # back-apply:
     #     runs-on: self-host

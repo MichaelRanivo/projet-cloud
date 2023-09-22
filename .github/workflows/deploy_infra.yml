@@ -44,7 +44,7 @@ jobs:
           pwd
           terraform init
           terraform validate
-          terraform plan -var-file=${{ vars.TFVARS_FILE }} -out tfplan
+          terraform plan -var-file=${{ vars.TFVARS_FILE }}.tfvars -out tfplan
 
     # back-apply:
     #     runs-on: self-host

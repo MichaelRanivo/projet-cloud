@@ -12,6 +12,10 @@ jobs:
         name: Plan the TF
         runs-on: self-hosted
         environment: dev
+        permissions:
+            contents: read
+            pages: write
+            id-token: write
         steps:
             - name: Checkout
               uses: actions/checkout@v3
@@ -28,9 +32,9 @@ jobs:
             - name: 'Az CLI login'
               uses: azure/login@v1
               with:
-                  client-id: ${{ secrets.AZURE_CLIENT_ID }}
-                  tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-                  subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+                client-id: ${{ secrets.AZURE_CLIENT_ID }}
+                tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+                subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
           
             - name: 'Run Azure CLI commands'
               run: |

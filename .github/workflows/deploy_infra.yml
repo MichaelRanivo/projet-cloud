@@ -11,6 +11,7 @@ jobs:
     terraform-back-plan:
         name: Plan the TF
         runs-on: self-hosted
+        environment: dev
         steps:
             - name: Checkout
               uses: actions/checkout@v3

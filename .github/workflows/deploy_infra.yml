@@ -6,11 +6,11 @@ on:
   push:
     branches: [ terraform ]
     paths: # if change on the back folder this workflow will run
-      - terraform/back/
+      - terraform/back/*
   pull_request:
     branches: [ terraform ]
     paths: # if change on the back folder this workflow will run
-      - terraform/back/
+      - terraform/back/*
 
 permissions:
   id-token: write

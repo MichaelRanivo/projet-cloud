@@ -17,8 +17,3 @@ terraform {
 provider "azurerm" {
     features {}
 }
-
-resource "azurerm_resource_group" "resource_group_tfstate" {
-  name     = var.az_resource_group_name
-  location = var.az_location
-}

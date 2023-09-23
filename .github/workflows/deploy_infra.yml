@@ -18,11 +18,8 @@ permissions:
 
 jobs:
   terraform-back-plan:
+    environment: dev
     name: Plan the TF
-    env:
-      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
     runs-on: self-hosted
     steps:
       - name: Checkout 
@@ -45,5 +42,27 @@ jobs:
           name: tfplan
           path: tfplan
 
-    # back-apply:
-    #     runs-on: self-host
+  terraform-back-apply:
+    needs: terraform-back-plan
+    environment: dev
+    name: Apply the TF
+    runs-on: self-hosted
+    steps:
+      - name: Download the artefact of the tfplan file
+        uses: actions/download-artifact@v3
+        with:
+          name: tfplan
+
+      - name: Checkout 
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+      
+      - name: Terraform test plan
+        run: |
+          terraform --version
+          cd ${{ vars.TF_ROOT }}
+          terraform init
+          terraform validate
+          terraform apply -input=false -auto-approve tfplan

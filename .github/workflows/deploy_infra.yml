@@ -18,11 +18,11 @@ permissions:
 
 jobs:
   terraform-back-plan:
-    environment: dev
-    # env:
-    #   ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-    #   ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-    #   ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+    # environment: dev
+    env:
+      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
     name: Plan the TF
     runs-on: self-hosted
     steps:
@@ -37,15 +37,16 @@ jobs:
           ls
           terraform --version
           cd ${{ vars.TF_ROOT }}
+          ls
           terraform init
           terraform validate
           terraform plan -var-file=${{ vars.TFVARS_FILE }}.tfvars -out tfplan
       
-      # - name: Upload artefact of the tfplan file
-      #   uses: actions/upload-artifact@v3
-      #   with:
-      #     name: tfplan
-      #     path: tfplan
+      - name: Upload artefact of the tfplan file
+        uses: actions/upload-artifact@v3
+        with:
+          name: tfplan
+          path: ${{ vars.TF_ROOT }}/tfplan
 
   # terraform-back-apply:
   #   needs: terraform-back-plan

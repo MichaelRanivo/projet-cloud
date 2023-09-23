@@ -17,8 +17,7 @@ data "azurerm_resource_group" "resource_group_TCLO_901" {
 }
 
 output "id" {
-  value = data.azurerm_resource_group.resource_group_TCLO_901.id
-  
+  value = data.azurerm_resource_group.resource_group_TCLO_901.id 
 }
 
 #Je prends les datas du resources groupe puis les datas du compte de stockage

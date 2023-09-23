@@ -1,0 +1,34 @@
+name: Pipeline destroy Infra
+
+run-name: ${{ github.actor }} is launching the destruction of the infra
+
+on: workflow_dispatch
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  terraform-destroy:
+    # environment: dev
+    env:
+      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+    name: Destroy Infra
+    runs-on: self-hosted
+    steps:
+      - name: Checkout 
+        uses: actions/checkout@v3
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+      
+      - name: Terraform test plan
+        run: |
+          terraform --version
+          cd ${{ vars.TF_COMPOSANTS }}
+          terraform init
+          terraform validate
+          terraform workspace select default
+          terraform destroy -input=false -auto-approve -var-file=${{ vars.TFVARS_FILE }}.tfvars

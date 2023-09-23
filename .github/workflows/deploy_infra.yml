@@ -70,8 +70,7 @@ jobs:
       - name: Terraform test apply
         run: |
           terraform --version
-          mv tfplan terraform/back/
-          ls
+          mv tfplan ${{ vars.TF_ROOT }}
           cd ${{ vars.TF_ROOT }}
           terraform init
           terraform validate

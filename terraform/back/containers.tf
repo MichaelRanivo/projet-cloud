@@ -8,8 +8,8 @@ terraform {
 }
 
 provider "azurerm" {
-    use_oidc = true
-    features {}
+  use_oidc = true
+  features {}
 }
 
 data "azurerm_resource_group" "resource_group_TCLO_901" {

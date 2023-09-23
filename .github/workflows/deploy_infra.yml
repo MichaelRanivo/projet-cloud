@@ -70,6 +70,7 @@ jobs:
       - name: Terraform test apply
         run: |
           terraform --version
+          mv tfplan terraform/back/
           ls
           cd ${{ vars.TF_ROOT }}
           terraform init

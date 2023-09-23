@@ -54,7 +54,7 @@ jobs:
           cd ${{ vars.TF_ROOT }}
           terraform init
           terraform validate
-          terraform plan -var-file=${{ vars.TFVARS_FILE }}.tfvars -out tfplan
+          terraform plan -out tfplan
       
       - name: Upload artefact of the tfplan file
         uses: actions/upload-artifact@v3

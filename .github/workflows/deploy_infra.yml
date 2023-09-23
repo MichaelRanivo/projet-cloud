@@ -30,6 +30,7 @@ jobs:
       
       - name: Terraform test plan
         run: |
+          echo $ARM_CLIENT_ID
           terraform --version
           cd ${{ vars.TF_ROOT }}
           terraform init

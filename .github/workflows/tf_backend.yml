@@ -1,12 +1,16 @@
-name: Pipeline deployment Infra
+name: Pipeline deployment Backend
 
-run-name: ${{ github.actor }} is launching the deployment of the infra
+run-name: ${{ github.actor }} is launching the deployment of the tf backend
 
 on:
   push:
     branches: [ terraform ]
+    paths: # if change on the back folder this workflow will run
+      - terraform/back/*
   pull_request:
     branches: [ terraform ]
+    paths: # if change on the back folder this workflow will run
+      - terraform/back/*
 
 permissions:
   id-token: write
@@ -19,38 +23,54 @@ jobs:
       ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
       ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-    name: Plan the infra
+    name: Plan backend TF
     runs-on: self-hosted
     steps:
       - name: Checkout 
         uses: actions/checkout@v3
 
+      - name: 'Az CLI login'
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
 
-      - name: Terraform infra plan
+      - name: Create Storage Container for tf state
+        run: |
+          az --version
+          az storage container create --name ${{ secrets.CONTAINER_NAME }} --account-name ${{ secrets.STORAGE_ACCOUNT_NAME }}
+      
+      - name: Configuration of terraform backend state
+        run: |
+          echo "ARM_ACCESS_KEY=$(az storage account keys list --resource-group ${{ secrets.RESOURCE_GROUP_NAME }} --account-name ${{ secrets.STORAGE_ACCOUNT_NAME }} --query '[0].value' -o tsv)" >> $GITHUB_ENV
+
+      - name: Terraform backend plan
         run: |
           terraform --version
-          cd ${{ vars.TF_COMPOSANTS }}
+          cd ${{ vars.TF_ROOT }}
           terraform init
           terraform validate
-          terraform plan -var-file=${{ vars.TFVARS_FILE }}.tfvars -out tfplan
+          terraform plan -out tfplan
       
       - name: Upload artefact of the tfplan file
         uses: actions/upload-artifact@v3
         with:
           name: tfplan
-          path: ${{ vars.TF_COMPOSANTS }}/tfplan
+          path: ${{ vars.TF_ROOT }}/tfplan
 
   terraform-back-apply:
     needs: terraform-back-plan
     # environment: dev
     env:
       ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-    #   ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+      ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
       ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
       ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-    name: Apply the infra
+    name: Apply backend TF
     runs-on: self-hosted
     steps:
       - name: Checkout 
@@ -64,11 +84,11 @@ jobs:
         with:
           name: tfplan
 
-      - name: Terraform infra apply
+      - name: Terraform backend apply
         run: |
           terraform --version
-          mv tfplan ${{ vars.TF_COMPOSANTS }}
-          cd ${{ vars.TF_COMPOSANTS }}
+          mv tfplan ${{ vars.TF_ROOT }}
+          cd ${{ vars.TF_ROOT }}
           terraform init
           terraform validate
           terraform apply -input=false -auto-approve tfplan

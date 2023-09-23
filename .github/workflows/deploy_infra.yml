@@ -21,17 +21,37 @@ jobs:
     # environment: dev
     env:
       ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
       ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
     name: Plan the TF
     runs-on: self-hosted
     steps:
       - name: Checkout 
         uses: actions/checkout@v3
 
+      - name: 'Az CLI login'
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
+
+      - name: Create Storage Container for tf state
+        run: |
+          az --version
+          az storage container create --name ${{ secrets.CONTAINER_NAME }} --account-name ${{ secrets.STORAGE_ACCOUNT_NAME }}
       
+      - name: Configuration of terraform backend state
+        run: |
+          echo "ARM_ACCESS_KEY=$(az storage account keys list --resource-group ${{ secrets.RESOURCE_GROUP_NAME }} --account-name ${{ secrets.STORAGE_ACCOUNT_NAME }} --query '[0].value' -o tsv)" >> $GITHUB_ENV
+
+      - name: Test ARM_ACCESS_KEY
+        run: |
+          echo $ARM_ACCESS_KEY
+
       - name: Terraform test plan
         run: |
           terraform --version
@@ -46,32 +66,32 @@ jobs:
           name: tfplan
           path: ${{ vars.TF_ROOT }}/tfplan
 
-  terraform-back-apply:
-    needs: terraform-back-plan
-    # environment: dev
-    env:
-      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-    name: Apply the TF
-    runs-on: self-hosted
-    steps:
-      - name: Checkout 
-        uses: actions/checkout@v3
+  # terraform-back-apply:
+  #   needs: terraform-back-plan
+  #   # environment: dev
+  #   env:
+  #     ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  #     ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  #     ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  #   name: Apply the TF
+  #   runs-on: self-hosted
+  #   steps:
+  #     - name: Checkout 
+  #       uses: actions/checkout@v3
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+  #     - name: Setup Terraform
+  #       uses: hashicorp/setup-terraform@v2
 
-      - name: Download the artefact of the tfplan file
-        uses: actions/download-artifact@v3
-        with:
-          name: tfplan
+  #     - name: Download the artefact of the tfplan file
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: tfplan
 
-      - name: Terraform test apply
-        run: |
-          terraform --version
-          mv tfplan ${{ vars.TF_ROOT }}
-          cd ${{ vars.TF_ROOT }}
-          terraform init
-          terraform validate
-          terraform apply -input=false -auto-approve tfplan
+  #     - name: Terraform test apply
+  #       run: |
+  #         terraform --version
+  #         mv tfplan ${{ vars.TF_ROOT }}
+  #         cd ${{ vars.TF_ROOT }}
+  #         terraform init
+  #         terraform validate
+  #         terraform apply -input=false -auto-approve tfplan

@@ -56,18 +56,18 @@ jobs:
     name: Apply the TF
     runs-on: self-hosted
     steps:
-      - name: Download the artefact of the tfplan file
-        uses: actions/download-artifact@v3
-        with:
-          name: tfplan
-
       - name: Checkout 
         uses: actions/checkout@v3
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
-      
-      - name: Terraform test plan
+
+      - name: Download the artefact of the tfplan file
+        uses: actions/download-artifact@v3
+        with:
+          name: tfplan
+
+      - name: Terraform test apply
         run: |
           terraform --version
           ls

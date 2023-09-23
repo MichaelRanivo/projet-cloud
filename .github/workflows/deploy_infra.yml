@@ -18,11 +18,11 @@ permissions:
 
 jobs:
   terraform-back-plan:
-    env:
-      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-      ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+    environment: dev
+    # env:
+    #   ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+    #   ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+    #   ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
     name: Plan the TF
     runs-on: self-hosted
     steps:
@@ -34,44 +34,43 @@ jobs:
       
       - name: Terraform test plan
         run: |
-          echo $ARM_CLIENT_ID
+          ls
           terraform --version
           cd ${{ vars.TF_ROOT }}
           terraform init
           terraform validate
           terraform plan -var-file=${{ vars.TFVARS_FILE }}.tfvars -out tfplan
       
-      - name: Upload artefact of the tfplan file
-        uses: actions/upload-artifact@v3
-        with:
-          name: tfplan
-          path: tfplan
+      # - name: Upload artefact of the tfplan file
+      #   uses: actions/upload-artifact@v3
+      #   with:
+      #     name: tfplan
+      #     path: tfplan
 
-  terraform-back-apply:
-    needs: terraform-back-plan
-    env:
-      ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-      ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-      ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-    name: Apply the TF
-    runs-on: self-hosted
-    steps:
-      - name: Download the artefact of the tfplan file
-        uses: actions/download-artifact@v3
-        with:
-          name: tfplan
+  # terraform-back-apply:
+  #   needs: terraform-back-plan
+  #   env:
+  #     ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  #     ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+  #     ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  #   name: Apply the TF
+  #   runs-on: self-hosted
+  #   steps:
+  #     - name: Download the artefact of the tfplan file
+  #       uses: actions/download-artifact@v3
+  #       with:
+  #         name: tfplan
 
-      - name: Checkout 
-        uses: actions/checkout@v3
+  #     - name: Checkout 
+  #       uses: actions/checkout@v3
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
+  #     - name: Setup Terraform
+  #       uses: hashicorp/setup-terraform@v2
       
-      - name: Terraform test plan
-        run: |
-          terraform --version
-          cd ${{ vars.TF_ROOT }}
-          terraform init
-          terraform validate
-          terraform apply -input=false -auto-approve tfplan
+  #     - name: Terraform test plan
+  #       run: |
+  #         terraform --version
+  #         cd ${{ vars.TF_ROOT }}
+  #         terraform init
+  #         terraform validate
+  #         terraform apply -input=false -auto-approve tfplan

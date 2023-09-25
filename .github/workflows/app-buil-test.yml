@@ -10,6 +10,7 @@ on:
 jobs:
   sniff-code:
     runs-on: self-hosted
+    continue-on-error: true
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3

@@ -8,16 +8,37 @@ on:
       - dev
 
 jobs:
-  build-sample-app:
-    runs-on: self-hosted 
+  sniff-code:
+    runs-on: self-hosted
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+
       - name: Set up PHP and composer
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: "8.2"
           tools: composer
+
+      - name: Install PHPStan
+        run: |
+          cd sample-app/
+          composer require --dev phpstan/phpstan
+          vendor/bin/phpstan analyse .
+
+  build-sample-app:
+    needs: sniff-code
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up PHP and composer
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          tools: composer
+
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v2.0
         with:
@@ -35,14 +56,17 @@ jobs:
           file_name: .env
           fail_on_empty: false
           sort_keys: false
+
       - name: Update and install dependencies
         run: |
           cd sample-app/
           composer update
           composer install
+
       - name: Compresse the app
         run: |
           tar -czf app.tar.gz sample-app/
+
       - name: Upload artefact of the app
         uses: actions/upload-artifact@v3
         with:
@@ -50,7 +74,7 @@ jobs:
           path: app.tar.gz
 
   test-sample-app:
-    needs: build-sample-app
+    needs: [sniff-code, build-sample-app]
     runs-on: ubuntu-latest
     container:
       image: kirschbaumdevelopment/laravel-test-runner:8.2
@@ -76,7 +100,7 @@ jobs:
         run: |
           mkdir sample-app/
           tar xzf app.tar.gz
-      - name: Migrate and seed the DB 
+      - name: Migrate and seed the DB
         run: |
           cd sample-app/
           php artisan migrate --force

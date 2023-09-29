@@ -33,13 +33,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
       - name: Set up PHP and composer
         uses: shivammathur/setup-php@v2
         with:
           php-version: "8.2"
           tools: composer
-
       - name: Make envfile
         uses: SpicyPizza/create-envfile@v2.0
         with:
@@ -53,21 +51,19 @@ jobs:
           envkey_DB_DATABASE: ${{ secrets.DB_DATABASE }}
           envkey_DB_USERNAME: ${{ secrets.DB_USERNAME }}
           envkey_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          envkey_MYSQL_ATTR_SSL_CA: ${{ secrets.DB_PATH }}
           directory: sample-app/
           file_name: .env
           fail_on_empty: false
           sort_keys: false
-
       - name: Update and install dependencies
         run: |
           cd sample-app/
-          composer update
-          composer install
-
+          composer update --optimize-autoloader
+          composer install --no-interaction --optimize-autoloader
       - name: Compresse the app
         run: |
-          tar -czf app.tar.gz sample-app/
-
+          tar -czf app-builded.tar.gz sample-app/
       - name: Upload artefact of the app
         uses: actions/upload-artifact@v3
         with:

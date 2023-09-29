@@ -147,7 +147,10 @@ jobs:
           fail_on_empty: false
           sort_keys: false
       - name: Build the Docker image
+        env:
+          AUTH: ${{ secrets.DB_KEY }}
         run: |
           cd sample-app/
-          docker build --build-arg DB_KEY=${{ secrets.DB_KEY }} --no-cache --progress=plain -t sample-app:${{ secrets.GITHUB_ACTOR_ID }} .
+          echo "$AUTH" | base64 --decode > certif.crt
+          docker build --no-cache --progress=plain -t sample-app:${{ secrets.GITHUB_ACTOR_ID }} .
           docker image ls -a

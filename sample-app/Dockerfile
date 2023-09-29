@@ -1,6 +1,5 @@
 FROM php:8.2-alpine3.18
 
-ARG DB_KEY
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
 RUN apk add openssl zip unzip git curl
@@ -8,7 +7,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local
 RUN docker-php-ext-install pdo pdo_mysql
 RUN composer --version
 
-RUN echo ${DB_KEY} > /var/www/key.crt
+COPY sample-app/certif.crt /var/www/
 
 COPY sample-app/ /app
 WORKDIR /app

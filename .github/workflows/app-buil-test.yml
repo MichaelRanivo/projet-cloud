@@ -71,8 +71,8 @@ jobs:
       - name: Upload artefact of the app
         uses: actions/upload-artifact@v3
         with:
-          name: app.tar.gz
-          path: app.tar.gz
+          name: app-builded.tar.gz
+          path: app-builded.tar.gz
 
   test-sample-app:
     needs: [sniff-code, build-sample-app]
@@ -94,14 +94,14 @@ jobs:
       - name: Download the artefact of the app
         uses: actions/download-artifact@v3
         with:
-          name: app.tar.gz
+          name: app-builded.tar.gz
       - name: Remove the sample-app directory
         run: rm -rf sample-app/
       - name: Unpack the artifact
         run: |
           mkdir sample-app/
-          tar xzf app.tar.gz
-      - name: Migrate and seed the DB
+          tar xzf app-builded.tar.gz
+      - name: Migrate and seed the DB 
         run: |
           cd sample-app/
           php artisan migrate --force
@@ -110,3 +110,30 @@ jobs:
         run: |
           cd sample-app/
           vendor/bin/phpunit tests/
+      - name: Compresse the app
+        run: |
+          tar -czf app-tested.tar.gz sample-app/
+      - name: Upload artefact of the app
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-tested.tar.gz
+          path: app-tested.tar.gz
+
+  build-image-docker:
+    needs: test-sample-app
+    runs-on: self-hosted
+    steps:
+      - name: Download the artefact of the app
+        uses: actions/download-artifact@v3
+        with:
+          name: app-tested.tar.gz
+      - name: Remove the sample-app directory
+        run: rm -rf sample-app/
+      - name: Unpack the artifact
+        run: |
+          mkdir sample-app/
+          tar xzf app-tested.tar.gz
+      - name: Build the Docker image
+        run: |
+          cd sample-app/
+          docker ps

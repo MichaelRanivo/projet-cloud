@@ -25,6 +25,10 @@ jobs:
         run: |
           cd sample-app/
           composer require --dev phpstan/phpstan
+
+      - name: Scan the code
+        run: |
+          cd sample-app/
           vendor/bin/phpstan analyse .
 
   build-sample-app:
@@ -72,8 +76,10 @@ jobs:
   test-sample-app:
     needs: [sniff-code, build-sample-app]
     runs-on: ubuntu-latest
+
     container:
       image: kirschbaumdevelopment/laravel-test-runner:8.2
+
     services:
       mysql:
         image: mysql:latest
@@ -85,22 +91,27 @@ jobs:
         ports:
           - 3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+
     steps:
       - name: Download the artefact of the app
         uses: actions/download-artifact@v3
         with:
           name: app-builded.tar.gz
+
       - name: Remove the sample-app directory
         run: rm -rf sample-app/
+
       - name: Unpack the artifact
         run: |
           mkdir sample-app/
           tar xzf app-builded.tar.gz
-      - name: Migrate and seed the DB 
+
+      - name: Migrate and seed the DB
         run: |
           cd sample-app/
-          php artisan migrate
-          php artisan db:seed
+          php artisan migrate --force
+          php artisan db:seed --force
+
       - name: Execute tests via PHPUnit
         run: |
           cd sample-app/
@@ -147,10 +158,6 @@ jobs:
           fail_on_empty: false
           sort_keys: false
       - name: Build the Docker image
-        env:
-          AUTH: ${{ secrets.DB_KEY }}
         run: |
           cd sample-app/
-          echo "$AUTH" | base64 --decode > certif.crt
           docker build --no-cache --progress=plain -t sample-app:${{ secrets.GITHUB_ACTOR_ID }} .
-          docker image ls -a

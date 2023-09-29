@@ -51,7 +51,7 @@ jobs:
           envkey_DB_DATABASE: ${{ secrets.DB_DATABASE }}
           envkey_DB_USERNAME: ${{ secrets.DB_USERNAME }}
           envkey_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          envkey_MYSQL_ATTR_SSL_CA: ${{ secrets.DB_PATH }}
+          # envkey_MYSQL_ATTR_SSL_CA: ${{ secrets.DB_PATH }}
           directory: sample-app/
           file_name: .env
           fail_on_empty: false
@@ -100,8 +100,8 @@ jobs:
       - name: Migrate and seed the DB 
         run: |
           cd sample-app/
-          php artisan migrate --force
-          php artisan db:seed --force
+          php artisan migrate
+          php artisan db:seed
       - name: Execute tests via PHPUnit
         run: |
           cd sample-app/

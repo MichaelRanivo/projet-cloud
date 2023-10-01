@@ -51,8 +51,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images:
-            - sample-app
+          images: sample-app
       - name: Print meta
         run: |
           echo "Les métadonnées pour l'image my-project sont :"

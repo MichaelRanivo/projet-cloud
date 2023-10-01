@@ -3,10 +3,16 @@ name: CI Build and Test
 run-name: ${{ github.actor }} is launching the Build and test 🚀
 
 on:
-  workflow_run:
-    workflows: ["CI Code Quality"]
-    types:
-      - completed
+  # à décommenter quand le projet sera fini
+  # workflow_run:
+  #   workflows: ["CI Code Quality"]
+  #   types:
+  #     - completed
+  # à supprimer quand le projet sera fini
+  push:
+    branches:
+      - dev
+      - main
 
 jobs:
   build-sample-app:

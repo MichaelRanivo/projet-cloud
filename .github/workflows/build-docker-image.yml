@@ -55,6 +55,7 @@ jobs:
       - name: Print meta
         run: |
           pwd && ls -al
-          echo "Les métadonnées pour l'image my-project sont :"
-          echo ${{ steps.meta.outputs.tags }}
-          echo ${{ steps.meta.outputs.labels }}
+          cd sample-app/ && ls -al
+        # echo "Les métadonnées pour l'image my-project sont :"
+        # echo ${{ steps.meta.outputs.tags }}
+        # echo ${{ steps.meta.outputs.labels }}

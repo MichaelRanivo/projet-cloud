@@ -1,5 +1,7 @@
 FROM php:8.2-alpine3.18
 
+LABEL version="1.0.0"
+
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
 RUN apk add openssl zip unzip git curl wget

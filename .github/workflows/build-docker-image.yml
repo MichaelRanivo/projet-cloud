@@ -4,7 +4,7 @@ run-name: ${{ github.actor }} is launching the Build the Docker image and push i
 
 on:
   workflow_run:
-    workflows: "CI Build and Test"
+    workflows: ["CI Build and Test"]
     types:
       - completed
   # push:

@@ -3,36 +3,13 @@ name: CI Build and Test
 run-name: ${{ github.actor }} is launching the Build and test 🚀
 
 on:
-  push:
-    branches:
-      - dev
+  workflow_run:
+    workflows: ["CI Code Quality"]
+    types:
+      - completed
 
 jobs:
-  sniff-code:
-    runs-on: self-hosted
-    continue-on-error: true
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Set up PHP and composer
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: "8.2"
-          tools: composer
-
-      - name: Install PHPStan
-        run: |
-          cd sample-app/
-          composer require --dev phpstan/phpstan
-
-      - name: Scan the code
-        run: |
-          cd sample-app/
-          vendor/bin/phpstan analyse .
-
   build-sample-app:
-    needs: sniff-code
     runs-on: self-hosted
     steps:
       - name: Checkout repository
@@ -74,7 +51,7 @@ jobs:
           path: app-builded.tar.gz
 
   test-sample-app:
-    needs: [sniff-code, build-sample-app]
+    needs: build-sample-app
     runs-on: ubuntu-latest
 
     container:
@@ -124,40 +101,3 @@ jobs:
         with:
           name: app-tested.tar.gz
           path: app-tested.tar.gz
-
-  build-image-docker:
-    needs: test-sample-app
-    runs-on: self-hosted
-    steps:
-      - name: Download the artefact of the app
-        uses: actions/download-artifact@v3
-        with:
-          name: app-tested.tar.gz
-      - name: Remove the sample-app directory
-        run: rm -rf sample-app/
-      - name: Unpack the artifact
-        run: |
-          mkdir sample-app/
-          tar xzf app-tested.tar.gz
-      - name: Make envfile
-        uses: SpicyPizza/create-envfile@v2.0
-        with:
-          envkey_APP_DEBUG: ${{ secrets.APP_DEBUG_DOCKER }}
-          envkey_APP_ENV: ${{ secrets.APP_ENV_DOCKER }}
-          envkey_APP_KEY: ${{ secrets.APP_KEY }}
-          envkey_APP_URL: ${{ secrets.APP_URL }}
-          envkey_DB_CONNECTION: ${{ secrets.DB_CONNECTION }}
-          envkey_DB_HOST: ${{ secrets.DB_HOST }}
-          envkey_DB_PORT: ${{ secrets.DB_PORT }}
-          envkey_DB_DATABASE: ${{ secrets.DB_DATABASE }}
-          envkey_DB_USERNAME: ${{ secrets.DB_USERNAME }}
-          envkey_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          envkey_MYSQL_ATTR_SSL_CA: ${{ secrets.KEY_PATH }}
-          directory: sample-app/
-          file_name: .env
-          fail_on_empty: false
-          sort_keys: false
-      - name: Build the Docker image
-        run: |
-          cd sample-app/
-          docker build --no-cache --progress=plain -t sample-app:${{ secrets.GITHUB_ACTOR_ID }} .

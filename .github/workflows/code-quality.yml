@@ -1,0 +1,33 @@
+name: CI Code Quality
+
+run-name: ${{ github.actor }} is launching the Code Quality 🚀
+
+on:
+  push:
+    branches:
+      - dev
+      - main
+
+jobs:
+  sniff-code:
+    runs-on: self-hosted
+    continue-on-error: true
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up PHP and composer
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          tools: composer
+
+      - name: Install PHPStan
+        run: |
+          cd sample-app/
+          composer require --dev phpstan/phpstan
+
+      - name: Scan the code
+        run: |
+          cd sample-app/
+          vendor/bin/phpstan analyse .

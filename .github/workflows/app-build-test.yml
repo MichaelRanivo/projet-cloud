@@ -3,12 +3,10 @@ name: CI Build and Test
 run-name: ${{ github.actor }} is launching the Build and test 🚀
 
 on:
-  # à décommenter quand le projet sera fini
   # workflow_run:
   #   workflows: ["CI Code Quality"]
   #   types:
   #     - completed
-  # à supprimer quand le projet sera fini
   push:
     branches:
       - dev
@@ -55,14 +53,11 @@ jobs:
         with:
           name: app-builded.tar.gz
           path: app-builded.tar.gz
-
   test-sample-app:
     needs: build-sample-app
     runs-on: ubuntu-latest
-
     container:
       image: kirschbaumdevelopment/laravel-test-runner:8.2
-
     services:
       mysql:
         image: mysql:latest
@@ -74,27 +69,22 @@ jobs:
         ports:
           - 3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
-
     steps:
       - name: Download the artefact of the app
         uses: actions/download-artifact@v3
         with:
           name: app-builded.tar.gz
-
       - name: Remove the sample-app directory
         run: rm -rf sample-app/
-
       - name: Unpack the artifact
         run: |
           mkdir sample-app/
           tar xzf app-builded.tar.gz
-
       - name: Migrate and seed the DB
         run: |
           cd sample-app/
           php artisan migrate --force
           php artisan db:seed --force
-
       - name: Execute tests via PHPUnit
         run: |
           cd sample-app/

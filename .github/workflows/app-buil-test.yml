@@ -57,7 +57,7 @@ jobs:
 
   test-sample-app:
     needs: build-sample-app
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     container:
       image: kirschbaumdevelopment/laravel-test-runner:8.2

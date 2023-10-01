@@ -9,10 +9,10 @@ on:
     types:
       - completed
   # à supprimer quand le projet sera fini
-  push:
-    branches:
-      - dev
-      - main
+  # push:
+  #   branches:
+  #     - dev
+  #     - main
 
 jobs:
   build-sample-app:

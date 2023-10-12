@@ -4,8 +4,8 @@ run-name: ${{ github.actor }} is launching the Build the Docker image and push i
 
 on:
   push:
-    branches: ["main"]
     tags: ["v*.*.*"]
+    branches: ["main"]
 
 jobs:
   build-image-docker:
@@ -39,11 +39,16 @@ jobs:
           tags: |
             type=semver,pattern={{version}}
 
-      - name: Build and push
-        uses: docker/build-push-action@v3
-        with:
-          context: sample-app/
-          file: ./Dockerfile
-          push: ${{ github.ref_type == 'tag' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
+      - name: Where are we
+        run: |
+          pwd 
+          ls -al
+
+      # - name: Build and push
+      #   uses: docker/build-push-action@v3
+      #   with:
+      #     context: sample-app/
+      #     file: ./Dockerfile
+      #     push: ${{ github.ref_type == 'tag' }}
+      #     tags: ${{ steps.meta.outputs.tags }}
+      #     labels: ${{ steps.meta.outputs.labels }}

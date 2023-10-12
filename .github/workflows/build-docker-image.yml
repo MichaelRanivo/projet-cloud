@@ -40,6 +40,7 @@ jobs:
           cd sample-app/
           composer update --optimize-autoloader
           composer install --no-interaction --optimize-autoloader
+          cat .env
           rm .env
       - name: Compresse the app
         run: |

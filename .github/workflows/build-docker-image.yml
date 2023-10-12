@@ -3,10 +3,6 @@ name: CI Build Docker image and push
 run-name: ${{ github.actor }} is launching the Build the Docker image and push it 🚀
 
 on:
-  workflow_run:
-    workflows: ["CI Build and Test"]
-    types:
-      - completed
   push:
     branches: ["main"]
     tags: ["v*.*.*"]
@@ -39,11 +35,15 @@ jobs:
         id: meta
         with:
           images: ${{ secrets.AZUR_REGISTRY }}/sample-app
+          flavor: latest=true
           tags: |
             type=semver,pattern={{version}}
 
-      - name: Print meta
-        run: |
-          echo "Les métadonnées pour l'image my-project sont :"
-          echo ${{ steps.meta.outputs.tags }}
-          echo ${{ steps.meta.outputs.labels }}
+      - name: Build and push
+        uses: docker/build-push-action@v3
+        with:
+          context: sample-app/
+          file: ./Dockerfile
+          push: ${{ github.ref_type == 'tag' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}

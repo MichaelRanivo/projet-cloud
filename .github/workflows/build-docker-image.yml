@@ -50,6 +50,7 @@ jobs:
           name: app-builded.tar.gz
           path: app-builded.tar.gz
   build-image-docker:
+    needs: build-sample-app
     runs-on: self-hosted
     steps:
       - name: Download the artefact of the app

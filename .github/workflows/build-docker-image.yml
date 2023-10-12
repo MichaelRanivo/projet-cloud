@@ -24,7 +24,7 @@ jobs:
           envkey_APP_DEBUG: ${{ secrets.APP_DEBUG }}
           envkey_APP_ENV: ${{ secrets.APP_ENV }}
           envkey_APP_KEY: ${{ secrets.APP_KEY }}
-          envkey_APP_URL: ${{ secrets.APP_URL }}
+          envkey_MYSQL_ATTR_SSL_CA: ${{ secrets.MYSQL_ATTR_SSL_CA }}
           envkey_DB_CONNECTION: ${{ secrets.DB_CONNECTION }}
           envkey_DB_HOST: ${{ secrets.DB_HOST }}
           envkey_DB_PORT: ${{ secrets.DB_PORT }}

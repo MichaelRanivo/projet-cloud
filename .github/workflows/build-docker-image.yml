@@ -3,22 +3,59 @@ name: CI Build Docker image and push
 run-name: ${{ github.actor }} is launching the Build the Docker image and push it 🚀
 
 on:
-  workflow_run:
-    workflows: ["CI Build and Test"]
-    types:
-      - completed
+  push:
+    tags: ["v*.*.*"]
+    branches: ["main"]
 
 jobs:
+  build-sample-app:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - name: Set up PHP and composer
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          tools: composer
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v2.0
+        with:
+          envkey_APP_DEBUG: ${{ secrets.APP_DEBUG }}
+          envkey_APP_ENV: ${{ secrets.APP_ENV }}
+          envkey_APP_KEY: ${{ secrets.APP_KEY }}
+          envkey_APP_URL: ${{ secrets.APP_URL }}
+          envkey_DB_CONNECTION: ${{ secrets.DB_CONNECTION }}
+          envkey_DB_HOST: ${{ secrets.DB_HOST }}
+          envkey_DB_PORT: ${{ secrets.DB_PORT }}
+          envkey_DB_DATABASE: ${{ secrets.DB_DATABASE }}
+          envkey_DB_USERNAME: ${{ secrets.DB_USERNAME }}
+          envkey_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          directory: sample-app/
+          file_name: .env
+          fail_on_empty: false
+          sort_keys: false
+      - name: Update and install dependencies
+        run: |
+          cd sample-app/
+          composer update --optimize-autoloader
+          composer install --no-interaction --optimize-autoloader
+          rm .env
+      - name: Compresse the app
+        run: |
+          tar -czf app-builded.tar.gz sample-app/
+      - name: Upload artefact of the app
+        uses: actions/upload-artifact@v3
+        with:
+          name: app-builded.tar.gz
+          path: app-builded.tar.gz
   build-image-docker:
     runs-on: self-hosted
     steps:
       - name: Download the artefact of the app
         uses: dawidd6/action-download-artifact@v2
         with:
-          github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          workflow: app-build-test.yml
-          workflow_conclusion: success
-          name: app-tested.tar.gz
+          name: app-builded.tar.gz
       - name: Unpack the artifact
         run: |
           rm -rf sample-app/
@@ -30,7 +67,6 @@ jobs:
           registry: ${{ secrets.AZUR_REGISTRY }}
           username: ${{ secrets.AZUR_REGISTRY_NAME }}
           password: ${{ secrets.AZUR_REGISTRY_PASSWORD }}
-
       - name: Docker meta
         uses: docker/metadata-action@v5
         id: meta
@@ -39,13 +75,6 @@ jobs:
           flavor: latest=true
           tags: |
             type=semver,pattern={{version}}
-
-      - name: Where are we
-        run: |
-          pwd 
-          ls -al
-          ls sample-app/
-
       - name: Build and push
         uses: docker/build-push-action@v3
         with:

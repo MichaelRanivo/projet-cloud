@@ -9,13 +9,13 @@ RUN docker-php-ext-install pdo pdo_mysql
 RUN cd /var/ && \
     wget https://dl.cacerts.digicert.com/DigiCertGlobalRootCA.crt.pem 
 
-COPY ./ /var/www/html
-WORKDIR /var/www/html
+COPY ./ /var/www/html/
+WORKDIR /var/www/html/
 
-RUN cd /var/www/html && \
+RUN cd /var/www/html/ && \
     composer install --no-interaction --optimize-autoloader
 
-RUN cd /var/www/html && \
+RUN cd /var/www/html/ && \
     php artisan optimize
 
 CMD ["php","artisan","serve", "--host=0.0.0.0","--port=80"]

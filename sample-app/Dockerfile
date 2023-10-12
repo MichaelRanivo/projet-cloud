@@ -9,7 +9,7 @@ RUN docker-php-ext-install pdo pdo_mysql
 RUN cd /var/ && \
     wget https://dl.cacerts.digicert.com/DigiCertGlobalRootCA.crt.pem 
 
-COPY ../sample-app/ /var/www/html
+COPY ./ /var/www/html
 WORKDIR /var/www/html
 
 RUN cd /var/www/html && \

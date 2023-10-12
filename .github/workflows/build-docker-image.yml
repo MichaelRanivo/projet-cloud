@@ -44,12 +44,13 @@ jobs:
         run: |
           pwd 
           ls -al
+          ls sample-app/
 
       - name: Build and push
         uses: docker/build-push-action@v3
         with:
           context: sample-app/
-          file: sample-app/Dockerfile
+          file: Dockerfile
           push: ${{ github.ref_type == 'tag' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}

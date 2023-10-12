@@ -7,10 +7,9 @@ on:
     workflows: ["CI Build and Test"]
     types:
       - completed
-  # push:
-  #   branches:
-  #     - dev
-  #     - main
+  push:
+    branches: ["main"]
+    tags: ["v*.*.*"]
 
 jobs:
   build-image-docker:

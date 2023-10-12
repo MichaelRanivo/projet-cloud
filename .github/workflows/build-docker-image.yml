@@ -7,9 +7,6 @@ on:
     workflows: ["CI Build and Test"]
     types:
       - completed
-  push:
-    tags: ["v*.*.*"]
-    branches-ignore: ["dev", "terraform"]
 
 jobs:
   build-image-docker:

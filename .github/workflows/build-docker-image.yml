@@ -5,7 +5,9 @@ run-name: ${{ github.actor }} is launching the Build the Docker image and push i
 on:
   push:
     tags: ["v*.*.*"]
-    branches: ["main"]
+    branches-ignore:
+      - "dev"
+      - "terraform"
 
 jobs:
   build-image-docker:
@@ -48,7 +50,7 @@ jobs:
       #   uses: docker/build-push-action@v3
       #   with:
       #     context: sample-app/
-      #     file: ./Dockerfile
+      #     file: sample-app/Dockerfile
       #     push: ${{ github.ref_type == 'tag' }}
       #     tags: ${{ steps.meta.outputs.tags }}
       #     labels: ${{ steps.meta.outputs.labels }}

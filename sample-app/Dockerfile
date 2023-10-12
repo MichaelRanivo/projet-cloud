@@ -16,7 +16,7 @@ RUN cd /var/www/html/ && \
     composer install --no-interaction --optimize-autoloader
 
 RUN cd /var/www/html/ && \
-    php artisan optimize
+    php artisan key:generate
 
 CMD ["php","artisan","serve", "--host=0.0.0.0","--port=80"]
 

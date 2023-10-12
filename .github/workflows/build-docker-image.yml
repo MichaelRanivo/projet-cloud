@@ -5,7 +5,6 @@ run-name: ${{ github.actor }} is launching the Build the Docker image and push i
 on:
   push:
     tags: ["v*.*.*"]
-    branches: ["main"]
     branches-ignore: ["dev", "terraform"]
 
 jobs:

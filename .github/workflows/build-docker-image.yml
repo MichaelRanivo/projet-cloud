@@ -3,6 +3,10 @@ name: CI Build Docker image and push
 run-name: ${{ github.actor }} is launching the Build the Docker image and push it 🚀
 
 on:
+  workflow_run:
+    workflows: ["CI Build and Test"]
+    types:
+      - completed
   push:
     tags: ["v*.*.*"]
     branches-ignore: ["dev", "terraform"]

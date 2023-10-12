@@ -40,7 +40,8 @@ jobs:
         id: meta
         with:
           images: ${{ secrets.AZUR_REGISTRY }}/sample-app
-          flavor: semver
+          tags: |
+            type=semver,pattern={{version}}
 
       - name: Print meta
         run: |

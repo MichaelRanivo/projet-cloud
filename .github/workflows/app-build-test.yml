@@ -7,10 +7,6 @@ on:
     workflows: ["CI Code Quality"]
     types:
       - completed
-  # push:
-  #   branches:
-  #     - dev
-  #     - main
 
 jobs:
   build-sample-app:

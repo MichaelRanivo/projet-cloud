@@ -7,10 +7,6 @@ on:
     branches: [ terraform ]
     paths: # if change on the back folder this workflow will run
       - terraform/back/*
-  pull_request:
-    branches: [ terraform ]
-    paths: # if change on the back folder this workflow will run
-      - terraform/back/*
 
 jobs:
   tf-backend-infra-plan:

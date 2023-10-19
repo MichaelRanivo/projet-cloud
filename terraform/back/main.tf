@@ -1,19 +1,15 @@
 terraform {
-  required_version = ">=0.12"
   required_providers {
-  
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~>3.0"
+      version = "~>3.50"
     }
-    
   }
-
   backend "azurerm" {
-    resource_group_name  = "t-clo-907-lyo-3"
-    storage_account_name = "atclo901lyo323092023"
-    container_name       = "tfstate"
-    key                  = "terraform.tfstate"
+      resource_group_name  = "tfstateresourcegroup"
+      storage_account_name = "tfstatestoragexiwls"
+      container_name       = "tfstatestoragecontainer"
+      key                  = "terraform.tfstate"
   }
 
 }

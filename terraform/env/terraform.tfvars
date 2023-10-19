@@ -1,8 +1,33 @@
+#Infra Backend
+backend_resource_group_name         = "tfstateresourcegroup"
+azure_cloud_location                = "North Europe"
+backend_storage_account_name        = "tfstatestorage"
+storage_account_tier                = "Standard"
+storage_account_replication_type    = "LRS"
+storage_container_name              = "tfstatestoragecontainer"
+storage_container_access_type       = "private"
+
+tags = {
+    Author          = "michael.ranivo@epitech.eu"
+    Project         = "TerraCloud"
+    Country         = "FR"
+    Environment     = "POC"
+    ApplicationID   = "Sample-App"
+    Version         = "1"
+    BackupPolicy    = "No-Backup"
+}
+
+#Upload state file
+
+
+
+
+
 #Virtual network vars
 vnet_name                   = "ImageVMVnet"
 vnet_ip_addr                = ["10.0.0.0/16"]
 resource_group_location     = "northeurope"
-resource_group_name         = "t-clo-907-lyo-3"
+resource_group_name         = "t-clo-901-lyo-3"
 
 #subnet vars
 subnet_name                 = "ImageVMSubnet"

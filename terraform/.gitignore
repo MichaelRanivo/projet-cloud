@@ -1,6 +1,13 @@
 back/.terraform
 back/.terraform.lock.hcl
 back/terraform.tfstate
+back/tfplan
+back/terraform.tfstate.backup
+back/infra/.terraform
+back/infra/.terraform.lock.hcl
+back/infra/terraform.tfstate
+back/infra/tfplan
+back/infra/terraform.tfstate.backup
 ImageVM/.terraform
 ImageVM/.terraform.lock.hcl
 ImageVM/terraform.tfstate

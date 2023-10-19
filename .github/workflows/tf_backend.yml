@@ -5,8 +5,8 @@ run-name: ${{ github.actor }} is launching the deployment of the tf backend
 on:
   push:
     branches: [ terraform ]
-    paths: # if change on the back folder this workflow will run
-      - terraform/back/*
+    # paths: # if change on the back folder this workflow will run
+    #   - terraform/back/*
 
 permissions:
   contents: read

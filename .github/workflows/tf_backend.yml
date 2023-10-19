@@ -74,6 +74,7 @@ jobs:
         shell: bash
       - name: Update Variables
         run: |
+          cd ${{ vars.TF_INFRA_ROOT }}
           terraform output --raw resource_group_name
           terraform output --raw storage_account_name
           terraform output --raw storage_container_name

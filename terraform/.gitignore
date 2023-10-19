@@ -1,3 +1,9 @@
 back/.terraform
 back/.terraform.lock.hcl
 back/terraform.tfstate
+ImageVM/.terraform
+ImageVM/.terraform.lock.hcl
+ImageVM/terraform.tfstate
+ImageVM/tfplan
+ImageVM/*.pem
+ImageVM/terraform.tfstate.backup

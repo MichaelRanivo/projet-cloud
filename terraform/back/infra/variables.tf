@@ -7,7 +7,7 @@ variable "azure_cloud_location" {
     type        = string
     description = "The location of Azure Cloud we used"
 }
-
+ 
 variable "backend_storage_account_name" {
     type        = string
     description = "The name of the storage account for the backend Terraform"  

@@ -8,6 +8,11 @@ on:
     paths: # if change on the back folder this workflow will run
       - terraform/back/*
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   tf-backend-infra-plan:
     env:

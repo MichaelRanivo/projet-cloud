@@ -69,31 +69,30 @@ jobs:
           terraform init
           terraform validate
           terraform apply -input=false -auto-approve tfplan
-      - name: Sleep for 20 seconds
-        run: sleep 20s
+      - name: Sleep for 40 seconds
+        run: sleep 40s
         shell: bash
       - name: Update Variables
         run: |
           cd ${{ vars.TF_INFRA_ROOT }}
-          echo $GITHUB_REPOSITORY
-        # curl -L \
-        # -X PATCH \
-        # -H "Accept: application/vnd.github+json" \
-        # -H "Authorization: Bearer ${{ secrets.TOKEN_PERSO }}" \
-        # -H "X-GitHub-Api-Version: 2022-11-28" \
-        # https://api.github.com/repos/${{ github.actor }}/$GITHUB_REPOSITORY/actions/variables/RESOURCE_GROUP_NAME \
-        # -d '{"name":"RESOURCE_GROUP_NAME","value":"$(terraform output --raw resource_group_name)"}'
-        # curl -L \
-        # -X PATCH \
-        # -H "Accept: application/vnd.github+json" \
-        # -H "Authorization: Bearer ${{ secrets.TOKEN_PERSO }}" \
-        # -H "X-GitHub-Api-Version: 2022-11-28" \
-        # https://api.github.com/repos/${{ github.actor }}/$GITHUB_REPOSITORY/actions/variables/STORAGE_ACCOUNT_NAME \
-        # -d '{"name":"STORAGE_ACCOUNT_NAME","value":"$(terraform output --raw storage_account_name)"}'
-        # curl -L \
-        # -X PATCH \
-        # -H "Accept: application/vnd.github+json" \
-        # -H "Authorization: Bearer ${{ secrets.TOKEN_PERSO }}" \
-        # -H "X-GitHub-Api-Version: 2022-11-28" \
-        # https://api.github.com/repos/${{ github.actor }}/$GITHUB_REPOSITORY/actions/variables/STORAGE_CONTAINER_NAME \
-        # -d '{"name":"STORAGE_CONTAINER_NAME","value":"$(terraform output --raw storage_container_name)"}'
+          curl -L \
+            -X PATCH \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.TOKEN_PERSO }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/$GITHUB_REPOSITORY/actions/variables/RESOURCE_GROUP_NAME \
+            -d '{"name":"RESOURCE_GROUP_NAME","value":"$(terraform output --raw resource_group_name)"}'
+          curl -L \
+            -X PATCH \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.TOKEN_PERSO }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/$GITHUB_REPOSITORY/actions/variables/STORAGE_ACCOUNT_NAME \
+            -d '{"name":"STORAGE_ACCOUNT_NAME","value":"$(terraform output --raw storage_account_name)"}'
+          curl -L \
+            -X PATCH \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.TOKEN_PERSO }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/$GITHUB_REPOSITORY/actions/variables/STORAGE_CONTAINER_NAME \
+            -d '{"name":"STORAGE_CONTAINER_NAME","value":"$(terraform output --raw storage_container_name)"}'

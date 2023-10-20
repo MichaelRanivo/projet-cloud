@@ -1,10 +1,10 @@
 #Infra Backend
-backend_resource_group_name         = "tfstateresourcegroup"
+backend_resource_group_name         = "tf-backend-rg"
 azure_cloud_location                = "North Europe"
-backend_storage_account_name        = "tfstatestorageterra"
+backend_storage_account_name        = "tfbackendstorageaccount"
 storage_account_tier                = "Standard"
 storage_account_replication_type    = "LRS"
-storage_container_name              = "tfstatestoragecontainer"
+storage_container_name              = "tfbackendstoragecontainer"
 storage_container_access_type       = "private"
 
 #DB

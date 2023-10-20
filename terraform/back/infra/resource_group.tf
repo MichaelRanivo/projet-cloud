@@ -9,7 +9,13 @@ terraform {
  
 provider "azurerm" {
   features {}
-} 
+}
+
+resource "random_string" "resource_code" {
+  length  = 5
+  special = false
+  upper   = false
+}
  
 resource "azurerm_resource_group" "tfstate_storage_resource_group" {
   name      = var.backend_resource_group_name
@@ -18,7 +24,7 @@ resource "azurerm_resource_group" "tfstate_storage_resource_group" {
 } 
 
 resource "azurerm_storage_account" "tfstate_storage_account" {
-  name                            = var.backend_storage_account_name
+  name                            = join("",[var.backend_storage_account_name,random_string.resource_code.result])
   resource_group_name             = azurerm_resource_group.tfstate_storage_resource_group.name
   location                        = azurerm_resource_group.tfstate_storage_resource_group.location
   account_tier                    = var.storage_account_tier

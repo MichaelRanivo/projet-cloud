@@ -1,6 +1,6 @@
-name: Pipeline deployment Backend
+name: Pipeline deployment Backend Infra
 
-run-name: ${{ github.actor }} is launching the deployment of the tf backend
+run-name: ${{ github.actor }} is launching the deployment of the tf backend infra
 
 on:
   push:
@@ -103,57 +103,4 @@ jobs:
             -d "{\"name\":\"STORAGE_CONTAINER_NAME\",\"value\":\"$(terraform output -raw storage_container_name)\"}"
       - name: Sleep for 10 seconds
         run: sleep 10s
-        shell: bash   
-
-  terraform-backend-plan:
-    needs: tf-backend-infra-apply
-    name: Plan backend TF
-    runs-on: self-hosted
-    steps:
-      - name: Checkout the repo
-        uses: actions/checkout@v3
-      - name: Az CLI login
-        uses: azure/login@v1
-        with:
-          client-id: ${{ secrets.AZURE_CLIENT_ID }}
-          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-      - name: Use Terraform Action
-        uses: hashicorp/setup-terraform@v2
-      - name: Configuration of terraform backend state
-        run: |
-          echo "ARM_ACCESS_KEY=$(az storage account keys list --resource-group ${{ secrets.RESOURCE_GROUP_NAME }} --account-name ${{ secrets.STORAGE_ACCOUNT_NAME }} --query '[0].value' -o tsv)" >> $GITHUB_ENV
-      - name: Terraform backend plan
-        run: |
-          terraform --version
-          cd ${{ vars.TF_ROOT }}
-          terraform init -backend-config="resource_group_name=${{ vars.RESOURCE_GROUP_NAME }}" -backend-config="storage_account_name=${{ vars.STORAGE_ACCOUNT_NAME }}" -backend-config="container_name=${{ vars.STORAGE_CONTAINER_NAME }}"
-          terraform validate
-          terraform plan -var-file="../env/$GITHUB_REF_NAME.tfvars" -out tfplan
-      - name: Upload artefact of the tfplan file
-        uses: actions/upload-artifact@v3
-        with:
-          name: tfplan
-          path: ${{ vars.TF_ROOT }}/tfplan
-  
-  terraform-backend-apply:
-    needs: terraform-backend-plan
-    name: Apply backend TF
-    runs-on: self-hosted
-    steps:
-      - name: Checkout the repo
-        uses: actions/checkout@v3
-      - name: Use Terraform Action
-        uses: hashicorp/setup-terraform@v2
-      - name: Download the artefact of the tfplan file
-        uses: actions/download-artifact@v3
-        with:
-          name: tfplan
-          path: ${{ vars.TF_ROOT }}/
-      - name: Terraform backend apply
-        run: |
-          terraform --version
-          cd ${{ vars.TF_ROOT }}
-          terraform init -backend-config="resource_group_name=${{ vars.RESOURCE_GROUP_NAME }}" -backend-config="storage_account_name=${{ vars.STORAGE_ACCOUNT_NAME }}" -backend-config="container_name=${{ vars.STORAGE_CONTAINER_NAME }}"
-          terraform validate
-          terraform apply -input=false -auto-approve tfplan
+        shell: bash

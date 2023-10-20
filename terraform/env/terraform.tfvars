@@ -7,18 +7,8 @@ storage_account_replication_type    = "LRS"
 storage_container_name              = "tfstatestoragecontainer"
 storage_container_access_type       = "private"
 
-tags = {
-    Author          = "michael.ranivo@epitech.eu"
-    Project         = "TerraCloud"
-    Country         = "FR"
-    Environment     = "POC"
-    ApplicationID   = "Sample-App"
-    Version         = "1"
-    BackupPolicy    = "No-Backup"
-}
-
-#Upload state file
-
+#DB
+resource_group_db_name  = "sampleappdbresourcegroup"
 
 
 
@@ -57,3 +47,14 @@ ssh_publick_key_type        = "Microsoft.Compute/sshPublicKeys@2023-03-01"
 ssh_public_key_name         = "ImageVMPublicKey"
 
 username                    = "azureadmin"
+
+#Tags for all resources
+tags = {
+    Author          = "michael.ranivo@epitech.eu"
+    Project         = "TerraCloud"
+    Country         = "FR"
+    Environment     = "POC"
+    ApplicationID   = "Sample-App"
+    Version         = "1"
+    BackupPolicy    = "No-Backup"
+}

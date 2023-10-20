@@ -8,6 +8,9 @@ back/infra/.terraform.lock.hcl
 back/infra/terraform.tfstate
 back/infra/tfplan
 back/infra/terraform.tfstate.backup
+database/.terraform
+database/.terraform.lock.hcl
+database/tfplan
 ImageVM/.terraform
 ImageVM/.terraform.lock.hcl
 ImageVM/terraform.tfstate

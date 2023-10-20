@@ -127,7 +127,7 @@ jobs:
         run: |
           terraform --version
           cd ${{ vars.TF_ROOT }}
-          terraform init
+          terraform init -backend-config="resource_group_name=${{ vars.RESOURCE_GROUP_NAME }}" -backend-config="storage_account_name=${{ vars.STORAGE_ACCOUNT_NAME }}" -backend-config="container_name=${{ vars.STORAGE_CONTAINER_NAME }}"
           terraform validate
           terraform plan -var-file="../env/$GITHUB_REF_NAME.tfvars" -out tfplan
       - name: Upload artefact of the tfplan file
@@ -154,6 +154,6 @@ jobs:
         run: |
           terraform --version
           cd ${{ vars.TF_ROOT }}
-          terraform init
+          terraform init -backend-config="resource_group_name=${{ vars.RESOURCE_GROUP_NAME }}" -backend-config="storage_account_name=${{ vars.STORAGE_ACCOUNT_NAME }}" -backend-config="container_name=${{ vars.STORAGE_CONTAINER_NAME }}"
           terraform validate
           terraform apply -input=false -auto-approve tfplan

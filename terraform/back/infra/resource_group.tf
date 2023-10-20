@@ -12,7 +12,7 @@ provider "azurerm" {
 }
 
 resource "random_string" "resource_code" {
-  length  = 5
+  length  = 4
   special = false
   upper   = false
 }

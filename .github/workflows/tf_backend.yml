@@ -7,7 +7,7 @@ on:
     branches: [ terraform ]
     # paths: # if change on the back folder this workflow will run
     #   - terraform/back/*
-
+  
 permissions:
   contents: read
   pages: write

@@ -7,7 +7,7 @@ on:
     workflows: ["Pipeline deployment Backend Infra"]
     types:
       - completed
-
+  
 permissions:
   contents: read
   pages: write

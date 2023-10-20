@@ -75,6 +75,7 @@ jobs:
       - name: Update Variables
         run: |
           cd ${{ vars.TF_INFRA_ROOT }}
+          terraform --version
           curl -L \
             -X PATCH \
             -H "Accept: application/vnd.github+json" \

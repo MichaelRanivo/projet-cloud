@@ -119,10 +119,11 @@ jobs:
               with:
                 php-version: "8.2"
                 tools: composer
-            # - name: Download the ssl certificate
-            #   run: |
-            #     pwd
-            #     wget https://dl.cacerts.digicert.com/DigiCertGlobalRootCA.crt.pem
+            - name: Download the ssl certificate
+              run: |
+                pwd
+                wget https://dl.cacerts.digicert.com/DigiCertGlobalRootCA.crt.pem
+                export MYSQL_ATTR_SSL_CA=$(pwd)/DigiCertGlobalRootCA.crt.pem
             - name: Migrate the database
               run: |
                 cd sample-app/

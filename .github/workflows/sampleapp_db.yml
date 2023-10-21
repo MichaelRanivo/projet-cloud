@@ -139,4 +139,4 @@ jobs:
             - name: Seed the DB
               run: |
                 cd sample-app/
-                php artisan seed:db --force
+                php artisan db:seed --force

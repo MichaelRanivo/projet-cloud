@@ -80,7 +80,7 @@ jobs:
                     https://api.github.com/repos/$GITHUB_REPOSITORY/actions/secrets/CR_USER \
                     -d "{\"encrypted_value\":\"$(terraform output -raw admin_login)\",\"key_id\":\"012345678912345678\"}"
             - name: Create or Update password of the container registry on github actions Variables
-              run: |
+              run: | 
                 cd ${{ vars.TF_CR_ROOT }}
                 curl -L \
                     -X PUT \

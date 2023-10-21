@@ -91,15 +91,14 @@ jobs:
                 terraform init -backend-config="resource_group_name=${{ vars.RESOURCE_GROUP_NAME }}" -backend-config="storage_account_name=${{ vars.STORAGE_ACCOUNT_NAME }}" -backend-config="container_name=${{ vars.STORAGE_CONTAINER_NAME }}"
                 terraform validate
                 terraform output
-                terraform output -raw admin_password
             - name: Create variables
               run: |
                 DB_HOST=$(terraform output -raw db_server_name)
                 DB_USERNAME=$(terraform output -raw admin_login)
                 DB_PASSWORD=$(terraform output -raw admin_password)
-                echo "DB_HOST=$DB_HOST.mysql.database.azure.com" >> $GITHUB_ENV
                 echo "DB_USERNAME=$DB_USERNAME" >> $GITHUB_ENV
                 echo "DB_PASSWORD=$DB_PASSWORD" >> $GITHUB_ENV
+                echo "DB_HOST=$DB_HOST" >> $GITHUB_ENV
             - name: Create a .env file
               uses: SpicyPizza/create-envfile@v2.0
               with:
@@ -108,7 +107,7 @@ jobs:
                 envkey_APP_KEY: ${{ secrets.APP_KEY }}
                 envkey_APP_URL: ${{ secrets.APP_URL }}
                 envkey_DB_CONNECTION: ${{ secrets.DB_CONNECTION }}
-                envkey_DB_HOST: $DB_HOST
+                envkey_DB_HOST: $DB_HOST.mysql.database.azure.com
                 envkey_DB_PORT: ${{ secrets.DB_PORT }}
                 envkey_DB_DATABASE: ${{ secrets.DB_DATABASE }}
                 envkey_DB_USERNAME: $DB_USERNAME

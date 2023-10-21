@@ -108,11 +108,8 @@ jobs:
                     envkey_APP_KEY: ${{ secrets.APP_KEY }}
                     envkey_APP_URL: ${{ secrets.APP_URL }}
                     envkey_DB_CONNECTION: ${{ secrets.DB_CONNECTION }}
-                    envkey_DB_HOST: $DB_HOST.mysql.database.azure.com
                     envkey_DB_PORT: ${{ secrets.DB_PORT }}
                     envkey_DB_DATABASE: ${{ secrets.DB_DATABASE }}
-                    envkey_DB_USERNAME: $DB_USERNAME
-                    envkey_DB_PASSWORD: $DB_PASSWORD
                     directory: sample-app/
                     file_name: .env
                     fail_on_empty: false
@@ -120,6 +117,10 @@ jobs:
             - name: Migrate the database
               run: |
                 cd sample-app/
+                cat .env
+                echo "DB_HOST=$DB_HOST.mysql.database.azure.com" >> .env
+                echo "DB_USERNAME=$DB_USERNAME" >> .env
+                echo "DB_PASSWORD=$DB_PASSWORD" >> .env
                 cat .env
                 php artisan migrate
             - name: Seed the DB

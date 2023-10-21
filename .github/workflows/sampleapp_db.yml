@@ -122,15 +122,13 @@ jobs:
             - name: Migrate the database
               run: |
                 cd sample-app/
-                cat .env
                 echo "DB_HOST=$DB_HOST.mysql.database.azure.com" >> .env
                 echo "DB_USERNAME=$DB_USERNAME" >> .env
                 echo "DB_PASSWORD=$DB_PASSWORD" >> .env
-                cat .env
                 composer update --optimize-autoloader
                 composer install --no-interaction --optimize-autoloader
-                php artisan migrate
+                php artisan migrate --force
             - name: Seed the DB
               run: |
                 cd sample-app/
-                php artisan seed:db
+                php artisan seed:db --force

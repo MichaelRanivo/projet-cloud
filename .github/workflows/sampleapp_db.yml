@@ -93,38 +93,36 @@ jobs:
                 terraform output
             - name: Create variables
               run: |
-                terraform output -raw db_server_name
-                terraform output -raw admin_login
-                terraform output -raw admin_password
-              
-            # - name: Create a .env file
-            #   uses: SpicyPizza/create-envfile@v2.0
-            #   with:
-                #     envkey_APP_DEBUG: ${{ secrets.APP_DEBUG }}
-                #     envkey_APP_ENV: ${{ secrets.APP_ENV }}
-                #     envkey_APP_KEY: ${{ secrets.APP_KEY }}
-                #     envkey_APP_URL: ${{ secrets.APP_URL }}
-                #     envkey_DB_CONNECTION: ${{ secrets.DB_CONNECTION }}
-                #     envkey_DB_HOST: $DB_HOST.mysql.database.azure.com
-                #     envkey_DB_PORT: ${{ secrets.DB_PORT }}
-                #     envkey_DB_DATABASE: ${{ secrets.DB_DATABASE }}
-                #     envkey_DB_USERNAME: $DB_USERNAME
-                #     envkey_DB_PASSWORD: $DB_PASSWORD
-                #     directory: sample-app/
-                #     file_name: .env
-                #     fail_on_empty: false
-                #     sort_keys: false
-                # - name: Migrate the database
-                #   run: |
-                #     cd sample-app/
-                #     php artisan migrate
-                # - name: Seed the DB
-                #   run: |
-                #     cd sample-app/
-                #     php artisan seed:db
-                # DB_HOST=$(terraform output -raw db_server_name)
-                # DB_USERNAME=$(terraform output -raw admin_login)
-                # DB_PASSWORD=$(terraform output -raw admin_password)
-                # echo "DB_USERNAME=$DB_USERNAME" >> $GITHUB_ENV
-                # echo "DB_PASSWORD=$DB_PASSWORD" >> $GITHUB_ENV
-                # echo "DB_HOST=$DB_HOST" >> $GITHUB_ENV
+                cd ${{ vars.TF_DB_ROOT }}
+                DB_HOST=$(terraform output -raw db_server_name)
+                DB_USERNAME=$(terraform output -raw admin_login)
+                DB_PASSWORD=$(terraform output -raw admin_password)
+                echo "DB_USERNAME=$DB_USERNAME" >> $GITHUB_ENV
+                echo "DB_PASSWORD=$DB_PASSWORD" >> $GITHUB_ENV
+                echo "DB_HOST=$DB_HOST" >> $GITHUB_ENV        
+            - name: Create a .env file
+              uses: SpicyPizza/create-envfile@v2.0
+              with:
+                    envkey_APP_DEBUG: ${{ secrets.APP_DEBUG }}
+                    envkey_APP_ENV: ${{ secrets.APP_ENV }}
+                    envkey_APP_KEY: ${{ secrets.APP_KEY }}
+                    envkey_APP_URL: ${{ secrets.APP_URL }}
+                    envkey_DB_CONNECTION: ${{ secrets.DB_CONNECTION }}
+                    envkey_DB_HOST: $DB_HOST.mysql.database.azure.com
+                    envkey_DB_PORT: ${{ secrets.DB_PORT }}
+                    envkey_DB_DATABASE: ${{ secrets.DB_DATABASE }}
+                    envkey_DB_USERNAME: $DB_USERNAME
+                    envkey_DB_PASSWORD: $DB_PASSWORD
+                    directory: sample-app/
+                    file_name: .env
+                    fail_on_empty: false
+                    sort_keys: false
+            - name: Migrate the database
+              run: |
+                cd sample-app/
+                cat .env
+                php artisan migrate
+            - name: Seed the DB
+              run: |
+                cd sample-app/
+                php artisan seed:db

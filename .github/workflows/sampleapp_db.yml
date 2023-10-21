@@ -119,12 +119,17 @@ jobs:
               with:
                 php-version: "8.2"
                 tools: composer
+            # - name: Download the ssl certificate
+            #   run: |
+            #     pwd
+            #     wget https://dl.cacerts.digicert.com/DigiCertGlobalRootCA.crt.pem
             - name: Migrate the database
               run: |
                 cd sample-app/
-                echo "DB_HOST=$DB_HOST.mysql.database.azure.com" >> .env
+                export DB_HOST=$DB_HOST.mysql.database.azure.com
                 echo "DB_USERNAME=$DB_USERNAME" >> .env
                 echo "DB_PASSWORD=$DB_PASSWORD" >> .env
+                cat .env
                 composer update --optimize-autoloader
                 composer install --no-interaction --optimize-autoloader
                 php artisan migrate --force

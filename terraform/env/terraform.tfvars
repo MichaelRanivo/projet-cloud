@@ -11,7 +11,7 @@ storage_container_access_type       = "private"
 resource_group_db_name  = "sampleappdbresourcegroup"
 
 database_name           = "laravel"
-database_server_name    = "db-server"
+database_server_name    = "dbserver"
 database_sku            = "B_Standard_B1s"
 
 

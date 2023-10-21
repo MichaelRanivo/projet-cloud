@@ -9,11 +9,13 @@ storage_container_access_type       = "private"
 
 #DB
 resource_group_db_name  = "sampleappdbresourcegroup"
-
 database_name           = "laravel"
 database_server_name    = "dbserver"
 database_sku            = "B_Standard_B1s"
 
+# Container registry
+resource_group_container_registry = "cr-resource-group"
+container_registry_name           = "sampleappcr"
 
 #Virtual network vars
 vnet_name                   = "ImageVMVnet"

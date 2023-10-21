@@ -121,8 +121,9 @@ jobs:
                 tools: composer
             - name: Download the ssl certificate
               run: |
+                cd sample-app/
                 pwd
-                wget https://dl.cacerts.digicert.com/DigiCertGlobalRootCA.crt.pem
+                curl -O https://dl.cacerts.digicert.com/DigiCertGlobalRootCA.crt.pem
                 export MYSQL_ATTR_SSL_CA=$(pwd)/DigiCertGlobalRootCA.crt.pem
             - name: Migrate the database
               run: |

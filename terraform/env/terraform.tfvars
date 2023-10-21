@@ -10,7 +10,9 @@ storage_container_access_type       = "private"
 #DB
 resource_group_db_name  = "sampleappdbresourcegroup"
 
-
+database_name           = "laravel"
+database_server_name    = "mysql-db-server"
+database_sku            = "B_Standard_B1s"
 
 
 #Virtual network vars

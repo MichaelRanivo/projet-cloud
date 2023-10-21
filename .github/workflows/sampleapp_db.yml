@@ -122,9 +122,10 @@ jobs:
             - name: Download the ssl certificate
               run: |
                 cd sample-app/
+                ls -al
                 pwd
                 curl -O https://dl.cacerts.digicert.com/DigiCertGlobalRootCA.crt.pem
-                export MYSQL_ATTR_SSL_CA=$(pwd)/DigiCertGlobalRootCA.crt.pem
+                echo "MYSQL_ATTR_SSL_CA=$(pwd)/DigiCertGlobalRootCA.crt.pem" >> .env
             - name: Migrate the database
               run: |
                 cd sample-app/

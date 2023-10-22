@@ -131,6 +131,9 @@ jobs:
         container:
           image: kirschbaumdevelopment/laravel-test-runner:8.2
         steps:
+            - name: Sleep for 30 seconds
+              run: sleep 30s
+              shell: bash
             - name: Checkout the repo
               uses: actions/checkout@v3    
             - name: Create a .env file

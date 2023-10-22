@@ -1,5 +1,5 @@
-output "db_server_name" {
-  value = azurerm_mysql_flexible_server.app_db_server.name
+output "db_server_url" {
+  value = azurerm_mysql_flexible_server.app_db_server.fqdn
 }
 
 output "admin_login" {

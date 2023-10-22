@@ -64,7 +64,7 @@ jobs:
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
-          registry: ${{ secrets.AZUR_REGISTRY }}
+          registry: ${{ secrets.AZUR_REGISTRY_NAME }}.azurecr.io
           username: ${{ secrets.AZUR_REGISTRY_NAME }}
           password: ${{ secrets.AZUR_REGISTRY_PASSWORD }}
       - name: Docker meta

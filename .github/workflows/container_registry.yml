@@ -5,8 +5,8 @@ run-name: ${{ github.actor }} is launching the container registry set up
 on:
     push:
         branches: [ terraform ]
-        # paths:
-        #     - terraform/container_registry/*
+        paths:
+            - terraform/container_registry/*
 
 
 permissions:

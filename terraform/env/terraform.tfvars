@@ -1,3 +1,6 @@
+# default
+resource_group_location     = "northeurope"
+
 #Infra Backend
 backend_resource_group_name         = "tf-back-rg"
 azure_cloud_location                = "North Europe"
@@ -20,7 +23,6 @@ container_registry_name           = "sampleappcr"
 #Virtual network vars
 vnet_name                   = "ImageVMVnet"
 vnet_ip_addr                = ["10.0.0.0/16"]
-resource_group_location     = "northeurope"
 resource_group_name         = "t-clo-901-lyo-3"
 
 #subnet vars
@@ -51,6 +53,16 @@ ssh_publick_key_type        = "Microsoft.Compute/sshPublicKeys@2023-03-01"
 ssh_public_key_name         = "ImageVMPublicKey"
 
 username                    = "azureadmin"
+
+# PAAS
+paas_resource_group_name        = "paas-rg"
+assigned_identity_name          = "tfMyID"
+data_container_registry_name    = "sampleappcrzrmod"
+registry_role_definition_name   = "AcrPull"
+app_service_plan_name           = "web-app-plan-sampleApp"
+web_app_name                    = "sampleApp-web-app"
+sample_app_port                 = 80
+sample_app_docker_image_name    = "sample-app"
 
 #Tags for all resources
 tags = {

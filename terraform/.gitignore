@@ -17,3 +17,7 @@ ImageVM/terraform.tfstate
 ImageVM/tfplan
 ImageVM/*.pem
 ImageVM/terraform.tfstate.backup
+paas/.terraform
+paas/.terraform.lock.hcl
+paas/terraform.tfstate
+paas/tfplan

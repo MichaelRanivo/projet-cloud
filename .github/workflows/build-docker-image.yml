@@ -10,51 +10,50 @@ on:
       - "v*.*.*"
 
 jobs:
-  build-sample-app:
-    if: startsWith(github.ref, 'refs/tags/')
-    runs-on: self-hosted
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-      - name: Set up PHP and composer
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: "8.2"
-          tools: composer
-      - name: Make envfile
-        uses: SpicyPizza/create-envfile@v2.0
-        with:
-          envkey_APP_DEBUG: ${{ secrets.APP_DEBUG }}
-          envkey_APP_ENV: ${{ secrets.APP_ENV }}
-          envkey_APP_KEY: ${{ secrets.APP_KEY }}
-          envkey_MYSQL_ATTR_SSL_CA: ${{ secrets.MYSQL_ATTR_SSL_CA }}
-          envkey_DB_CONNECTION: ${{ secrets.DB_CONNECTION }}
-          envkey_DB_HOST: ${{ vars.AZURE_MYSQL_DB_HOST }}
-          envkey_DB_PORT: ${{ secrets.DB_PORT }}
-          envkey_DB_DATABASE: ${{ secrets.DB_DATABASE }}
-          envkey_DB_USERNAME: ${{ vars.AZURE_DB_LOGIN }}
-          envkey_DB_PASSWORD: ${{ vars.AZURE_DB_PASSWORD }}
-          directory: sample-app/
-          file_name: .env
-          fail_on_empty: false
-          sort_keys: false
-      - name: Update and install dependencies
-        run: |
-          cd sample-app/
-          composer update --optimize-autoloader
-          composer install --no-interaction --optimize-autoloader
-      - name: Compresse the app
-        run: |
-          tar -czf app-builded.tar.gz sample-app/
-      - name: Upload artefact of the app
-        uses: actions/upload-artifact@v3
-        with:
-          name: app-builded.tar.gz
-          path: app-builded.tar.gz
+  # build-sample-app:
+  #   if: startsWith(github.ref, 'refs/tags/')
+  #   runs-on: self-hosted
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v3
+  #     - name: Set up PHP and composer
+  #       uses: shivammathur/setup-php@v2
+  #       with:
+  #         php-version: "8.2"
+  #         tools: composer
+  #     - name: Make envfile
+  #       uses: SpicyPizza/create-envfile@v2.0
+  #       with:
+  #         envkey_APP_DEBUG: ${{ secrets.APP_DEBUG }}
+  #         envkey_APP_ENV: ${{ secrets.APP_ENV }}
+  #         envkey_APP_KEY: ${{ secrets.APP_KEY }}
+  #         envkey_MYSQL_ATTR_SSL_CA: ${{ secrets.MYSQL_ATTR_SSL_CA }}
+  #         envkey_DB_CONNECTION: ${{ secrets.DB_CONNECTION }}
+  #         envkey_DB_HOST: ${{ vars.AZURE_MYSQL_DB_HOST }}
+  #         envkey_DB_PORT: ${{ secrets.DB_PORT }}
+  #         envkey_DB_DATABASE: ${{ secrets.DB_DATABASE }}
+  #         envkey_DB_USERNAME: ${{ vars.AZURE_DB_LOGIN }}
+  #         envkey_DB_PASSWORD: ${{ vars.AZURE_DB_PASSWORD }}
+  #         directory: sample-app/
+  #         file_name: .env
+  #         fail_on_empty: false
+  #         sort_keys: false
+  #     - name: Update and install dependencies
+  #       run: |
+  #         cd sample-app/
+  #         composer update --optimize-autoloader
+  #         composer install --no-interaction --optimize-autoloader
+  #     - name: Compresse the app
+  #       run: |
+  #         tar -czf app-builded.tar.gz sample-app/
+  #     - name: Upload artefact of the app
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: app-builded.tar.gz
+  #         path: app-builded.tar.gz
 
   build-image-docker:
     if: startsWith(github.ref, 'refs/tags/')
-    needs: build-sample-app
     runs-on: self-hosted
     steps:
       - name: Download the artefact of the app

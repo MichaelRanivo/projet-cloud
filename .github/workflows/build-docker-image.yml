@@ -7,15 +7,18 @@ on:
     branches:
       - "main"
     tags:
+      - "v*.*.*"
 
 jobs:
   build-sample-app:
-    if: startsWith(github.ref, 'refs/tags/')
+    # if: startsWith(github.ref, 'refs/tags/')
     runs-on: self-hosted
     steps:
       - name: Test
         run: |
           echo "${{ github.ref }}"
+          echo "${{ github.ref_type }}"
+          echo "${{ github.ref_name }}"
   #     - name: Checkout repository
   #       uses: actions/checkout@v3
   #     - name: Set up PHP and composer

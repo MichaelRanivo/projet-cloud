@@ -14,7 +14,7 @@ jobs:
     steps:
       - name: Test
         run: |
-          echo $github.ref
+          echo "$github.ref"
   #     - name: Checkout repository
   #       uses: actions/checkout@v3
   #     - name: Set up PHP and composer

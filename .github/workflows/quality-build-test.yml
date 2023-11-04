@@ -52,7 +52,7 @@ jobs:
           envkey_APP_KEY: ${{ secrets.APP_KEY }}
           envkey_APP_URL: ${{ secrets.APP_URL }}
           envkey_DB_CONNECTION: ${{ secrets.DB_CONNECTION }}
-          envkey_DB_HOST: 127.0.0.1
+          envkey_DB_HOST: "localhost"
           envkey_DB_PORT: ${{ secrets.DB_PORT }}
           envkey_DB_DATABASE: ${{ secrets.MYSQL_DATABASE }}
           envkey_DB_USERNAME: ${{ secrets.MYSQL_USER }}

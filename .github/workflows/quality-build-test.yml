@@ -52,11 +52,11 @@ jobs:
           envkey_APP_KEY: ${{ secrets.APP_KEY }}
           envkey_APP_URL: ${{ secrets.APP_URL }}
           envkey_DB_CONNECTION: ${{ secrets.DB_CONNECTION }}
-          envkey_DB_HOST: ${{ secrets.DB_HOST }}
+          envkey_DB_HOST: 127.0.0.1
           envkey_DB_PORT: ${{ secrets.DB_PORT }}
-          envkey_DB_DATABASE: ${{ secrets.DB_DATABASE }}
-          envkey_DB_USERNAME: ${{ secrets.DB_USERNAME }}
-          envkey_DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          envkey_DB_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+          envkey_DB_USERNAME: ${{ secrets.MYSQL_USER }}
+          envkey_DB_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
           directory: sample-app/
           file_name: .env
           fail_on_empty: false

@@ -1,23 +1,21 @@
-FROM php:8.2-alpine3.18
+FROM composer:2.6.5 as build
 
-ENV COMPOSER_ALLOW_SUPERUSER=1
+COPY . /app
+RUN composer install --prefer-dist --no-dev --optimize-autoloader --no-interaction && composer update
 
-RUN apk add openssl zip unzip git curl wget
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+FROM php:8.2-alpine3.18 as deploy
+
 RUN docker-php-ext-install pdo pdo_mysql
 
-RUN cd /var/ && \
-    wget https://dl.cacerts.digicert.com/DigiCertGlobalRootCA.crt.pem 
+RUN cd /var/ && wget https://dl.cacerts.digicert.com/DigiCertGlobalRootCA.crt.pem 
 
-COPY ./ /var/www/html/
+COPY --from=build /app /var/www/html
+RUN chmod 755 -R /var/www/html/storage/ && chown -R www-data:www-data /var/www/
+
 WORKDIR /var/www/html/
 
-RUN cd /var/www/html/ && \
-    composer install --no-interaction --optimize-autoloader
+RUN cd /var/www/html/ && php artisan key:generate
 
-RUN cd /var/www/html/ && \
-    php artisan key:generate
+CMD ["php","artisan","serve", "--host=0.0.0.0","--port=8080"]
 
-CMD ["php","artisan","serve", "--host=0.0.0.0","--port=80"]
-
-EXPOSE 80
+EXPOSE 8080

@@ -3,174 +3,168 @@ name: Pipeline Set Up DB
 run-name: ${{ github.actor }} is launching the database set up
 
 on:
-    push:
-        branches: [ terraform ]
-        # paths:
-        #     - terraform/databse/*
-        #     - sample-app/database/*
-
+  push:
+    branches: [terraform]
+    paths:
+      - terraform/databse/*
+      - sample-app/database/*
 
 permissions:
-    contents: read
-    pages: write
-    id-token: write
+  contents: read
+  pages: write
+  id-token: write
 
 env:
-    ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-    ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-    ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-    ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}  
+  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+  ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
 jobs:
-    db-plan:
-        name: Plan DB
-        runs-on: self-hosted
-        steps:
-            - name: Checkout the repo
-              uses: actions/checkout@v3
-            - name: Az CLI login
-              uses: azure/login@v1
-              with:
-                client-id: ${{ secrets.AZURE_CLIENT_ID }}
-                tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-                subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-            - name: Use Terraform Action
-              uses: hashicorp/setup-terraform@v2
-            - name: Terraform DB plan
-              run: |
-                terraform --version
-                cd ${{ vars.TF_DB_ROOT }}
-                terraform init -backend-config="resource_group_name=${{ vars.RESOURCE_GROUP_NAME }}" -backend-config="storage_account_name=${{ vars.STORAGE_ACCOUNT_NAME }}" -backend-config="container_name=${{ vars.STORAGE_CONTAINER_NAME }}"
-                terraform validate
-                terraform plan -var-file="../env/$GITHUB_REF_NAME.tfvars" -out tfplan
-            - name: Upload artefact of the tfplan file
-              uses: actions/upload-artifact@v3
-              with:
-                name: tfplan
-                path: ${{ vars.TF_DB_ROOT }}/tfplan
+  db-plan:
+    name: Plan DB
+    runs-on: self-hosted
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v3
 
-    db-apply:
-        needs: db-plan
-        name: Apply DB
-        runs-on: self-hosted
-        steps:
-            - name: Checkout the repo
-              uses: actions/checkout@v3
-            - name: Use Terraform Action
-              uses: hashicorp/setup-terraform@v2
-              with:
-                terraform_wrapper: false
-            - name: Download the artefact of the tfplan file
-              uses: actions/download-artifact@v3
-              with:
-                name: tfplan
-                path: ${{ vars.TF_DB_ROOT }}/ 
-            - name: Terraform DB apply
-              run: |
-                terraform --version
-                cd ${{ vars.TF_DB_ROOT }}
-                terraform init -backend-config="resource_group_name=${{ vars.RESOURCE_GROUP_NAME }}" -backend-config="storage_account_name=${{ vars.STORAGE_ACCOUNT_NAME }}" -backend-config="container_name=${{ vars.STORAGE_CONTAINER_NAME }}"
-                terraform validate
-                terraform apply -input=false -auto-approve tfplan
-            - name: Update FQDN of the MySQL db on github actions Variables
-              run: |
-                cd ${{ vars.TF_DB_ROOT }}
-                curl -L \
-                  -X PATCH \
-                  -H "Accept: application/vnd.github+json" \
-                  -H "Authorization: Bearer ${{ secrets.TOKEN_PERSO }}" \
-                  -H "X-GitHub-Api-Version: 2022-11-28" \
-                  https://api.github.com/repos/$GITHUB_REPOSITORY/actions/variables/AZURE_MYSQL_DB_HOST \
-                  -d "{\"name\":\"AZURE_MYSQL_DB_HOST\",\"value\":\"$(terraform output -raw db_server_url)\"}" 
-              # curl -L \
-              #   -X PUT \
-              #   -H "Accept: application/vnd.github+json" \
-              #   -H "Authorization: Bearer ${{ secrets.TOKEN_PERSO }}" \
-              #   -H "X-GitHub-Api-Version: 2022-11-28" \
-              #   https://api.github.com/repos/$GITHUB_REPOSITORY/actions/secrets/AZURE_MYSQL_DB_HOST \
-              #   -d "{\"encrypted_value\":\"$(terraform output -raw db_server_url)\",\"key_id\":\"${{ secrets.KEYID }}\"}"
-            - name: Update admin login of the db on github actions Variables
-              run: |
-                cd ${{ vars.TF_DB_ROOT }}
-                curl -L \
-                  -X PATCH \
-                  -H "Accept: application/vnd.github+json" \
-                  -H "Authorization: Bearer ${{ secrets.TOKEN_PERSO }}" \
-                  -H "X-GitHub-Api-Version: 2022-11-28" \
-                  https://api.github.com/repos/$GITHUB_REPOSITORY/actions/variables/AZURE_DB_LOGIN \
-                  -d "{\"name\":\"AZURE_DB_LOGIN\",\"value\":\"$(terraform output -raw admin_login)\"}"
-            #     curl -L \
-            #       -X PUT \
-            #       -H "Accept: application/vnd.github+json" \
-            #       -H "Authorization: Bearer ${{ secrets.TOKEN_PERSO }}" \
-            #       -H "X-GitHub-Api-Version: 2022-11-28" \
-            #       https://api.github.com/repos/$GITHUB_REPOSITORY/actions/secrets/AZURE_DB_LOGIN \
-            #       -d "{\"encrypted_value\":\"$(terraform output -raw admin_login)\",\"key_id\":\"${{ secrets.KEYID }}\"}"
-            - name: Update password of the db on github actions Variables
-              run: | 
-                cd ${{ vars.TF_DB_ROOT }}
-                curl -L \
-                  -X PATCH \
-                  -H "Accept: application/vnd.github+json" \
-                  -H "Authorization: Bearer ${{ secrets.TOKEN_PERSO }}" \
-                  -H "X-GitHub-Api-Version: 2022-11-28" \
-                  https://api.github.com/repos/$GITHUB_REPOSITORY/actions/variables/AZURE_DB_PASSWORD \
-                  -d "{\"name\":\"AZURE_DB_PASSWORD\",\"value\":\"$(terraform output -raw admin_password)\"}"
-            #     curl -L \
-            #       -X PUT \
-            #       -H "Accept: application/vnd.github+json" \
-            #       -H "Authorization: Bearer ${{ secrets.TOKEN_PERSO }}" \
-            #       -H "X-GitHub-Api-Version: 2022-11-28" \
-            #       https://api.github.com/repos/$GITHUB_REPOSITORY/actions/secrets/AZURE_DB_PASSWORD \
-            #       -d "{\"encrypted_value\":\"$(terraform output -raw admin_password)\",\"key_id\":\"${{ secrets.KEYID }}\"}"
-    
-    db-migrate:
-        needs: db-apply
-        name: Migrate the DB
-        runs-on: ubuntu-latest
-        container:
-          image: kirschbaumdevelopment/laravel-test-runner:8.2
-        steps:
-            - name: Sleep for 30 seconds
-              run: sleep 30s
-              shell: bash
-            - name: Checkout the repo
-              uses: actions/checkout@v3    
-            - name: Create a .env file
-              uses: SpicyPizza/create-envfile@v2.0
-              with:
-                envkey_APP_DEBUG: ${{ secrets.APP_DEBUG }}
-                envkey_APP_ENV: ${{ secrets.APP_ENV }}
-                envkey_APP_KEY: ${{ secrets.APP_KEY }}
-                envkey_APP_URL: ${{ secrets.APP_URL }}
-                envkey_DB_CONNECTION: ${{ secrets.DB_CONNECTION }}
-                envkey_DB_HOST: ${{ vars.AZURE_MYSQL_DB_HOST }}
-                envkey_DB_PORT: ${{ secrets.DB_PORT }}
-                envkey_DB_DATABASE: ${{ secrets.DB_DATABASE }}
-                envkey_DB_USERNAME: ${{ vars.AZURE_DB_LOGIN }}
-                envkey_DB_PASSWORD: ${{ vars.AZURE_DB_PASSWORD }}
-                directory: sample-app/
-                file_name: .env
-                fail_on_empty: false
-                sort_keys: false
-            - name: Set up PHP and composer
-              uses: shivammathur/setup-php@v2
-              with:
-                php-version: "8.2"
-                tools: composer
-            - name: Download the ssl certificate
-              run: |
-                cd sample-app/
-                curl -O https://dl.cacerts.digicert.com/DigiCertGlobalRootCA.crt.pem
-                echo "MYSQL_ATTR_SSL_CA=$(pwd)/DigiCertGlobalRootCA.crt.pem" >> .env
-            - name: Migrate the database
-              run: |
-                cd sample-app/
-                cat .env
-                composer update --optimize-autoloader
-                composer install --no-interaction --optimize-autoloader
-                php artisan migrate --force
-            - name: Seed the DB
-              run: |
-                cd sample-app/
-                php artisan db:seed --force
+      - name: Az CLI login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Use Terraform Action
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform DB plan
+        run: |
+          terraform --version
+          cd ${{ vars.TF_DB_ROOT }}
+          terraform init -backend-config="resource_group_name=${{ vars.RESOURCE_GROUP_NAME }}" -backend-config="storage_account_name=${{ vars.STORAGE_ACCOUNT_NAME }}" -backend-config="container_name=${{ vars.STORAGE_CONTAINER_NAME }}"
+          terraform validate
+          terraform plan -var-file="../env/$GITHUB_REF_NAME.tfvars" -out tfplan
+
+      - name: Upload artefact of the tfplan file
+        uses: actions/upload-artifact@v3
+        with:
+          name: tfplan
+          path: ${{ vars.TF_DB_ROOT }}/tfplan
+
+  db-apply:
+    needs: db-plan
+    name: Apply DB
+    runs-on: self-hosted
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v3
+
+      - name: Use Terraform Action
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_wrapper: false
+
+      - name: Download the artefact of the tfplan file
+        uses: actions/download-artifact@v3
+        with:
+          name: tfplan
+          path: ${{ vars.TF_DB_ROOT }}/
+
+      - name: Terraform DB apply
+        run: |
+          terraform --version
+          cd ${{ vars.TF_DB_ROOT }}
+          terraform init -backend-config="resource_group_name=${{ vars.RESOURCE_GROUP_NAME }}" -backend-config="storage_account_name=${{ vars.STORAGE_ACCOUNT_NAME }}" -backend-config="container_name=${{ vars.STORAGE_CONTAINER_NAME }}"
+          terraform validate
+          terraform apply -input=false -auto-approve tfplan
+
+      - name: Update FQDN of the MySQL db on github actions Variables
+        run: |
+          cd ${{ vars.TF_DB_ROOT }}
+          curl -L \
+            -X PATCH \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.TOKEN_PERSO }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/$GITHUB_REPOSITORY/actions/variables/AZURE_MYSQL_DB_HOST \
+            -d "{\"name\":\"AZURE_MYSQL_DB_HOST\",\"value\":\"$(terraform output -raw db_server_url)\"}"
+
+      - name: Update admin login of the db on github actions Variables
+        run: |
+          cd ${{ vars.TF_DB_ROOT }}
+          curl -L \
+            -X PATCH \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.TOKEN_PERSO }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/$GITHUB_REPOSITORY/actions/variables/AZURE_DB_LOGIN \
+            -d "{\"name\":\"AZURE_DB_LOGIN\",\"value\":\"$(terraform output -raw admin_login)\"}"
+
+      - name: Update password of the db on github actions Variables
+        run: |
+          cd ${{ vars.TF_DB_ROOT }}
+          curl -L \
+            -X PATCH \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.TOKEN_PERSO }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/$GITHUB_REPOSITORY/actions/variables/AZURE_DB_PASSWORD \
+            -d "{\"name\":\"AZURE_DB_PASSWORD\",\"value\":\"$(terraform output -raw admin_password)\"}"
+
+  db-migrate:
+    needs: db-apply
+    name: Migrate the DB
+    runs-on: ubuntu-latest
+    container:
+      image: kirschbaumdevelopment/laravel-test-runner:8.2
+    steps:
+      - name: Sleep for 30 seconds
+        run: sleep 30s
+        shell: bash
+
+      - name: Checkout the repo
+        uses: actions/checkout@v3
+
+      - name: Create a .env file
+        uses: SpicyPizza/create-envfile@v2.0
+        with:
+          envkey_APP_DEBUG: ${{ secrets.APP_DEBUG }}
+          envkey_APP_ENV: ${{ secrets.APP_ENV }}
+          envkey_APP_KEY: ${{ secrets.APP_KEY }}
+          envkey_APP_URL: ${{ secrets.APP_URL }}
+          envkey_DB_CONNECTION: ${{ secrets.DB_CONNECTION }}
+          envkey_DB_HOST: ${{ vars.AZURE_MYSQL_DB_HOST }}
+          envkey_DB_PORT: ${{ secrets.DB_PORT }}
+          envkey_DB_DATABASE: ${{ secrets.DB_DATABASE }}
+          envkey_DB_USERNAME: ${{ vars.AZURE_DB_LOGIN }}
+          envkey_DB_PASSWORD: ${{ vars.AZURE_DB_PASSWORD }}
+          directory: sample-app/
+          file_name: .env
+          fail_on_empty: false
+          sort_keys: false
+
+      - name: Set up PHP and composer
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          tools: composer
+
+      - name: Download the ssl certificate
+        run: |
+          cd sample-app/
+          curl -O https://dl.cacerts.digicert.com/DigiCertGlobalRootCA.crt.pem
+          echo "MYSQL_ATTR_SSL_CA=$(pwd)/DigiCertGlobalRootCA.crt.pem" >> .env
+
+      - name: Migrate the database
+        run: |
+          cd sample-app/
+          cat .env
+          composer update --optimize-autoloader
+          composer install --no-interaction --optimize-autoloader
+          php artisan migrate --force
+
+      - name: Seed the DB
+        run: |
+          cd sample-app/
+          php artisan db:seed --force

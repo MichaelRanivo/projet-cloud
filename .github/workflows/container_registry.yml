@@ -3,122 +3,110 @@ name: Pipeline Set Up Container Registry
 run-name: ${{ github.actor }} is launching the container registry set up
 
 on:
-    push:
-        branches: [ terraform ]
-        paths:
-            - terraform/container_registry/*
-
+  push:
+    branches: [terraform]
+    paths:
+      - terraform/container_registry/*
 
 permissions:
-    contents: read
-    pages: write
-    id-token: write
+  contents: read
+  pages: write
+  id-token: write
 
 env:
-    ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-    ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-    ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-    ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}  
+  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+  ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
 jobs:
-    cr-plan:
-        name: Plan Container Registry
-        runs-on: self-hosted
-        steps:
-            - name: Checkout the repo
-              uses: actions/checkout@v3
-            - name: Az CLI login
-              uses: azure/login@v1
-              with:
-                client-id: ${{ secrets.AZURE_CLIENT_ID }}
-                tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-                subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-            - name: Use Terraform Action
-              uses: hashicorp/setup-terraform@v2
-            - name: Terraform Container Registry plan
-              run: |
-                terraform --version
-                cd ${{ vars.TF_CR_ROOT }}
-                terraform init -backend-config="resource_group_name=${{ vars.RESOURCE_GROUP_NAME }}" -backend-config="storage_account_name=${{ vars.STORAGE_ACCOUNT_NAME }}" -backend-config="container_name=${{ vars.STORAGE_CONTAINER_NAME }}"
-                terraform validate
-                terraform plan -var-file="../env/$GITHUB_REF_NAME.tfvars" -out tfplan
-            - name: Upload artefact of the tfplan file
-              uses: actions/upload-artifact@v3
-              with:
-                name: tfplan
-                path: ${{ vars.TF_CR_ROOT }}/tfplan
+  cr-plan:
+    name: Plan Container Registry
+    runs-on: self-hosted
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v3
 
-    cr-apply:
-        needs: cr-plan
-        name: Apply Container Registry
-        runs-on: self-hosted
-        steps:
-            - name: Checkout the repo
-              uses: actions/checkout@v3
-            - name: Use Terraform Action
-              uses: hashicorp/setup-terraform@v2
-              with:
-                terraform_wrapper: false
-            - name: Download the artefact of the tfplan file
-              uses: actions/download-artifact@v3
-              with:
-                name: tfplan
-                path: ${{ vars.TF_CR_ROOT }}/ 
-            - name: Terraform Container Registry apply
-              run: |
-                terraform --version
-                cd ${{ vars.TF_CR_ROOT }}
-                terraform init -backend-config="resource_group_name=${{ vars.RESOURCE_GROUP_NAME }}" -backend-config="storage_account_name=${{ vars.STORAGE_ACCOUNT_NAME }}" -backend-config="container_name=${{ vars.STORAGE_CONTAINER_NAME }}"
-                terraform validate
-                terraform apply -input=false -auto-approve tfplan
-            - name: Update registry of the container registry on github actions Variables
-              run: |
-                cd ${{ vars.TF_CR_ROOT }}
-                curl -L \
-                  -X PATCH \
-                  -H "Accept: application/vnd.github+json" \
-                  -H "Authorization: Bearer ${{ secrets.TOKEN_PERSO }}" \
-                  -H "X-GitHub-Api-Version: 2022-11-28" \
-                  https://api.github.com/repos/$GITHUB_REPOSITORY/actions/variables/AZURE_REGISTRY \
-                  -d "{\"name\":\"AZURE_REGISTRY\",\"value\":\"$(terraform output -raw server_cr)\"}" 
-              # curl -L \
-              #   -X PUT \
-              #   -H "Accept: application/vnd.github+json" \
-              #   -H "Authorization: Bearer ${{ secrets.TOKEN_PERSO }}" \
-              #   -H "X-GitHub-Api-Version: 2022-11-28" \
-              #   https://api.github.com/repos/$GITHUB_REPOSITORY/actions/secrets/AZURE_REGISTRY \
-              #   -d "{\"encrypted_value\":\"$(terraform output -raw admin_login)\",\"key_id\":\"${{ secrets.KEYID }}\"}"
-            - name: Update username of the container registry on github actions Variables
-              run: |
-                cd ${{ vars.TF_CR_ROOT }}
-                curl -L \
-                  -X PATCH \
-                  -H "Accept: application/vnd.github+json" \
-                  -H "Authorization: Bearer ${{ secrets.TOKEN_PERSO }}" \
-                  -H "X-GitHub-Api-Version: 2022-11-28" \
-                  https://api.github.com/repos/$GITHUB_REPOSITORY/actions/variables/AZURE_REGISTRY_NAME \
-                  -d "{\"name\":\"AZURE_REGISTRY_NAME\",\"value\":\"$(terraform output -raw admin_login)\"}"
-            #     curl -L \
-            #       -X PUT \
-            #       -H "Accept: application/vnd.github+json" \
-            #       -H "Authorization: Bearer ${{ secrets.TOKEN_PERSO }}" \
-            #       -H "X-GitHub-Api-Version: 2022-11-28" \
-            #       https://api.github.com/repos/$GITHUB_REPOSITORY/actions/secrets/AZURE_REGISTRY_NAME \
-            #       -d "{\"encrypted_value\":\"$(terraform output -raw admin_login)\",\"key_id\":\"${{ secrets.KEYID }}\"}"
-            - name: Create or Update password of the container registry on github actions Variables
-              run: | 
-                cd ${{ vars.TF_CR_ROOT }}
-                curl -L \
-                  -X PATCH \
-                  -H "Accept: application/vnd.github+json" \
-                  -H "Authorization: Bearer ${{ secrets.TOKEN_PERSO }}" \
-                  -H "X-GitHub-Api-Version: 2022-11-28" \
-                  https://api.github.com/repos/$GITHUB_REPOSITORY/actions/variables/AZURE_REGISTRY_PASSWORD \
-                  -d "{\"name\":\"AZURE_REGISTRY_PASSWORD\",\"value\":\"$(terraform output -raw admin_password)\"}"
-            #     curl -L \
-            #       -X PUT \
-            #       -H "Accept: application/vnd.github+json" \
-            #       -H "Authorization: Bearer ${{ secrets.TOKEN_PERSO }}" \
-            #       -H "X-GitHub-Api-Version: 2022-11-28" \
-            #       https://api.github.com/repos/$GITHUB_REPOSITORY/actions/secrets/AZURE_REGISTRY_PASSWORD \
-            #       -d "{\"encrypted_value\":\"$(terraform output -raw admin_password)\",\"key_id\":\"${{ secrets.KEYID }}\"}"
+      - name: Az CLI login
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Use Terraform Action
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform Container Registry plan
+        run: |
+          terraform --version
+          cd ${{ vars.TF_CR_ROOT }}
+          terraform init -backend-config="resource_group_name=${{ vars.RESOURCE_GROUP_NAME }}" -backend-config="storage_account_name=${{ vars.STORAGE_ACCOUNT_NAME }}" -backend-config="container_name=${{ vars.STORAGE_CONTAINER_NAME }}"
+          terraform validate
+          terraform plan -var-file="../env/$GITHUB_REF_NAME.tfvars" -out tfplan
+
+      - name: Upload artefact of the tfplan file
+        uses: actions/upload-artifact@v3
+        with:
+          name: tfplan
+          path: ${{ vars.TF_CR_ROOT }}/tfplan
+
+  cr-apply:
+    needs: cr-plan
+    name: Apply Container Registry
+    runs-on: self-hosted
+    steps:
+      - name: Checkout the repo
+        uses: actions/checkout@v3
+
+      - name: Use Terraform Action
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_wrapper: false
+
+      - name: Download the artefact of the tfplan file
+        uses: actions/download-artifact@v3
+        with:
+          name: tfplan
+          path: ${{ vars.TF_CR_ROOT }}/
+
+      - name: Terraform Container Registry apply
+        run: |
+          terraform --version
+          cd ${{ vars.TF_CR_ROOT }}
+          terraform init -backend-config="resource_group_name=${{ vars.RESOURCE_GROUP_NAME }}" -backend-config="storage_account_name=${{ vars.STORAGE_ACCOUNT_NAME }}" -backend-config="container_name=${{ vars.STORAGE_CONTAINER_NAME }}"
+          terraform validate
+          terraform apply -input=false -auto-approve tfplan
+
+      - name: Update registry of the container registry on github actions Variables
+        run: |
+          cd ${{ vars.TF_CR_ROOT }}
+          curl -L \
+            -X PATCH \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.TOKEN_PERSO }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/$GITHUB_REPOSITORY/actions/variables/AZURE_REGISTRY \
+            -d "{\"name\":\"AZURE_REGISTRY\",\"value\":\"$(terraform output -raw server_cr)\"}"
+
+      - name: Update username of the container registry on github actions Variables
+        run: |
+          cd ${{ vars.TF_CR_ROOT }}
+          curl -L \
+            -X PATCH \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.TOKEN_PERSO }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/$GITHUB_REPOSITORY/actions/variables/AZURE_REGISTRY_NAME \
+            -d "{\"name\":\"AZURE_REGISTRY_NAME\",\"value\":\"$(terraform output -raw admin_login)\"}"
+
+      - name: Create or Update password of the container registry on github actions Variables
+        run: |
+          cd ${{ vars.TF_CR_ROOT }}
+          curl -L \
+            -X PATCH \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.TOKEN_PERSO }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/$GITHUB_REPOSITORY/actions/variables/AZURE_REGISTRY_PASSWORD \
+            -d "{\"name\":\"AZURE_REGISTRY_PASSWORD\",\"value\":\"$(terraform output -raw admin_password)\"}"

@@ -32,8 +32,19 @@ jobs:
           vendor/bin/phpstan analyse .
 
   build-sample-app:
-    runs-on: self-hosted
     needs: sniff-code
+    runs-on: self-hosted
+    services:
+      mysql:
+        image: mysql:latest
+        env:
+          MYSQL_ROOT_PASSWORD: sampleAdmin
+          MYSQL_DATABASE: laravel
+          MYSQL_USER: dev
+          MYSQL_PASSWORD: sampleAdminDev
+        ports:
+          - 3306
+        options: --health-cmd="mysqladmin ping" --health-interval=20s --health-timeout=5s --health-retries=5
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -52,7 +63,7 @@ jobs:
           envkey_APP_KEY: ${{ secrets.APP_KEY }}
           envkey_APP_URL: ${{ secrets.APP_URL }}
           envkey_DB_CONNECTION: mysql
-          envkey_DB_HOST: 127.0.0.1
+          envkey_DB_HOST: mysql
           envkey_DB_PORT: 3306
           envkey_DB_DATABASE: laravel
           envkey_DB_USERNAME: dev
@@ -68,57 +79,61 @@ jobs:
           composer update --optimize-autoloader
           composer install --no-interaction --optimize-autoloader
 
-      - name: Compresse the app
-        run: |
-          tar -czf app-builded.tar.gz sample-app/
-
-      - name: Upload artefact of the app
-        uses: actions/upload-artifact@v3
-        with:
-          name: app-builded.tar.gz
-          path: app-builded.tar.gz
-
-  test-sample-app:
-    needs: build-sample-app
-    runs-on: ubuntu-latest
-    container:
-      image: kirschbaumdevelopment/laravel-test-runner:8.2
-    services:
-      mysql:
-        image: mysql:latest
-        env:
-          MYSQL_ROOT_PASSWORD: sampleAdmin
-          MYSQL_DATABASE: laravel
-          MYSQL_USER: dev
-          MYSQL_PASSWORD: sampleAdminDev
-        ports:
-          - 3306
-        options: --health-cmd="mysqladmin ping" --health-interval=20s --health-timeout=5s --health-retries=5
-    steps:
       - name: test mysql
         run: |
           mysql -h localhost -P 3306 -u dev -p sampleAdminDev
 
-      # - name: Download the artefact of the app
-      #   uses: actions/download-artifact@v3
-      #   with:
-      #     name: app-builded.tar.gz
+  #     - name: Compresse the app
+  #       run: |
+  #         tar -czf app-builded.tar.gz sample-app/
 
-      # - name: Remove the sample-app directory
-      #   run: rm -rf sample-app/
+  #     - name: Upload artefact of the app
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: app-builded.tar.gz
+  #         path: app-builded.tar.gz
 
-      # - name: Unpack the artifact
-      #   run: |
-      #     mkdir sample-app/
-      #     tar xzf app-builded.tar.gz
+  # test-sample-app:
+  #   needs: build-sample-app
+  #   runs-on: ubuntu-latest
+  #   container:
+  #     image: kirschbaumdevelopment/laravel-test-runner:8.2
+  #   services:
+  #     mysql:
+  #       image: mysql:latest
+  #       env:
+  #         MYSQL_ROOT_PASSWORD: sampleAdmin
+  #         MYSQL_DATABASE: laravel
+  #         MYSQL_USER: dev
+  #         MYSQL_PASSWORD: sampleAdminDev
+  #       ports:
+  #         - 3306
+  #       options: --health-cmd="mysqladmin ping" --health-interval=20s --health-timeout=5s --health-retries=5
+  #   steps:
+  #     - name: test mysql
+  #       run: |
+  #         mysql -h localhost -P 3306 -u dev -p sampleAdminDev
 
-      # - name: Migrate and seed the DB
-      #   run: |
-      #     cd sample-app/
-      #     php artisan migrate --force
-      #     php artisan db:seed --force
+  # - name: Download the artefact of the app
+  #   uses: actions/download-artifact@v3
+  #   with:
+  #     name: app-builded.tar.gz
 
-      # - name: Execute tests via PHPUnit
-      #   run: |
-      #     cd sample-app/
-      #     vendor/bin/phpunit tests/
+  # - name: Remove the sample-app directory
+  #   run: rm -rf sample-app/
+
+  # - name: Unpack the artifact
+  #   run: |
+  #     mkdir sample-app/
+  #     tar xzf app-builded.tar.gz
+
+  # - name: Migrate and seed the DB
+  #   run: |
+  #     cd sample-app/
+  #     php artisan migrate --force
+  #     php artisan db:seed --force
+
+  # - name: Execute tests via PHPUnit
+  #   run: |
+  #     cd sample-app/
+  #     vendor/bin/phpunit tests/

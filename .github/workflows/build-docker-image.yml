@@ -1,6 +1,6 @@
 name: CI Build Docker image and push
 
-run-name: ${{ github.actor }} is launching the Build the Docker image and push it 🚀
+run-name: ${{ github.actor }} is launching the Build the Docker image and push it
 
 on:
   push:

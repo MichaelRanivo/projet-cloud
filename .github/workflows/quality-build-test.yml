@@ -97,7 +97,7 @@ jobs:
     steps:
       - name: test mysql
         run: |
-          mysql -h 127.0.0.1 -u dev -p sampleAdminDev
+          mysql -h localhost -u dev -p sampleAdminDev
 
       - name: Download the artefact of the app
         uses: actions/download-artifact@v3

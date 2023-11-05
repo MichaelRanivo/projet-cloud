@@ -1,6 +1,6 @@
 name: CI Code Quality, Build and Unit test
 
-run-name: ${{ github.actor }} is launching the Code Quality0, the app Build and the Unit test 🚀
+run-name: ${{ github.actor }} is launching the Code Quality, the app Build and the Unit test 🚀
 
 on:
   push:
@@ -52,7 +52,7 @@ jobs:
           envkey_APP_KEY: ${{ secrets.APP_KEY }}
           envkey_APP_URL: ${{ secrets.APP_URL }}
           envkey_DB_CONNECTION: mysql
-          envkey_DB_HOST: 127.0.0.1
+          envkey_DB_HOST: localhost
           envkey_DB_PORT: 3306
           envkey_DB_DATABASE: laravel
           envkey_DB_USERNAME: dev

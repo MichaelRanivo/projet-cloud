@@ -31,7 +31,7 @@ jobs:
           cd sample-app/
           vendor/bin/phpstan analyse .
 
-  build-sample-app:
+  app-unit-test:
     needs: sniff-code
     runs-on: ubuntu-latest
     container:
@@ -40,8 +40,8 @@ jobs:
       mysql:
         image: mysql:latest
         env:
-          MYSQL_ROOT_PASSWORD: sampleAdmin
-          MYSQL_DATABASE: laravel
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=20s --health-timeout=5s --health-retries=5
@@ -59,15 +59,15 @@ jobs:
         uses: SpicyPizza/create-envfile@v2.0
         with:
           envkey_APP_DEBUG: ${{ secrets.APP_DEBUG }}
-          envkey_APP_ENV: local
+          envkey_APP_ENV: ${{ secrets.MYSQL_APP_DEBUG }}
           envkey_APP_KEY: ${{ secrets.APP_KEY }}
           envkey_APP_URL: ${{ secrets.APP_URL }}
-          envkey_DB_CONNECTION: mysql
-          envkey_DB_HOST: mysql
+          envkey_DB_CONNECTION: ${{ secrets.MYSQL_DB_CONNECTION }}
+          envkey_DB_HOST: ${{ secrets.MYSQL_DB_CONNECTION }}
           envkey_DB_PORT: 3306
-          envkey_DB_DATABASE: laravel
-          envkey_DB_USERNAME: root
-          envkey_DB_PASSWORD: sampleAdmin
+          envkey_DB_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+          envkey_DB_USERNAME: ${{ secrets.MYSQL_USERNAME }}
+          envkey_DB_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
           directory: sample-app/
           file_name: .env
           fail_on_empty: false

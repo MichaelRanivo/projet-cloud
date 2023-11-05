@@ -40,10 +40,8 @@ jobs:
         env:
           MYSQL_ROOT_PASSWORD: sampleAdmin
           MYSQL_DATABASE: laravel
-          MYSQL_USER: dev
-          MYSQL_PASSWORD: sampleAdminDev
         ports:
-          - 3306
+          - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=20s --health-timeout=5s --health-retries=5
     steps:
       - name: Checkout repository
@@ -66,8 +64,8 @@ jobs:
           envkey_DB_HOST: mysql
           envkey_DB_PORT: 3306
           envkey_DB_DATABASE: laravel
-          envkey_DB_USERNAME: dev
-          envkey_DB_PASSWORD: sampleAdminDev
+          envkey_DB_USERNAME: root
+          envkey_DB_PASSWORD: sampleAdmin
           directory: sample-app/
           file_name: .env
           fail_on_empty: false
@@ -81,7 +79,7 @@ jobs:
 
       - name: test mysql
         run: |
-          mysql -h localhost -P 3306 -u dev -p sampleAdminDev
+          mysql -h localhost -P 3306 -u root -p sampleAdmin
 
   #     - name: Compresse the app
   #       run: |

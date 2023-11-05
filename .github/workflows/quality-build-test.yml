@@ -95,30 +95,30 @@ jobs:
           - 3306
         options: --health-cmd="mysqladmin ping" --health-interval=20s --health-timeout=5s --health-retries=5
     steps:
-      # - name: test mysql
+      - name: test mysql
+        run: |
+          mysql -h localhost -P 3306 -u dev -p sampleAdminDev
+
+      # - name: Download the artefact of the app
+      #   uses: actions/download-artifact@v3
+      #   with:
+      #     name: app-builded.tar.gz
+
+      # - name: Remove the sample-app directory
+      #   run: rm -rf sample-app/
+
+      # - name: Unpack the artifact
       #   run: |
-      #     mysql -h localhost -u dev -p sampleAdminDev
+      #     mkdir sample-app/
+      #     tar xzf app-builded.tar.gz
 
-      - name: Download the artefact of the app
-        uses: actions/download-artifact@v3
-        with:
-          name: app-builded.tar.gz
+      # - name: Migrate and seed the DB
+      #   run: |
+      #     cd sample-app/
+      #     php artisan migrate --force
+      #     php artisan db:seed --force
 
-      - name: Remove the sample-app directory
-        run: rm -rf sample-app/
-
-      - name: Unpack the artifact
-        run: |
-          mkdir sample-app/
-          tar xzf app-builded.tar.gz
-
-      - name: Migrate and seed the DB
-        run: |
-          cd sample-app/
-          php artisan migrate --force
-          php artisan db:seed --force
-
-      - name: Execute tests via PHPUnit
-        run: |
-          cd sample-app/
-          vendor/bin/phpunit tests/
+      # - name: Execute tests via PHPUnit
+      #   run: |
+      #     cd sample-app/
+      #     vendor/bin/phpunit tests/

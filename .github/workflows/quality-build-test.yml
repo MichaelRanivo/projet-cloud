@@ -33,7 +33,7 @@ jobs:
 
   build-sample-app:
     needs: sniff-code
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     services:
       mysql:
         image: mysql:latest

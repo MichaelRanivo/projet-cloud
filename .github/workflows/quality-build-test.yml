@@ -34,6 +34,8 @@ jobs:
   build-sample-app:
     needs: sniff-code
     runs-on: ubuntu-latest
+    container:
+      image: kirschbaumdevelopment/laravel-test-runner:8.2
     services:
       mysql:
         image: mysql:latest
@@ -76,6 +78,17 @@ jobs:
           cd sample-app/
           composer update --optimize-autoloader
           composer install --no-interaction --optimize-autoloader
+
+      - name: Migrate and seed the DB
+        run: |
+          cd sample-app/
+          php artisan migrate --force
+          php artisan db:seed --force
+
+      - name: Execute tests via PHPUnit
+        run: |
+          cd sample-app/
+          vendor/bin/phpunit tests/
 
       - name: test mysql
         run: |

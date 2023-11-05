@@ -53,10 +53,10 @@ jobs:
           envkey_APP_URL: ${{ secrets.APP_URL }}
           envkey_DB_CONNECTION: ${{ secrets.DB_CONNECTION }}
           envkey_DB_HOST: 127.0.0.1
-          envkey_DB_PORT: ${{ secrets.DB_PORT }}
-          envkey_DB_DATABASE: ${{ secrets.MYSQL_DATABASE }}
-          envkey_DB_USERNAME: ${{ secrets.MYSQL_USER }}
-          envkey_DB_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+          envkey_DB_PORT: 3306
+          envkey_DB_DATABASE: devTest
+          envkey_DB_USERNAME: mike
+          envkey_DB_PASSWORD: mike
           directory: sample-app/
           file_name: .env
           fail_on_empty: false
@@ -88,9 +88,9 @@ jobs:
         image: mysql:latest
         env:
           MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
-          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
-          MYSQL_USER: ${{ secrets.MYSQL_USER }}
-          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+          MYSQL_DATABASE: devTest
+          MYSQL_USER: mike
+          MYSQL_PASSWORD: mike
         ports:
           - 3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3

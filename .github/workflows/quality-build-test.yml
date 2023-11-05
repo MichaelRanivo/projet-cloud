@@ -97,6 +97,7 @@ jobs:
     steps:
       - name: test mysql
         run: |
+          docker ps -a
           mysql -h localhost -u dev -p sampleAdminDev
 
       - name: Download the artefact of the app

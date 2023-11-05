@@ -1,0 +1,91 @@
+name: CI Code Quality, Build and Unit test
+
+run-name: ${{ github.actor }} is launching the Code Quality, the app Build and the Unit test 🚀
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  sniff-code:
+    runs-on: self-hosted
+    continue-on-error: true
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up PHP and composer
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          tools: composer
+
+      - name: Install PHPStan
+        run: |
+          cd sample-app/
+          composer require --dev phpstan/phpstan
+
+      - name: Scan the code
+        run: |
+          cd sample-app/
+          vendor/bin/phpstan analyse .
+
+  app-unit-test:
+    needs: sniff-code
+    runs-on: ubuntu-latest
+    container:
+      image: kirschbaumdevelopment/laravel-test-runner:8.2
+    services:
+      mysql:
+        image: mysql:latest
+        env:
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+        ports:
+          - 3306:3306
+        options: --health-cmd="mysqladmin ping" --health-interval=20s --health-timeout=5s --health-retries=5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up PHP and composer
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          tools: composer
+
+      - name: Make envfile
+        uses: SpicyPizza/create-envfile@v2.0
+        with:
+          envkey_APP_DEBUG: ${{ secrets.APP_DEBUG }}
+          envkey_APP_ENV: ${{ secrets.MYSQL_APP_DEBUG }}
+          envkey_APP_KEY: ${{ secrets.APP_KEY }}
+          envkey_APP_URL: ${{ secrets.APP_URL }}
+          envkey_DB_CONNECTION: ${{ secrets.MYSQL_DB_CONNECTION }}
+          envkey_DB_HOST: ${{ secrets.MYSQL_DB_CONNECTION }}
+          envkey_DB_PORT: 3306
+          envkey_DB_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+          envkey_DB_USERNAME: ${{ secrets.MYSQL_USERNAME }}
+          envkey_DB_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+          directory: sample-app/
+          file_name: .env
+          fail_on_empty: false
+          sort_keys: false
+
+      - name: Update and install dependencies
+        run: |
+          cd sample-app/
+          composer update --optimize-autoloader
+          composer install --no-interaction --optimize-autoloader
+
+      - name: Migrate and seed the DB
+        run: |
+          cd sample-app/
+          php artisan migrate --force
+          php artisan db:seed --force
+
+      - name: Execute tests via PHPUnit
+        run: |
+          cd sample-app/
+          vendor/bin/phpunit tests/

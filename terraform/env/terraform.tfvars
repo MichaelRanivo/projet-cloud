@@ -56,13 +56,12 @@ username                    = "azureadmin"
 
 # PAAS
 paas_resource_group_name        = "paas-rg"
-assigned_identity_name          = "tfMyID"
-data_container_registry_name    = "sampleappcrzrmod"
-registry_role_definition_name   = "AcrPull"
-app_service_plan_name           = "web-app-plan-sampleApp"
-web_app_name                    = "sampleApp-web-app"
-sample_app_port                 = 80
-sample_app_docker_image_name    = "sample-app"
+aks-cluster-name                = "sample-app-AKS"
+dns_aks_prefix                  = "sampleappaks"
+kube_version                    = "1.27.3"
+aks-sku                         = "Free"
+aks_auto_upgrade                = "stable"
+aks_api_private                 = false
 
 #Tags for all resources
 tags = {

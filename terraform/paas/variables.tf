@@ -1,9 +1,9 @@
 variable "resource_group_container_registry" {
     type        = string
-    description = "The name of the resource group where is the Container Registry"
+    description = "The name of the resource group where the container registry is" 
 }
 
-variable "data_container_registry_name" {
+variable "container_registry_name" {
     type        = string
     description = "The name of the container registry"
 }
@@ -18,35 +18,34 @@ variable "resource_group_location" {
     description = "The Azure Cloud's location for our infra"
 }
 
-variable "assigned_identity_name" {
+variable "aks-cluster-name" {
     type        = string
-    description = "The name of the managed identity"
+    description = "The name of the cluster AKS"
 }
 
-variable "registry_role_definition_name" {
+variable "aks-sku" {
     type        = string
-    description = "The name of the role"
+    description = "The sku of the AKS"
 }
 
-variable "app_service_plan_name" {
+variable "dns_aks_prefix" {
     type        = string
-    description = "The name of the app service plan"
+    description = "The DNS prefixe of the AKS"
 }
 
-variable "web_app_name" {
+variable "kube_version" {
     type        = string
-    description = "The name of the Azure Web app"
+    description = "The version of the Kubernetes"
 }
 
-variable "sample_app_port" {
-    type        = number
-    description = "The Port of the app"
-    default     = 80
+variable "aks_auto_upgrade" {
+    type        = string
+    description = "The upgrade channel for this Kubernetes Cluster"
 }
 
-variable "sample_app_docker_image_name" {
-    type = string
-    description = "The Docker image of the App"
+variable "aks_api_private" {
+    type        = bool
+    description = "Should this Kubernetes Cluster have its API server only exposed on internal IP addresses?"
 }
 
 variable "tags" {

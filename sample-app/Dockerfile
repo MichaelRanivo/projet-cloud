@@ -14,6 +14,4 @@ RUN chmod 755 -R /var/www/html/storage/ && chown -R www-data:www-data /var/www/
 
 WORKDIR /var/www/html/
 
-CMD ["php","artisan","serve", "--host=0.0.0.0","--port=8080"]
-
-EXPOSE 8080 
+EXPOSE 8080

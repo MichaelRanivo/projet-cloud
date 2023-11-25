@@ -15,6 +15,29 @@ on:
       - "v*.*.*"
 
 jobs:
+  sniff-code:
+    runs-on: self-hosted
+    continue-on-error: true
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up PHP and composer
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.2"
+          tools: composer
+
+      - name: Install PHPStan
+        run: |
+          cd sample-app/
+          composer require --dev phpstan/phpstan
+
+      - name: Scan the code
+        run: |
+          cd sample-app/
+          vendor/bin/phpstan analyse .
+
   build-push-image-docker:
     if: startsWith(github.ref, 'refs/tags/')
     runs-on: self-hosted

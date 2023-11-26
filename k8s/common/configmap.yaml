@@ -1,9 +1,0 @@
----
-apiVersion: v1
-kind: ConfigMap
-metadata:
-  name: sample-app-configmap
-  namespace: sample-app-kub-namespace
-data:
-  app_debug: "false"
-  app_env: production

@@ -1,27 +1,20 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: sample-app-ingress
+  name: demo-localhost
   namespace: sample-app-kub-namespace
   labels:
     app: sample-app
-  # annotations:
-#   kubernetes.io/tls-acme: "true"
-#   nginx.ingress.kubernetes.io/proxy-body-size: 10m
 spec:
-  # tls:
-  #   - hosts:
-  #     - terracloud.access.ly
-  #     secretName: cli.sample-app-crt TODO
   ingressClassName: nginx
   rules:
   - host: terracloud.access.ly
     http:
       paths:
-      - path: /
-        pathType: Prefix
-        backend:
+      - backend:
           service:
             name: sample-app-service-clusterip
             port:
               number: 80
+        path: /
+        pathType: Prefix

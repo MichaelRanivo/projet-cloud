@@ -21,3 +21,7 @@ paas/.terraform
 paas/.terraform.lock.hcl
 paas/terraform.tfstate
 paas/tfplan
+iaas/.terraform
+iaas/.terraform.lock.hcl
+iaas/terraform.tfstate
+iaas/tfplan

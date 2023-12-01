@@ -20,39 +20,59 @@ database_sku            = "B_Standard_B1s"
 resource_group_container_registry = "cr-resource-group"
 container_registry_name           = "sampleappcr"
 
-#Virtual network vars
-vnet_name                   = "ImageVMVnet"
-vnet_ip_addr                = ["10.0.0.0/16"]
-resource_group_name         = "t-clo-901-lyo-3"
+# IAAS
+iaas_resource_group_name    = "iaas-rg"
+iaas_vnet_name              = "iaas-vnet"
+iaad_subnet_name            = "iaas-subnet"
 
-#subnet vars
-subnet_name                 = "ImageVMSubnet"
-subnet_ip_addr              = ["10.0.1.0/24"]
+######### NODE MASTER ##############
 
-#Public IPs vars
-public_ip_name              = "ImageVMPublicIP"
+## NODE MASTER
+vm_node_master_name                     = "NodeMaster"
+vm_node_master_size                     = "Standard_B1s"
+vm_node_master_os_disk_name             = "NodeMasterVMOsDisk"
+vm_node_master_image_pub                = "debian"
+vm_node_master_image_offer              = "debian-12"
+vm_node_master_image_sku                = "12-gen2"
+vm_node_master_image_version            = "latest"
 
-#Network Security Group and Rules vars
-network_sg_r_name           = "ImageVMNetSG_R"
+## SSH Config key vars node master
+node_master_ssh_public_key_type         = "Microsoft.Compute/sshPublicKeys@2023-03-01"
+node_master_ssh_public_key_name         = "VMNodeMasterPublicKey"
+node_master_username                    = "k8smaster"
 
-#Network interface vars
-net_interface_name          = "ImageVMNetInt"
-net_inter_ip_config_name    = "ImageVMNetIntIPConfig"
+## Public IP for the node master
+node_master_public_ip_name              = "NodeMasterPublicIP"
 
-#Virtual Machine vars
-vm_name                     = "VmForImage"
-vm_size                     = "Standard_B1s"
-vm_os_disk_name             = "ImageVMOsDisk"
-vm_image_pub                = "debian"
-vm_image_offer              = "debian-11"
-vm_image_sku                = "11"
-vm_image_version            = "latest"
+## Node Master Network Security Group and rule
+node_master_network_sg_name             = "nodeMasterSg"
+net_int_ip_config_name                  = "nodeMasterNetIntConfigIp"
 
-#SSH Config key vars
-ssh_publick_key_type        = "Microsoft.Compute/sshPublicKeys@2023-03-01"
-ssh_public_key_name         = "ImageVMPublicKey"
+## Network interface 
+net_int_node_master_name                = "nodemasternetinte"
 
-username                    = "azureadmin"
+######### NODE WORKER ##############
+
+## SSH PUBLIC KEY
+node_master_ssh_public_key_name
+node_master_ssh_public_key_type
+
+## Network Interface Node Worker
+net_int_node_worker_name                = "NetIntNodeWorker"
+net_int_ip_config_worker_name           = "NetIntIpCongNodeWorker"
+
+## VM Node Worker
+vm_node_master_name
+vm_node_master_size
+vm_node_master_os_disk_name
+vm_node_master_image_pub
+vm_node_master_image_offer
+vm_node_master_image_sku
+vm_node_master_image_version
+vm_noe_master_computer_name
+node_master_username
+
+
 
 # PAAS
 paas_resource_group_name        = "paas-rg"

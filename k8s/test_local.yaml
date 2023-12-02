@@ -5,10 +5,16 @@ metadata:
   namespace: sample-app-kub-namespace
   labels:
     app: sample-app
+  annotations:
+    cert-manager.io/issuer: "cert-manager-issuer"
 spec:
+  tls:
+  - hosts:
+    - lekasecrets.net
+    secretName: sample-app-tls
   ingressClassName: nginx
   rules:
-  - host: terracloud.access.ly
+  - host: lekasecrets.net
     http:
       paths:
       - backend:

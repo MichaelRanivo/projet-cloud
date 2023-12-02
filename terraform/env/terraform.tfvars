@@ -54,23 +54,23 @@ net_int_node_master_name                = "nodemasternetinte"
 ######### NODE WORKER ##############
 
 ## SSH PUBLIC KEY
-node_master_ssh_public_key_name
-node_master_ssh_public_key_type
+# node_master_ssh_public_key_name
+# node_master_ssh_public_key_type
 
 ## Network Interface Node Worker
 net_int_node_worker_name                = "NetIntNodeWorker"
 net_int_ip_config_worker_name           = "NetIntIpCongNodeWorker"
 
 ## VM Node Worker
-vm_node_master_name
-vm_node_master_size
-vm_node_master_os_disk_name
-vm_node_master_image_pub
-vm_node_master_image_offer
-vm_node_master_image_sku
-vm_node_master_image_version
-vm_noe_master_computer_name
-node_master_username
+# vm_node_master_name
+# vm_node_master_size
+# vm_node_master_os_disk_name
+# vm_node_master_image_pub
+# vm_node_master_image_offer
+# vm_node_master_image_sku
+# vm_node_master_image_version
+# vm_noe_master_computer_name
+# node_master_username
 
 
 

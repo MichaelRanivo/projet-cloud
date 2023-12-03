@@ -1,0 +1,32 @@
+name: CD Deploy aks Manifeste
+
+run-name: ${{ github.actor }} is launching the deployment of manifeste to the AKS Cluster
+
+on:
+  workflow_run:
+    workflows: [CI Build Docker image and push]
+    types:
+      - completed
+
+jobs:
+  deploy-AKS:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Kubectl
+        uses: azure/k8s-set-context@v3
+        with:
+          kubeconfig: ${{ secrets.KUBECONFIG }}
+
+      - name: Deploy
+        run: |
+          cd k8s/
+          kubectl apply -f nginx-ingress-controller.yaml
+          kubectl apply -f namespace.yaml
+          kubectl apply -f common/
+          kubectl apply -f deployement.yaml
+          kubectl apply -f service_clusterip.yaml
+          kubectl apply -f horizontalPodAutoscaler.yaml
+          kubectl apply -f ingress.yaml

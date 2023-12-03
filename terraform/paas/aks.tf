@@ -1,3 +1,9 @@
+resource "azurerm_user_assigned_identity" "AKS_managed_identity" {
+    name                = "AKS-managed-identity"
+    location            = azurerm_resource_group.paas_resource_group.location
+    resource_group_name = azurerm_resource_group.paas_resource_group.name
+}
+
 resource "azurerm_kubernetes_cluster" "sample-app-AKS" {
     name                      = var.aks-cluster-name
     location                  = azurerm_resource_group.paas_resource_group.location
@@ -9,7 +15,6 @@ resource "azurerm_kubernetes_cluster" "sample-app-AKS" {
     private_cluster_enabled   = var.aks_api_private
     node_resource_group       = "${var.aks-cluster-name}-nodepool-rc"
     oidc_issuer_enabled       = false
-    # workload_identity_enabled = true
         
     default_node_pool {
         name                    = "akspool"
@@ -35,7 +40,10 @@ resource "azurerm_kubernetes_cluster" "sample-app-AKS" {
     }
 
     identity {
-        type         = "SystemAssigned"
+        type = "UserAssigned"
+        identity_ids = [
+            azurerm_user_assigned_identity.AKS_managed_identity.id
+        ]
     }
 
     lifecycle {
@@ -45,9 +53,20 @@ resource "azurerm_kubernetes_cluster" "sample-app-AKS" {
     tags = var.tags
 }
 
+## Give the permission to the AKS to pull image on the Container Registry on another Resource Group. 
 resource "azurerm_role_assignment" "aks-cr" {
-    principal_id                     = azurerm_kubernetes_cluster.sample-app-AKS.kubelet_identity[0].object_id
-    role_definition_name             = "AcrPull"
-    scope                            = data.azurerm_container_registry.rc-data.id
-    skip_service_principal_aad_check = true
+    principal_id         = azurerm_kubernetes_cluster.sample-app-AKS.kubelet_identity[0].object_id
+    role_definition_name = "AcrPull"
+    scope                = data.azurerm_container_registry.rc-data.id
+}
+
+## Give the permission to the AKS to manipulate the Public IP adresse (read, join it to the Ingress Controller Load Balancer IP)
+data "azurerm_resource_group" "public_ip_rg" {
+    name = var.rg_public_ip
+}
+
+resource "azurerm_role_assignment" "aks-manip-rg-public-ip" {
+    scope                = data.azurerm_resource_group.public_ip_rg.id
+    role_definition_name = "Network Contributor"
+    principal_id         = azurerm_user_assigned_identity.AKS_managed_identity.principal_id
 }

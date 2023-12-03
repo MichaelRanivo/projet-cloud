@@ -83,6 +83,10 @@ aks-sku                         = "Free"
 aks_auto_upgrade                = "stable"
 aks_api_private                 = false
 
+## Public IP for LaodBalancer
+lb_public_ip_name               = "lb-ip"
+rg_public_ip                    = "dns"
+
 #Tags for all resources
 tags = {
     Author          = "michael.ranivo@epitech.eu"

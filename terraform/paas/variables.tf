@@ -48,6 +48,16 @@ variable "aks_api_private" {
     description = "Should this Kubernetes Cluster have its API server only exposed on internal IP addresses?"
 }
 
+variable "lb_public_ip_name" {
+    type        = string
+    description = "The name of the Public IP on Azure"
+}
+
+variable "rg_public_ip" {
+    type        = string
+    description = "The name of the Resource Group where are the Public IP"
+}
+
 variable "tags" {
     type        = map(string)
     description = "Informations who will tag all resources"

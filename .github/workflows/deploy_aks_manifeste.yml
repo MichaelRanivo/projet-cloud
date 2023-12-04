@@ -43,7 +43,9 @@ jobs:
       - name: Deploy to Kubernetes
         run: |
           kubectl apply -f k8s/nginx-ingress-controller.yaml
+          kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.2/cert-manager.yaml
           kubectl apply -f k8s/namespace.yaml
+          kubectl apply -f cert-manager/issuer.yaml
           kubectl apply -f k8s/common/
           kubectl apply -f k8s/deployement.yaml
           kubectl apply -f k8s/service_clusterip.yaml

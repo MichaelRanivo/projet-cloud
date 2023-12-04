@@ -5,14 +5,13 @@ metadata:
   namespace: sample-app-kub-namespace
   labels:
     app: sample-app
-  # annotations:
-#   kubernetes.io/tls-acme: "true"
-#   nginx.ingress.kubernetes.io/proxy-body-size: 10m
+  annotations:
+    cert-manager.io/issuer: "cert-manager-issuer"
 spec:
-  # tls:
-  #   - hosts:
-  #     - terracloud.access.ly
-  #     secretName: cli.sample-app-crt TODO
+  tls:
+  - hosts:
+    - terracloud.access.ly
+    secretName: sample-app-tls
   ingressClassName: nginx
   rules:
   - host: terracloud.access.ly

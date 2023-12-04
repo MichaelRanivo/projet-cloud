@@ -18,15 +18,14 @@ jobs:
       - name: Set up Kubectl
         uses: azure/k8s-set-context@v3
         with:
-          kubeconfig: ${{ secrets.KUBECONFIG }}
+          kubeconfig: ${{ secrets.AKS_KUBE_CONFIG }}
 
-      - name: Deploy
-        run: |
-          cd k8s/
-          kubectl apply -f nginx-ingress-controller.yaml
-          kubectl apply -f namespace.yaml
-          kubectl apply -f common/
-          kubectl apply -f deployement.yaml
-          kubectl apply -f service_clusterip.yaml
-          kubectl apply -f horizontalPodAutoscaler.yaml
-          kubectl apply -f ingress.yaml
+      - uses: actions-hub/kubectl@master
+        with:
+          args: apply -f k8s/nginx-ingress-controller.yaml
+          # kubectl apply -f namespace.yaml
+          # kubectl apply -f common/
+          # kubectl apply -f deployement.yaml
+          # kubectl apply -f service_clusterip.yaml
+          # kubectl apply -f horizontalPodAutoscaler.yaml
+          # kubectl apply -f ingress.yaml

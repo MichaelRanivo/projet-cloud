@@ -8,6 +8,11 @@ on:
     types:
       - completed
 
+permissions:
+  id-token: write
+  contents: read
+  actions: read
+
 jobs:
   deploy-AKS:
     runs-on: self-hosted
@@ -15,17 +20,25 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - uses: azure/setup-kubectl@v3
+        with:
+          version: "v1.28.2" # default is latest stable
+        id: install
+
       - name: Set up Kubectl
         uses: azure/k8s-set-context@v3
         with:
           kubeconfig: ${{ secrets.AKS_KUBE_CONFIG }}
 
-      - uses: actions-hub/kubectl@master
-        with:
-          args: apply -f k8s/nginx-ingress-controller.yaml
-          # kubectl apply -f namespace.yaml
-          # kubectl apply -f common/
-          # kubectl apply -f deployement.yaml
-          # kubectl apply -f service_clusterip.yaml
-          # kubectl apply -f horizontalPodAutoscaler.yaml
-          # kubectl apply -f ingress.yaml
+      # - uses: actions-hub/kubectl@master
+      #   with:
+      #     args: apply -f k8s/nginx-ingress-controller.yaml
+      # kubectl apply -f namespace.yaml
+      # kubectl apply -f common/
+      # kubectl apply -f deployement.yaml
+      # kubectl apply -f service_clusterip.yaml
+      # kubectl apply -f horizontalPodAutoscaler.yaml
+      # kubectl apply -f ingress.yaml
+
+      - name: Deploy to Kubernetes
+        run: kubectl apply -f k8s/nginx-ingress-controller.yaml

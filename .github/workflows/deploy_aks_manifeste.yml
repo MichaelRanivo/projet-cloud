@@ -43,9 +43,9 @@ jobs:
       - name: Deploy to Kubernetes
         run: |
           kubectl apply -f k8s/nginx-ingress-controller.yaml
-          kubectl apply -f namespace.yaml
-          kubectl apply -f common/
-          kubectl apply -f deployement.yaml
-          kubectl apply -f service_clusterip.yaml
-          kubectl apply -f horizontalPodAutoscaler.yaml
-          kubectl apply -f ingress.yaml
+          kubectl apply -f k8s/namespace.yaml
+          kubectl apply -f k8s/common/
+          kubectl apply -f k8s/deployement.yaml
+          kubectl apply -f k8s/service_clusterip.yaml
+          kubectl apply -f k8s/horizontalPodAutoscaler.yaml
+          kubectl apply -f k8s/ingress.yaml

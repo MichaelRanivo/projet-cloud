@@ -70,3 +70,14 @@ jobs:
           terraform init -backend-config="resource_group_name=${{ vars.RESOURCE_GROUP_NAME }}" -backend-config="storage_account_name=${{ vars.STORAGE_ACCOUNT_NAME }}" -backend-config="container_name=${{ vars.STORAGE_CONTAINER_NAME }}"
           terraform validate
           terraform apply -input=false -auto-approve tfplan
+
+      - name: Update kube config of the AKS on github actions secrets
+        run: |
+          cd ${{ vars.TF_PAAS_ROOT }}
+          curl -L \
+            -X PUT \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer ${{ secrets.TOKEN_PERSO }}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            https://api.github.com/repos/${{ secrets.REPO_OWNER }}/$GITHUB_REPOSITORY/actions/secrets/AKS_KUBE_CONFIG \
+            -d  "{\"encrypted_value\":\"$(terraform output -raw kube_config)\",\"key_id\":\"${{ secrets.ENCRYPT_KEY }}\"}"

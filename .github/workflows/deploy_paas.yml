@@ -5,8 +5,8 @@ run-name: ${{ github.actor }} is launching the AKS set up
 on:
   push:
     branches: [terraform]
-    paths:
-      - terraform/paas/*
+    # paths:
+    #   - terraform/paas/*
 
 permissions:
   contents: read
@@ -85,4 +85,5 @@ jobs:
       - name: Update kube config of the AKS on github actions secrets
         run: |
           export GITHUB_TOKEN="${{ secrets.TOKEN_PERSO }}" && \
-          gh secret set AKS_KUBE_CONFIG < "$(terraform output -raw kube_config)"
+          echo "$(terraform output -raw kube_config)" > kube_config && \
+          gh secret set AKS_KUBE_CONFIG < kube_config

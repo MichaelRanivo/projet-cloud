@@ -3,10 +3,13 @@ name: CD Deploy aks Manifeste
 run-name: ${{ github.actor }} is launching the deployment of manifeste to the AKS Cluster
 
 on:
-  workflow_run:
-    workflows: [CI Build Docker image and push]
-    types:
-      - completed
+  # workflow_run:
+  #   workflows: [CI Build Docker image and push]
+  #   types:
+  #     - completed
+  push:
+    branches:
+      - "main"
 
 permissions:
   contents: read

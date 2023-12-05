@@ -30,12 +30,19 @@ jobs:
         with:
           kubeconfig: ${{ secrets.AKS_KUBE_CONFIG }}
 
-      - name: Deploy to Kubernetes
+      - name: Deploy ingress controller to cluster Kubernetes
         run: |
           kubectl apply -f k8s/nginx-ingress-controller.yaml
+
+      - name: Sleep for 5 seconds
+        run: sleep 5s
+        shell: bash
+
+      - name: Deploy ingress controller to cluster Kubernetes
+        run: |
           kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.2/cert-manager.yaml
           kubectl apply -f k8s/namespace.yaml
-          kubectl apply -f cert-manager/issuer.yaml
+          kubectl apply -f k8s/cert-manager/issuer.yaml
           kubectl apply -f k8s/common/
           kubectl apply -f k8s/deployement.yaml
           kubectl apply -f k8s/service_clusterip.yaml

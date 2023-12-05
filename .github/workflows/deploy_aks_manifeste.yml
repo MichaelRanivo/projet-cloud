@@ -13,12 +13,6 @@ permissions:
   pages: write
   id-token: write
 
-env:
-  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
-  ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
-  ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
-  ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
 jobs:
   deploy-AKS:
     runs-on: self-hosted
@@ -35,6 +29,13 @@ jobs:
         uses: azure/k8s-set-context@v3
         with:
           kubeconfig: ${{ secrets.AKS_KUBE_CONFIG }}
+
+      - name: "Az CLI login"
+        uses: azure/login@v1
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
       - name: Update kube config of the AKS on github actions secrets
         run: |

@@ -82,8 +82,8 @@ jobs:
       #       https://api.github.com/repos/${{ secrets.REPO_OWNER }}/$GITHUB_REPOSITORY/actions/secrets/AKS_KUBE_CONFIG \
       #       -d  "{\"encrypted_value\":\"$(terraform output -raw kube_config)\",\"key_id\":\"${{ secrets.ENCRYPT_KEY }}\"}"
 
-      - name: Update kube config of the AKS on github actions secrets
-        run: |
-          export GITHUB_TOKEN="${{ secrets.TOKEN_PERSO }}" && \
-          echo "$(terraform output -raw kube_config)" > kube_config.yaml && \
-          gh secret set AKS_KUBE_CONFIG < kube_config.yaml
+      # - name: Update kube config of the AKS on github actions secrets
+      #   run: |
+      #     export GITHUB_TOKEN="${{ secrets.TOKEN_PERSO }}" && \
+      #     echo "$(terraform output -raw kube_config)" > kube_config.yaml && \
+      #     gh secret set AKS_KUBE_CONFIG < kube_config.yaml

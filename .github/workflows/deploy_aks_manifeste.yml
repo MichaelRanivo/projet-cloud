@@ -20,16 +20,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - uses: azure/setup-kubectl@v3
-        with:
-          version: "v1.28.2" # default is latest stable
-        id: install
-
-      - name: Set up Kubectl
-        uses: azure/k8s-set-context@v3
-        with:
-          kubeconfig: ${{ secrets.AKS_KUBE_CONFIG }}
-
       - name: "Az CLI login"
         uses: azure/login@v1
         with:
@@ -40,6 +30,16 @@ jobs:
       - name: Update kube config of the AKS on github actions secrets
         run: |
           az aks get-credentials --resource-group ${{ secrets.AKS_RG }} --name ${{ secrets.AKS_NAME }}
+
+      - uses: azure/setup-kubectl@v3
+        with:
+          version: "v1.28.2" # default is latest stable
+        id: install
+
+      - name: Set up Kubectl
+        uses: azure/k8s-set-context@v3
+        with:
+          kubeconfig: ${{ secrets.AKS_KUBE_CONFIG }}
 
       - name: Deploy ingress controller to cluster Kubernetes
         run: |

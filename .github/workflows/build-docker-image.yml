@@ -4,8 +4,8 @@ run-name: ${{ github.actor }} is launching the Build the Docker image and push i
 
 on:
   push:
-    # branches:
-    #   - "main"
+    branches:
+      - "main"
     tags:
       - "v*.*.*"
 

@@ -9,9 +9,15 @@ on:
       - completed
 
 permissions:
-  id-token: write
   contents: read
-  actions: read
+  pages: write
+  id-token: write
+
+env:
+  ARM_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  ARM_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
+  ARM_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+  ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
 jobs:
   deploy-AKS:
@@ -29,6 +35,10 @@ jobs:
         uses: azure/k8s-set-context@v3
         with:
           kubeconfig: ${{ secrets.AKS_KUBE_CONFIG }}
+
+      - name: Update kube config of the AKS on github actions secrets
+        run: |
+          az aks get-credentials --resource-group ${{ secrets.AKS_RG }} --name ${{ secrets.AKS_NAME }}
 
       - name: Deploy ingress controller to cluster Kubernetes
         run: |

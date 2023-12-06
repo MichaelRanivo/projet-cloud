@@ -73,13 +73,14 @@ jobs:
 
       - name: Get kube config
         run: |
+          cd ${{ vars.TF_PAAS_ROOT }}
           terraform output -raw kube_config | base64 > config
 
       - name: Upload kube config as artifact
         uses: actions/upload-artifact@v2
         with:
           name: kubeconfig
-          path: config
+          path: ${{ vars.TF_PAAS_ROOT }}/
 
       # - uses: gliech/create-github-secret-action@v1
       #   with:

@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sample-app-dashboard-ingress
+  namespace: kubernetes-dashboard
+  labels:
+    k8s-app: kubernetes-dashboard
+  annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    cert-manager.io/issuer: "cert-manager-issuer-sample-app-dashboard"
+spec:
+  tls:
+  - hosts:
+    - kubedash.access.ly
+    secretName: sample-app-dashboard-tls
+  ingressClassName: nginx
+  rules:
+  - host: kubedash.access.ly
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: kubernetes-dashboard
+            port:
+              number: 443

@@ -3,13 +3,13 @@ name: CD Deploy aks Manifeste
 run-name: ${{ github.actor }} is launching the deployment of manifeste to the AKS Cluster
 
 on:
-  # workflow_run:
-  #   workflows: [CI Build Docker image and push]
-  #   types:
-  #     - completed
-  push:
-    branches:
-      - "main"
+  workflow_run:
+    workflows: [CI Build Docker image and push]
+    types:
+      - completed
+  # push:
+  #   branches:
+  #     - "main"
 
 permissions:
   contents: read
@@ -22,17 +22,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
-      # - name: "Az CLI login"
-      #   uses: azure/login@v1
-      #   with:
-      #     client-id: ${{ secrets.AZURE_CLIENT_ID }}
-      #     tenant-id: ${{ secrets.AZURE_TENANT_ID }}
-      #     subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-
-      # - name: Update kube config of the AKS on github actions secrets
-      #   run: |
-      #     az aks get-credentials --resource-group ${{ secrets.AKS_RG }} --name ${{ secrets.AKS_NAME }}
 
       - name: Téléchargez l'artefact
         uses: dawidd6/action-download-artifact@v2
@@ -76,5 +65,7 @@ jobs:
 
       - name: Deploy the ingress manifest to cluster Kubernetes
         run: |
-          kubectl apply -f k8s/cert-manager/issuer.yaml
+          kubectl apply -f k8s/cert-manager/issuer_sample_app_dashboard.yaml
+          kubectl apply -f k8s/cert-manager/issuer_sample_app.yaml
           kubectl apply -f k8s/ingress.yaml
+          kubectl apply -f k8s/dashboard_ingress.yaml

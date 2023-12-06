@@ -33,6 +33,20 @@ jobs:
       # - name: Update kube config of the AKS on github actions secrets
       #   run: |
       #     az aks get-credentials --resource-group ${{ secrets.AKS_RG }} --name ${{ secrets.AKS_NAME }}
+      - name: Create kube config dir
+        run: |
+          mkdir ${HOME}/.kube
+          ls -al 
+          ls -al ${HOME}
+
+      - name: Téléchargez l'artefact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          workflow: deploy_paas.yml
+          workflow_conclusion: success
+          branch: terraform
+          name: kubeconfig
+          path: ./
 
       - uses: azure/setup-kubectl@v3
         with:
@@ -41,10 +55,8 @@ jobs:
 
       - name: View kube config
         run: |
-          pwd
-          mkdir ./kube
-          echo ${{ secrets.AKS_KUBE_CONFIG }} > ./kube/config
-          cat ./kube/config
+          ls -al ./
+          ls -al ${HOME}
 
       # - name: Set up Kubectl
       #   uses: azure/k8s-set-context@v3

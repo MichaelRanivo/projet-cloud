@@ -46,28 +46,16 @@ jobs:
 
       - uses: azure/setup-kubectl@v3
         with:
-          version: "v1.28.2" # default is latest stable
+          version: "v1.28.2"
         id: install
 
       - name: set up the kube config
         run: |
           base64 --decode ./config > ${HOME}/.kube/config
 
-      # - name: Set up Kubectl
-      #   uses: azure/k8s-set-context@v3
-      #   with:
-      #     kubeconfig: ${{ secrets.AKS_KUBE_CONFIG }}
-
       - name: Deploy ingress controller to cluster Kubernetes
         run: |
           kubectl apply -f k8s/nginx-ingress-controller.yaml
-
-      - name: Sleep for 5 seconds
-        run: sleep 5s
-        shell: bash
-
-      - name: Deploy cert manager to cluster Kubernetes
-        run: |
           kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.2/cert-manager.yaml
 
       - name: Sleep for 5 seconds
@@ -77,7 +65,6 @@ jobs:
       - name: Deploy all ours manifests to cluster Kubernetes
         run: |
           kubectl apply -f k8s/namespace.yaml
-          kubectl apply -f k8s/cert-manager/issuer.yaml
           kubectl apply -f k8s/common/
           kubectl apply -f k8s/deployement.yaml
           kubectl apply -f k8s/service_clusterip.yaml
@@ -89,4 +76,5 @@ jobs:
 
       - name: Deploy the ingress manifest to cluster Kubernetes
         run: |
+          kubectl apply -f k8s/cert-manager/issuer.yaml
           kubectl apply -f k8s/ingress.yaml

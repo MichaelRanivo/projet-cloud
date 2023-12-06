@@ -80,7 +80,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: kubeconfig
-          path: ${{ vars.TF_PAAS_ROOT }}/
+          path: ${{ vars.TF_PAAS_ROOT }}/config
 
       # - uses: gliech/create-github-secret-action@v1
       #   with:

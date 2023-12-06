@@ -35,7 +35,6 @@ jobs:
       #     az aks get-credentials --resource-group ${{ secrets.AKS_RG }} --name ${{ secrets.AKS_NAME }}
       - name: Create kube config dir
         run: |
-          mkdir ${HOME}/.kube
           ls -al 
           ls -al ${HOME}
 
@@ -56,7 +55,6 @@ jobs:
       - name: View kube config
         run: |
           ls -al ./
-          ls -al ${HOME}
 
       # - name: Set up Kubectl
       #   uses: azure/k8s-set-context@v3

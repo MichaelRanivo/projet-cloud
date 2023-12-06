@@ -57,8 +57,7 @@ jobs:
       - name: View kube config
         run: |
           base64 --decode ./config > ${HOME}/.kube/config
-          cat ${HOME}/.kube/config
-          kubectl get pods
+          kubectl get pods --all-namespaces
 
       # - name: Set up Kubectl
       #   uses: azure/k8s-set-context@v3

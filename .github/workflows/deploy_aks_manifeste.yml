@@ -37,10 +37,12 @@ jobs:
         run: |
           ls -al 
           ls -al ${HOME}
+          ls -al ${HOME}/.kube
 
       - name: Téléchargez l'artefact
         uses: dawidd6/action-download-artifact@v2
         with:
+          github_token: ${{ secrets.TOKEN_PERSO }}
           workflow: deploy_paas.yml
           workflow_conclusion: success
           branch: terraform

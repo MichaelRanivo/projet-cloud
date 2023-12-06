@@ -71,11 +71,21 @@ jobs:
           terraform validate
           terraform apply -input=false -auto-approve tfplan
 
-      - uses: gliech/create-github-secret-action@v1
+      - name: Get kube config
+        run: |
+          terraform output -raw kube_config | base64 > config
+
+      - name: Upload kube config as artifact
+        uses: actions/upload-artifact@v2
         with:
-          name: AKS_KUBE_CONFIG
-          value: $(terraform output -raw kube_config)
-          pa_token: ${{ secrets.TOKEN_PERSO }}
+          name: kubeconfig
+          path: config
+
+      # - uses: gliech/create-github-secret-action@v1
+      #   with:
+      #     name: AKS_KUBE_CONFIG
+      #     value: $(terraform output -raw kube_config)
+      #     pa_token: ${{ secrets.TOKEN_PERSO }}
 
       # - name: Update kube config of the AKS on github actions secrets
       #   run: |

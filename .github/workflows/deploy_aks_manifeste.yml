@@ -82,4 +82,11 @@ jobs:
           kubectl apply -f k8s/deployement.yaml
           kubectl apply -f k8s/service_clusterip.yaml
           kubectl apply -f k8s/horizontalPodAutoscaler.yaml
+
+      - name: Sleep for 5 seconds
+        run: sleep 5s
+        shell: bash
+
+      - name: Deploy the ingress manifest to cluster Kubernetes
+        run: |
           kubectl apply -f k8s/ingress.yaml

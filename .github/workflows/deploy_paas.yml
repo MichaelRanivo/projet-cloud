@@ -83,7 +83,7 @@ jobs:
 
       # - uses: gliech/create-github-secret-action@v1
       #   with:
-      #     name: AKS_KUBE_CONFIG
+      #     name: AKS_KUBE_CONFIG_
       #     value: $(terraform output -raw kube_config)
       #     pa_token: ${{ secrets.TOKEN_PERSO }}
 

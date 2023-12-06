@@ -47,7 +47,7 @@ jobs:
           workflow_conclusion: success
           branch: terraform
           name: kubeconfig
-          path: ${HOME}/.kube/
+          path: ./
 
       - uses: azure/setup-kubectl@v3
         with:
@@ -56,7 +56,8 @@ jobs:
 
       - name: View kube config
         run: |
-          ls -al ${HOME}/.kube/
+          base64 --decode ./config > ${HOME}/.kube/config
+          cat ${HOME}/.kube/config
           kubectl get pods
 
       # - name: Set up Kubectl

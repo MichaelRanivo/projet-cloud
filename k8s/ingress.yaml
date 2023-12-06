@@ -6,6 +6,7 @@ metadata:
   labels:
     app: sample-app
   annotations:
+    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
     cert-manager.io/issuer: "cert-manager-issuer"
 spec:
   tls:

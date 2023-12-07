@@ -9,7 +9,7 @@ variable "resource_group_location" {
     description = "The Azure Cloud's location for our infra"
 }
 
-## IAAS VNET & 
+## IAAS VNET & SUBNET
 variable "iaas_vnet_name" {
     type        = string
     description = "The name of the virtual network for the iaas"
@@ -26,7 +26,12 @@ variable "node_ssh_public_key_type" {
     description = "The ssh type public key" 
 }
 
-variable "node_ssh_public_key_name" {
+variable "node_master_ssh_public_key_name" {
+    type        = string
+    description = "THe ssh public key name"  
+}
+
+variable "node_worker_ssh_public_key_name" {
     type        = string
     description = "THe ssh public key name"  
 }

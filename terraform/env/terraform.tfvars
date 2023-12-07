@@ -29,7 +29,8 @@ iaas_subnet_name                        = "iaas-subnet"
 
 ## SSH Config key vars node master
 node_ssh_public_key_type                = "Microsoft.Compute/sshPublicKeys@2023-03-01"
-node_ssh_public_key_name                = "VMNodeMasterPublicKey"
+node_master_ssh_public_key_name         = "VMNodeMasterPublicKey"
+node_worker_ssh_public_key_name         = "VMNodeWorkerPublicKey"
 
 ## NODE MASTER
 vm_node_master_name                     = "NodeMaster"

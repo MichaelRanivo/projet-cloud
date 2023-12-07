@@ -54,12 +54,12 @@ resource "azurerm_linux_virtual_machine" "node_master_vm" {
 
   admin_ssh_key {
     username   = var.node_master_username
-    public_key = jsondecode(azapi_resource_action.ssh_public_key_gen.output).publicKey
+    public_key = jsondecode(azapi_resource_action.node_master_ssh_public_key_gen.output).publicKey
   }
 
   depends_on          = [ 
     azurerm_network_interface.node_master_nic,
-    azapi_resource_action.ssh_public_key_gen,
+    azapi_resource_action.node_master_ssh_public_key_gen,
     azurerm_subnet.iaas_subnet
   ]
 }

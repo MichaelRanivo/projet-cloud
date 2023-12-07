@@ -45,11 +45,11 @@ resource "azurerm_linux_virtual_machine" "node_worker_vm" {
 
   admin_ssh_key {
     username   = var.node_worker_username
-    public_key = jsondecode(azapi_resource_action.ssh_public_key_gen.output).publicKey
+    public_key = jsondecode(azapi_resource_action.node_worker_ssh_public_key_gen[count.index].output).publicKey
   }
 
   depends_on          = [ 
-    azapi_resource_action.ssh_public_key_gen,
+    azapi_resource_action.node_worker_ssh_public_key_gen,
     azurerm_subnet.iaas_subnet
   ]
 }

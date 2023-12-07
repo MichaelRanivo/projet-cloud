@@ -1,0 +1,132 @@
+<mxfile host="Electron" modified="2023-12-01T21:26:26.269Z" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.1.2 Chrome/114.0.5735.289 Electron/25.9.4 Safari/537.36" etag="2mZ9DR6cv9VoDuBA5Kei" version="22.1.2" type="device">
+  <diagram name="Page-1" id="wgb-Qt2xiRzVkzTRx9ni">
+    <mxGraphModel dx="2261" dy="2005" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="WRSea-24zWlMeVep451W-1" value="" style="rounded=1;arcSize=10;dashed=1;strokeColor=#F59D56;fillColor=none;gradientColor=none;dashPattern=8 4;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="32" y="70" width="883" height="414" as="geometry" />
+        </mxCell>
+        <mxCell id="WRSea-24zWlMeVep451W-2" value="Azure Cloud" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=none;fillColor=#00BEF2;shape=mxgraph.azure.cloud;" vertex="1" parent="1">
+          <mxGeometry x="73" y="45" width="50" height="32.5" as="geometry" />
+        </mxCell>
+        <mxCell id="WRSea-24zWlMeVep451W-3" value="" style="rounded=1;arcSize=10;dashed=1;strokeColor=#2d17d3;fillColor=none;gradientColor=none;dashPattern=8 4;strokeWidth=2;" vertex="1" parent="1">
+          <mxGeometry x="320" y="114" width="572" height="349" as="geometry" />
+        </mxCell>
+        <mxCell id="WRSea-24zWlMeVep451W-4" value="AKS" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/compute/Kubernetes_Services.svg;" vertex="1" parent="1">
+          <mxGeometry x="350" y="84" width="68" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="WRSea-24zWlMeVep451W-5" value="Sample-app" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[1,1,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];rounded=1;absoluteArcSize=1;arcSize=2;html=1;strokeColor=none;gradientColor=none;shadow=0;dashed=0;fontSize=12;fontColor=#9E9E9E;align=left;verticalAlign=top;spacing=10;spacingTop=-4;whiteSpace=wrap;fillColor=#EFEBE9;" vertex="1" parent="1">
+          <mxGeometry x="626" y="131" width="244" height="309" as="geometry" />
+        </mxCell>
+        <mxCell id="WRSea-24zWlMeVep451W-6" value="Deployment" style="sketch=0;html=1;dashed=0;whitespace=wrap;fillColor=#2875E2;strokeColor=#ffffff;points=[[0.005,0.63,0],[0.1,0.2,0],[0.9,0.2,0],[0.5,0,0],[0.995,0.63,0],[0.72,0.99,0],[0.5,1,0],[0.28,0.99,0]];verticalLabelPosition=bottom;align=center;verticalAlign=top;shape=mxgraph.kubernetes.icon;prIcon=deploy" vertex="1" parent="1">
+          <mxGeometry x="806" y="366" width="50" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="WRSea-24zWlMeVep451W-7" value="HPA" style="sketch=0;html=1;dashed=0;whitespace=wrap;fillColor=#2875E2;strokeColor=#ffffff;points=[[0.005,0.63,0],[0.1,0.2,0],[0.9,0.2,0],[0.5,0,0],[0.995,0.63,0],[0.72,0.99,0],[0.5,1,0],[0.28,0.99,0]];verticalLabelPosition=bottom;align=center;verticalAlign=top;shape=mxgraph.kubernetes.icon;prIcon=hpa" vertex="1" parent="1">
+          <mxGeometry x="646" y="268" width="50" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="WRSea-24zWlMeVep451W-8" value="Service ClusterIP" style="sketch=0;html=1;dashed=0;whitespace=wrap;fillColor=#2875E2;strokeColor=#ffffff;points=[[0.005,0.63,0],[0.1,0.2,0],[0.9,0.2,0],[0.5,0,0],[0.995,0.63,0],[0.72,0.99,0],[0.5,1,0],[0.28,0.99,0]];verticalLabelPosition=bottom;align=center;verticalAlign=top;shape=mxgraph.kubernetes.icon;prIcon=svc" vertex="1" parent="1">
+          <mxGeometry x="785" y="220" width="50" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="WRSea-24zWlMeVep451W-10" value="Pod" style="sketch=0;html=1;dashed=0;whitespace=wrap;fillColor=#2875E2;strokeColor=#ffffff;points=[[0.005,0.63,0],[0.1,0.2,0],[0.9,0.2,0],[0.5,0,0],[0.995,0.63,0],[0.72,0.99,0],[0.5,1,0],[0.28,0.99,0]];verticalLabelPosition=bottom;align=center;verticalAlign=top;shape=mxgraph.kubernetes.icon;prIcon=pod" vertex="1" parent="1">
+          <mxGeometry x="711" y="366" width="50" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="WRSea-24zWlMeVep451W-11" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.005;entryY=0.63;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="WRSea-24zWlMeVep451W-7" target="WRSea-24zWlMeVep451W-10">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="671" y="397" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="WRSea-24zWlMeVep451W-12" value="Scale" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="WRSea-24zWlMeVep451W-11">
+          <mxGeometry x="-0.3343" y="1" relative="1" as="geometry">
+            <mxPoint x="15" y="-2" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="WRSea-24zWlMeVep451W-14" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="WRSea-24zWlMeVep451W-8" target="WRSea-24zWlMeVep451W-10">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="810" y="303" />
+              <mxPoint x="736" y="303" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="WRSea-24zWlMeVep451W-15" value="Ingress : Nginx&lt;br&gt;path : /" style="sketch=0;html=1;dashed=0;whitespace=wrap;fillColor=#2875E2;strokeColor=#ffffff;points=[[0.005,0.63,0],[0.1,0.2,0],[0.9,0.2,0],[0.5,0,0],[0.995,0.63,0],[0.72,0.99,0],[0.5,1,0],[0.28,0.99,0]];verticalLabelPosition=bottom;align=center;verticalAlign=top;shape=mxgraph.kubernetes.icon;prIcon=ing" vertex="1" parent="1">
+          <mxGeometry x="658" y="168" width="50" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="WRSea-24zWlMeVep451W-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.995;exitY=0.63;exitDx=0;exitDy=0;exitPerimeter=0;" edge="1" parent="1" source="WRSea-24zWlMeVep451W-15" target="WRSea-24zWlMeVep451W-8">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="810" y="198" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="WRSea-24zWlMeVep451W-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.995;entryY=0.63;entryDx=0;entryDy=0;entryPerimeter=0;strokeColor=#CC0066;" edge="1" parent="1" source="WRSea-24zWlMeVep451W-6" target="WRSea-24zWlMeVep451W-10">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="794" y="396" />
+              <mxPoint x="794" y="396" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="WRSea-24zWlMeVep451W-18" value="Ingress Controller Nginx" style="sketch=0;points=[[0,0,0],[0.25,0,0],[0.5,0,0],[0.75,0,0],[1,0,0],[1,0.25,0],[1,0.5,0],[1,0.75,0],[1,1,0],[0.75,1,0],[0.5,1,0],[0.25,1,0],[0,1,0],[0,0.75,0],[0,0.5,0],[0,0.25,0]];rounded=1;absoluteArcSize=1;arcSize=2;html=1;strokeColor=none;gradientColor=none;shadow=0;dashed=0;fontSize=12;fontColor=#9E9E9E;align=left;verticalAlign=top;spacing=10;spacingTop=-4;whiteSpace=wrap;fillColor=#EFEBE9;" vertex="1" parent="1">
+          <mxGeometry x="350" y="328" width="244" height="112" as="geometry" />
+        </mxCell>
+        <mxCell id="WRSea-24zWlMeVep451W-19" value="Service ClusterIP" style="sketch=0;html=1;dashed=0;whitespace=wrap;fillColor=#2875E2;strokeColor=#ffffff;points=[[0.005,0.63,0],[0.1,0.2,0],[0.9,0.2,0],[0.5,0,0],[0.995,0.63,0],[0.72,0.99,0],[0.5,1,0],[0.28,0.99,0]];verticalLabelPosition=bottom;align=center;verticalAlign=top;shape=mxgraph.kubernetes.icon;prIcon=svc" vertex="1" parent="1">
+          <mxGeometry x="373" y="364" width="50" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="WRSea-24zWlMeVep451W-21" value="Pod" style="sketch=0;html=1;dashed=0;whitespace=wrap;fillColor=#2875E2;strokeColor=#ffffff;points=[[0.005,0.63,0],[0.1,0.2,0],[0.9,0.2,0],[0.5,0,0],[0.995,0.63,0],[0.72,0.99,0],[0.5,1,0],[0.28,0.99,0]];verticalLabelPosition=bottom;align=center;verticalAlign=top;shape=mxgraph.kubernetes.icon;prIcon=pod" vertex="1" parent="1">
+          <mxGeometry x="457" y="364" width="50" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="WRSea-24zWlMeVep451W-22" value="Deployment" style="sketch=0;html=1;dashed=0;whitespace=wrap;fillColor=#2875E2;strokeColor=#ffffff;points=[[0.005,0.63,0],[0.1,0.2,0],[0.9,0.2,0],[0.5,0,0],[0.995,0.63,0],[0.72,0.99,0],[0.5,1,0],[0.28,0.99,0]];verticalLabelPosition=bottom;align=center;verticalAlign=top;shape=mxgraph.kubernetes.icon;prIcon=deploy" vertex="1" parent="1">
+          <mxGeometry x="535" y="364" width="50" height="48" as="geometry" />
+        </mxCell>
+        <mxCell id="WRSea-24zWlMeVep451W-23" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.005;entryY=0.63;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" target="WRSea-24zWlMeVep451W-21">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="425" y="394" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="WRSea-24zWlMeVep451W-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.995;entryY=0.63;entryDx=0;entryDy=0;entryPerimeter=0;strokeColor=#CC0066;" edge="1" parent="1" source="WRSea-24zWlMeVep451W-22" target="WRSea-24zWlMeVep451W-21">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="526" y="394" />
+              <mxPoint x="526" y="394" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="WRSea-24zWlMeVep451W-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.005;entryY=0.63;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="WRSea-24zWlMeVep451W-21" target="WRSea-24zWlMeVep451W-15">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="593" y="263" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="475" y="198" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="WRSea-24zWlMeVep451W-26" value="Load Balancer" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/networking/Load_Balancers.svg;" vertex="1" parent="1">
+          <mxGeometry x="209" y="358" width="72" height="72" as="geometry" />
+        </mxCell>
+        <mxCell id="WRSea-24zWlMeVep451W-27" value="Public IP&amp;nbsp;" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/networking/Public_IP_Addresses_Classic.svg;" vertex="1" parent="1">
+          <mxGeometry x="77" y="368" width="64" height="52" as="geometry" />
+        </mxCell>
+        <mxCell id="WRSea-24zWlMeVep451W-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.014;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="WRSea-24zWlMeVep451W-27" target="WRSea-24zWlMeVep451W-26">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="WRSea-24zWlMeVep451W-29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.005;entryY=0.63;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="WRSea-24zWlMeVep451W-26" target="WRSea-24zWlMeVep451W-19">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="WRSea-24zWlMeVep451W-31" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="WRSea-24zWlMeVep451W-30" target="WRSea-24zWlMeVep451W-27">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="WRSea-24zWlMeVep451W-30" value="users" style="sketch=0;outlineConnect=0;gradientColor=none;fontColor=#545B64;strokeColor=none;fillColor=#879196;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.illustration_users;pointerEvents=1" vertex="1" parent="1">
+          <mxGeometry x="-161" y="344" width="100" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="WRSea-24zWlMeVep451W-33" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="WRSea-24zWlMeVep451W-32" target="WRSea-24zWlMeVep451W-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="WRSea-24zWlMeVep451W-32" value="Admin" style="image;aspect=fixed;html=1;points=[];align=center;fontSize=12;image=img/lib/azure2/identity/Users.svg;" vertex="1" parent="1">
+          <mxGeometry x="352" y="-121" width="64" height="70" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

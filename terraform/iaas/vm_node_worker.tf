@@ -1,25 +1,8 @@
-# Créer Avant la VM node Master
-resource "azapi_resource" "ssh_public_key" {
-  name        = var.node_master_ssh_public_key_name
-  type        = var.node_master_ssh_public_key_type
-  location    = azurerm_resource_group.iaas_resource_group.location
-  parent_id   = azurerm_resource_group.iaas_resource_group.id
-  depends_on  = [ azurerm_resource_group.iaas_resource_group ]
-}
-
-resource "azapi_resource_action" "ssh_public_key_gen" {
-  type                      = var.node_master_ssh_public_key_type
-  resource_id               = azapi_resource.ssh_public_key.id
-  action                    = "generateKeyPair"
-  method                    = "POST"
-  response_export_values    = ["publicKey", "privateKey"]
-  depends_on                = [ azapi_resource.ssh_public_key ]
-}
-
 # Créer cette interface après le subnet et l'adresse 
 # Create network interface
 resource "azurerm_network_interface" "node_worker_nic" {
-  name                = var.net_int_node_worker_name
+  count               = 3
+  name                = "${var.net_int_node_worker_name}-${count.index}"
   location            = azurerm_resource_group.iaas_resource_group.location
   resource_group_name = azurerm_resource_group.iaas_resource_group.name
 
@@ -36,36 +19,36 @@ resource "azurerm_network_interface" "node_worker_nic" {
 
 # Créer arpès l'interface réseau en meme temps que l'ip public et le groupe de securité
 # Create virtual machine
-resource "azurerm_linux_virtual_machine" "node_master_vm" {
-  name                  = var.vm_node_master_name
-  location              = azurerm_resource_group.iaas_resource_group.location
-  resource_group_name   = azurerm_resource_group.iaas_resource_group.name
-  network_interface_ids = [azurerm_network_interface.node_worker_nic.id]
-  size                  = var.vm_node_master_size
+resource "azurerm_linux_virtual_machine" "node_worker_vm" {
+  count                             = 3
+  name                              = "${var.vm_node_worker_name}-${count.index}"
+  location                          = azurerm_resource_group.iaas_resource_group.location
+  resource_group_name               = azurerm_resource_group.iaas_resource_group.name
+  network_interface_ids             = [azurerm_network_interface.node_worker_nic[count.index].id]
+  size                              = var.vm_node_worker_size
 
   os_disk {
-    name                 = var.vm_node_master_os_disk_name
+    name                 = "${var.vm_node_worker_os_disk_name}-${count.index}"
     caching              = "ReadWrite"
     storage_account_type = "Premium_LRS"
   }
 
   source_image_reference {
-    publisher = var.vm_node_master_image_pub
-    offer     = var.vm_node_master_image_offer
-    sku       = var.vm_node_master_image_sku
-    version   = var.vm_node_master_image_version
+    publisher = var.vm_node_worker_image_pub
+    offer     = var.vm_node_worker_image_offer
+    sku       = var.vm_node_worker_image_sku
+    version   = var.vm_node_worker_image_version
   }
 
-  computer_name         = "master"
-  admin_username        = var.node_master_username
+  computer_name         = "worker"
+  admin_username        = var.node_worker_username
 
   admin_ssh_key {
-    username   = var.node_master_username
+    username   = var.node_worker_username
     public_key = jsondecode(azapi_resource_action.ssh_public_key_gen.output).publicKey
   }
 
   depends_on          = [ 
-    azurerm_network_interface.node_master_nic,
     azapi_resource_action.ssh_public_key_gen,
     azurerm_subnet.iaas_subnet
   ]
@@ -73,8 +56,8 @@ resource "azurerm_linux_virtual_machine" "node_master_vm" {
 
 # Créer en meme temps que la VM apres l'interface réseau
 # Create Network Security Group and rule
-resource "azurerm_network_security_group" "node_master_sg" {
-  name                = var.node_master_network_sg_name
+resource "azurerm_network_security_group" "node_worker_sg" {
+  name                = var.node_worker_network_sg_name
   location            = azurerm_resource_group.iaas_resource_group.location
   resource_group_name = azurerm_resource_group.iaas_resource_group.name
 
@@ -118,7 +101,8 @@ resource "azurerm_network_security_group" "node_master_sg" {
 }
 
 # Connect the security group to the network interface
-resource "azurerm_network_interface_security_group_association" "ni_sg" {
-  network_interface_id      = azurerm_network_interface.node_worker_nic.id
-  network_security_group_id = azurerm_network_security_group.node_master_sg.id
+resource "azurerm_network_interface_security_group_association" "ni_node_worker_sg" {
+  count                     = 3
+  network_interface_id      = azurerm_network_interface.node_worker_nic[count.index].id
+  network_security_group_id = azurerm_network_security_group.node_worker_sg.id
 }

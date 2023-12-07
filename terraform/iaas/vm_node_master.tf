@@ -1,21 +1,3 @@
-# Créer Avant la VM node Master
-resource "azapi_resource" "ssh_public_key" {
-  name        = var.node_master_ssh_public_key_name
-  type        = var.node_master_ssh_public_key_type
-  location    = var.resource_group_location
-  parent_id   = azurerm_resource_group.iaas_resource_group.id
-  depends_on  = [ azurerm_resource_group.iaas_resource_group ]
-}
-
-resource "azapi_resource_action" "ssh_public_key_gen" {
-  type                      = var.node_master_ssh_public_key_type
-  resource_id               = azapi_resource.ssh_public_key.id
-  action                    = "generateKeyPair"
-  method                    = "POST"
-  response_export_values    = ["publicKey", "privateKey"]
-  depends_on                = [ azapi_resource.ssh_public_key ]
-}
-
 # Create public IPs
 resource "azurerm_public_ip" "node_master_vm_public_ip" {
   name                = var.node_master_public_ip_name

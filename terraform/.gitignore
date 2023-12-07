@@ -25,3 +25,4 @@ iaas/.terraform
 iaas/.terraform.lock.hcl
 iaas/terraform.tfstate
 iaas/tfplan
+iaas/*.pem

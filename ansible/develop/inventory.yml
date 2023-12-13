@@ -1,0 +1,14 @@
+all:
+  children:
+    bastion:
+      children:
+        master:
+          hosts:
+            node_master:
+    servers:
+      children:
+        worker:
+          hosts:
+            node_worker_0:
+            node_worker_1:
+            node_worker_2:

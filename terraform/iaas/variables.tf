@@ -153,7 +153,7 @@ variable "node_worker_network_sg_name" {
     description = "The network security group node worker"
 }
 
-## IAAS TAGS
+## PROJECT TAGS
 
 variable "tags" {
     type        = map(string)

@@ -1,0 +1,2 @@
+ansible_host: "20.234.98.98"
+ansible_ssh_private_key_file: /mnt/d/Epitech/T-CLO-901-LYO_13/terraform/iaas/node_master_private_key.pem

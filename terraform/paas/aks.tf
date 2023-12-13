@@ -24,7 +24,7 @@ resource "azurerm_kubernetes_cluster" "sample-app-AKS" {
         os_disk_size_gb         = 128
         os_disk_type            = "Managed"
         kubelet_disk_type       = "OS"
-        max_pods                = 20 
+        max_pods                = 10 
         type                    = "VirtualMachineScaleSets"
         #Nombre de Node Max
         max_count               = 10 

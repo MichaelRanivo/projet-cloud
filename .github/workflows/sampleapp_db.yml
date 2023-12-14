@@ -5,9 +5,9 @@ run-name: ${{ github.actor }} is launching the database set up
 on:
   push:
     branches: [terraform]
-    paths:
-      - terraform/databse/*
-      - sample-app/database/**
+    # paths:
+    #   - terraform/databse/*
+    #   - sample-app/database/**
 
 permissions:
   contents: read
@@ -126,6 +126,10 @@ jobs:
     needs: db-apply
     name: Migrate the DB
     runs-on: ubuntu-latest
+    env:
+      DB_HOST: ${{ needs.db-apply.outputs.DB_HOST }}
+      DB_LOGIN: ${{ needs.db-apply.outputs.DB_LOGIN }}
+      DB_PASSWORD: ${{ needs.db-apply.outputs.DB_PASSWORD }}
     container:
       image: kirschbaumdevelopment/laravel-test-runner:8.2
     steps:
@@ -137,10 +141,6 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Create a .env file
-        env:
-          DB_HOST: ${{ needs.db-apply.outputs.DB_HOST }}
-          DB_LOGIN: ${{ needs.db-apply.outputs.DB_LOGIN }}
-          DB_PASSWORD: ${{ needs.db-apply.outputs.DB_PASSWORD }}
         uses: SpicyPizza/create-envfile@v2.0
         with:
           envkey_APP_DEBUG: ${{ secrets.APP_DEBUG }}

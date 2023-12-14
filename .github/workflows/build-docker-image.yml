@@ -1,4 +1,4 @@
-name: CI Build Docker image and push
+name: CI Scan the code, Build Docker image and push it to the registry
 
 run-name: ${{ github.actor }} is launching the Build the Docker image and push it
 
@@ -11,6 +11,7 @@ on:
 
 jobs:
   sniff-code:
+    if: startsWith(github.ref, 'refs/tags/')
     runs-on: self-hosted
     continue-on-error: true
     steps:
@@ -35,6 +36,7 @@ jobs:
 
   build-push-image-docker:
     if: startsWith(github.ref, 'refs/tags/')
+    needs: sniff-code
     runs-on: self-hosted
     steps:
       - name: Checkout repository

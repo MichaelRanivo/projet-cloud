@@ -19,7 +19,7 @@ resource "azurerm_kubernetes_cluster" "sample-app-AKS" {
     default_node_pool {
         name                    = "akspool"
         #Le nombre initial de Node (doit être entre min_count et max_count)
-        #node_count              = 2
+        node_count              = 3
         vm_size                 = "Standard_B2s"
         os_disk_size_gb         = 128
         os_disk_type            = "Managed"

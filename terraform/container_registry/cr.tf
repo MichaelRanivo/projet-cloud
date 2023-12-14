@@ -15,3 +15,4 @@ resource "azurerm_container_registry" "cr_sample_app" {
   admin_enabled       = true
   tags                = var.tags
 }
+ 

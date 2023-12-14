@@ -136,7 +136,7 @@ jobs:
 
       - name: Configuration of terraform backend state
         run: |
-          echo "ARM_ACCESS_KEY=$(az storage account keys list --resource-group ${{ secrets.RESOURCE_GROUP_NAME }} --account-name ${{ secrets.STORAGE_ACCOUNT_NAME }} --query '[0].value' -o tsv)" >> $GITHUB_ENV
+          echo "ARM_ACCESS_KEY=$(az storage account keys list --resource-group ${{ vars.RESOURCE_GROUP_NAME }} --account-name ${{ vars.STORAGE_ACCOUNT_NAME }} --query '[0].value' -o tsv)" >> $GITHUB_ENV
 
       - name: Terraform backend plan
         run: |

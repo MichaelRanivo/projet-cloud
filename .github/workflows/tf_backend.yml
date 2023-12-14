@@ -117,6 +117,7 @@ jobs:
         shell: bash
 
   terraform-backend-plan:
+    needs: tf-backend-infra-apply
     name: Plan backend TF
     runs-on: self-hosted
     steps:

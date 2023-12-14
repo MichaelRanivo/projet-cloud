@@ -4,7 +4,8 @@ run-name: ${{ github.actor }} is launching the deployment of manifeste to the AK
 
 on:
   workflow_run:
-    workflows: [CI Build Docker image and push]
+    workflows:
+      [CI Scan the code, Build Docker image and push it to the registry]
     types:
       - completed
   # push:

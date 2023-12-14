@@ -131,6 +131,10 @@ jobs:
           tenant-id: ${{ secrets.AZURE_TENANT_ID }}
           subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
+      - name: Sleep for 10 seconds
+        run: sleep 10s
+        shell: bash
+
       - name: Use Terraform Action
         uses: hashicorp/setup-terraform@v2
 

@@ -17,7 +17,7 @@ resource "random_password" "password" {
   min_upper        = 1
   numeric          = true
   override_special = "_"
-  special          = true
+  special          = true 
   upper            = true
 }
 

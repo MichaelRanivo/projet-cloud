@@ -7,7 +7,7 @@ on:
     branches: [terraform]
     paths:
       - terraform/databse/*
-      - sample-app/database/*
+      - sample-app/database/**
 
 permissions:
   contents: read

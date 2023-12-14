@@ -19,7 +19,7 @@ resource "random_password" "password" {
   override_special = "_"
   special          = true 
   upper            = true
-} 
+}  
 
 # Manages the MySQL Flexible Server
 resource "azurerm_mysql_flexible_server" "app_db_server" {

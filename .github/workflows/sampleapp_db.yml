@@ -5,9 +5,9 @@ run-name: ${{ github.actor }} is launching the database set up
 on:
   push:
     branches: [terraform]
-    # paths:
-    #   - terraform/databse/*
-    #   - sample-app/database/**
+    paths:
+      - terraform/databse/*
+      - sample-app/database/**
 
 permissions:
   contents: read
@@ -129,10 +129,6 @@ jobs:
     container:
       image: kirschbaumdevelopment/laravel-test-runner:8.2
     steps:
-      - name: Sleep for 30 seconds
-        run: sleep 30s
-        shell: bash
-
       - name: Checkout the repo
         uses: actions/checkout@v3
 
@@ -158,11 +154,9 @@ jobs:
           DB_PASSWORD: ${{ needs.db-apply.outputs.DB_PASSWORD }}
         run: |
           cd sample-app/
-          cat .env
           echo "DB_HOST=$DB_HOST" >> .env
           echo "DB_USERNAME=$DB_LOGIN" >> .env
           echo "DB_PASSWORD=$DB_PASSWORD" >> .env
-          cat .env
 
       - name: Set up PHP and composer
         uses: shivammathur/setup-php@v2

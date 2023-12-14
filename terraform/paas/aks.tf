@@ -19,18 +19,18 @@ resource "azurerm_kubernetes_cluster" "sample-app-AKS" {
     default_node_pool {
         name                    = "akspool"
         #Le nombre initial de Node (doit être entre min_count et max_count)
-        node_count              = 2
+        #node_count              = 2
         vm_size                 = "Standard_B2s"
         os_disk_size_gb         = 128
         os_disk_type            = "Managed"
         kubelet_disk_type       = "OS"
-        max_pods                = 10 
+        max_pods                = 100 
         type                    = "VirtualMachineScaleSets"
         #Nombre de Node Max
-        max_count               = 10 
+        #max_count               = 10 
         #Nombre de Node Min
-        min_count               = 2
-        enable_auto_scaling     = true
+        #min_count               = 2
+        enable_auto_scaling     = false //Dans le Iaas on n'a pas cette auto scaling des nodes on désactive cette option
         orchestrator_version    = var.kube_version
         os_sku                  = "Ubuntu"
         enable_node_public_ip   = false

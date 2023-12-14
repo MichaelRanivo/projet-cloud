@@ -6,7 +6,7 @@ on:
   push:
     branches: [terraform]
     paths:
-      - terraform/paas/*
+      - terraform/paas/outputs.tf
 
 permissions:
   contents: read

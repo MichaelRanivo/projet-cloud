@@ -56,6 +56,10 @@ jobs:
     needs: db-plan
     name: Apply DB
     runs-on: self-hosted
+    outputs:
+      DB_HOST: ${{ steps.DBH.outputs.DB_HOST }}
+      DB_LOGIN: ${{ steps.BDL.outputs.DB_LOGIN }}
+      DB_PASSWORD: ${{ steps.DBP.outputs.DB_PASSWORD }}
     steps:
       - name: Checkout the repo
         uses: actions/checkout@v3
@@ -80,6 +84,7 @@ jobs:
           terraform apply -input=false -auto-approve tfplan
 
       - name: Update FQDN of the MySQL db on github actions Variables
+        id: DBH
         run: |
           cd ${{ vars.TF_DB_ROOT }}
           curl -L \
@@ -89,8 +94,10 @@ jobs:
             -H "X-GitHub-Api-Version: 2022-11-28" \
             https://api.github.com/repos/$GITHUB_REPOSITORY/actions/variables/AZURE_MYSQL_DB_HOST \
             -d "{\"name\":\"AZURE_MYSQL_DB_HOST\",\"value\":\"$(terraform output -raw db_server_url)\"}"
+          echo "DB_HOST=$(terraform output -raw db_server_url)" >> "$GITHUB_OUTPUT"
 
       - name: Update admin login of the db on github actions Variables
+        id: BDL
         run: |
           cd ${{ vars.TF_DB_ROOT }}
           curl -L \
@@ -100,8 +107,10 @@ jobs:
             -H "X-GitHub-Api-Version: 2022-11-28" \
             https://api.github.com/repos/$GITHUB_REPOSITORY/actions/variables/AZURE_DB_LOGIN \
             -d "{\"name\":\"AZURE_DB_LOGIN\",\"value\":\"$(terraform output -raw admin_login)\"}"
+          echo "DB_LOGIN=$(terraform output -raw admin_login)" >> "$GITHUB_OUTPUT"
 
       - name: Update password of the db on github actions Variables
+        id: DBP
         run: |
           cd ${{ vars.TF_DB_ROOT }}
           curl -L \
@@ -111,6 +120,7 @@ jobs:
             -H "X-GitHub-Api-Version: 2022-11-28" \
             https://api.github.com/repos/$GITHUB_REPOSITORY/actions/variables/AZURE_DB_PASSWORD \
             -d "{\"name\":\"AZURE_DB_PASSWORD\",\"value\":\"$(terraform output -raw admin_password)\"}"
+          echo "DB_PASSWORD=$(terraform output -raw admin_password)" >> "$GITHUB_OUTPUT"
 
   db-migrate:
     needs: db-apply
@@ -127,6 +137,10 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Create a .env file
+        env:
+          DB_HOST: ${{ needs.db-apply.outputs.DB_HOST }}
+          DB_LOGIN: ${{ needs.db-apply.outputs.DB_LOGIN }}
+          DB_PASSWORD: ${{ needs.db-apply.outputs.DB_PASSWORD }}
         uses: SpicyPizza/create-envfile@v2.0
         with:
           envkey_APP_DEBUG: ${{ secrets.APP_DEBUG }}
@@ -134,11 +148,11 @@ jobs:
           envkey_APP_KEY: ${{ secrets.APP_KEY }}
           envkey_APP_URL: ${{ secrets.APP_URL }}
           envkey_DB_CONNECTION: ${{ secrets.DB_CONNECTION }}
-          envkey_DB_HOST: ${{ vars.AZURE_MYSQL_DB_HOST }}
+          envkey_DB_HOST: $DB_HOST
           envkey_DB_PORT: ${{ secrets.DB_PORT }}
           envkey_DB_DATABASE: ${{ secrets.DB_DATABASE }}
-          envkey_DB_USERNAME: ${{ vars.AZURE_DB_LOGIN }}
-          envkey_DB_PASSWORD: ${{ vars.AZURE_DB_PASSWORD }}
+          envkey_DB_USERNAME: $DB_LOGIN
+          envkey_DB_PASSWORD: $DB_PASSWORD
           directory: sample-app/
           file_name: .env
           fail_on_empty: false

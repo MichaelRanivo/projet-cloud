@@ -126,10 +126,6 @@ jobs:
     needs: db-apply
     name: Migrate the DB
     runs-on: ubuntu-latest
-    env:
-      DB_HOST: ${{ needs.db-apply.outputs.DB_HOST }}
-      DB_LOGIN: ${{ needs.db-apply.outputs.DB_LOGIN }}
-      DB_PASSWORD: ${{ needs.db-apply.outputs.DB_PASSWORD }}
     container:
       image: kirschbaumdevelopment/laravel-test-runner:8.2
     steps:
@@ -148,15 +144,25 @@ jobs:
           envkey_APP_KEY: ${{ secrets.APP_KEY }}
           envkey_APP_URL: ${{ secrets.APP_URL }}
           envkey_DB_CONNECTION: ${{ secrets.DB_CONNECTION }}
-          envkey_DB_HOST: $DB_HOST
           envkey_DB_PORT: ${{ secrets.DB_PORT }}
           envkey_DB_DATABASE: ${{ secrets.DB_DATABASE }}
-          envkey_DB_USERNAME: $DB_LOGIN
-          envkey_DB_PASSWORD: $DB_PASSWORD
           directory: sample-app/
           file_name: .env
           fail_on_empty: false
           sort_keys: false
+
+      - name: Add more information on the .env
+        env:
+          DB_HOST: ${{ needs.db-apply.outputs.DB_HOST }}
+          DB_LOGIN: ${{ needs.db-apply.outputs.DB_LOGIN }}
+          DB_PASSWORD: ${{ needs.db-apply.outputs.DB_PASSWORD }}
+        run: |
+          cd sample-app/
+          cat .env
+          echo "DB_HOST=$DB_HOST" >> .env
+          echo "DB_USERNAME=$DB_LOGIN" >> .env
+          echo "DB_PASSWORD=$DB_PASSWORD" >> .env
+          cat .env
 
       - name: Set up PHP and composer
         uses: shivammathur/setup-php@v2

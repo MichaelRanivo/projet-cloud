@@ -1,4 +1,4 @@
-name: CI Scan the code, Build Docker image and push it to the registry
+name: Build Docker image
 
 run-name: ${{ github.actor }} is launching the Build the Docker image and push it
 

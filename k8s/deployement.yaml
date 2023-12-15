@@ -19,7 +19,7 @@ spec:
       - name: sample-app-secret-cr
       containers:
       - name: sample-app-container
-        image: sampleappcrzrmod.azurecr.io/sample-app:latest
+        image: sampleappcrteakr.azurecr.io/sample-app:latest
         imagePullPolicy: Always
         command: ["php"]
         args: ["artisan", "serve", "--host=0.0.0.0", "--port=8080"]

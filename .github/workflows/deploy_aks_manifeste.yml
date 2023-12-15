@@ -49,8 +49,8 @@ jobs:
           kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.2/cert-manager.yaml
           kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
 
-      - name: Sleep for 5 seconds
-        run: sleep 5s
+      - name: Sleep for 10 seconds
+        run: sleep 10s
         shell: bash
 
       - name: Deploy all ours manifests to cluster Kubernetes
@@ -61,8 +61,8 @@ jobs:
           kubectl apply -f k8s/service_clusterip.yaml
           kubectl apply -f k8s/horizontalPodAutoscaler.yaml
 
-      - name: Sleep for 10 seconds
-        run: sleep 10s
+      - name: Sleep for 20 seconds
+        run: sleep 20s
         shell: bash
 
       - name: Deploy the ingress manifest to cluster Kubernetes

@@ -7,7 +7,7 @@ on:
     branches: [terraform]
     # paths:
     #   - terraform/paas/*
-
+ 
 permissions:
   contents: read
   pages: write

@@ -6,8 +6,8 @@ metadata:
   labels:
     app: sample-app
   annotations:
-    nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
     cert-manager.io/issuer: "cert-manager-issuer"
+    # nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
 spec:
   tls:
   - hosts:
@@ -24,4 +24,4 @@ spec:
           service:
             name: sample-app-service-clusterip
             port:
-              number: 80
+              number: 443

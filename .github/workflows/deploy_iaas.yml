@@ -5,9 +5,9 @@ run-name: ${{ github.actor }} is launching the IaaS set up
 on:
   push:
     branches: [terraform]
-    # paths:
-    #   - terraform/iaas/*
- 
+    paths:
+      - terraform/paas/*
+      
 permissions:
   contents: read
   pages: write

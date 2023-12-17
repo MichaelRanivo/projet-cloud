@@ -1,6 +1,6 @@
 all:
   children:
-    bastion:
+    controller:
       children:
         master:
           hosts:
@@ -12,3 +12,4 @@ all:
             node_worker_0:
             node_worker_1:
             node_worker_2:
+

@@ -1,1 +1,1 @@
-ansible_user: root
+ansible_host: "20.54.32.240"

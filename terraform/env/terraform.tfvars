@@ -25,6 +25,10 @@ iaas_resource_group_name                = "iaas-rg"
 iaas_vnet_name                          = "iaas-vnet"
 iaas_subnet_name                        = "iaas-subnet"
 
+## IAAS IP LB
+rg_iaas_address_ip_name                 = "dns"
+iaas_address_ip_name                    = "lb-ip-iaas"
+
 ######### NODE MASTER ##############
 
 ## SSH Config key vars node master

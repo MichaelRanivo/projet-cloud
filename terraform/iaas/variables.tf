@@ -9,6 +9,28 @@ variable "resource_group_location" {
     description = "The Azure Cloud's location for our infra"
 }
 
+## IAAS LOAD BALANCER
+variable "rg_iaas_address_ip_name" {
+    type        = string
+    description = "The name of the Resource Groupe of the address IP of the Load Balancer"
+}
+
+variable "iaas_address_ip_name" {
+    type        = string
+    description = "The name of Address IP of the Load Balancer"
+}
+#
+variable "iaas_lb_name" {
+    type        = string
+    description = "The name of the LB of IAAS"
+}
+
+variable "iaas_lb_Public_IP_Address_name" {
+    type        = string
+    description = "The name of the public IP address of the LB"
+}
+#
+
 ## IAAS VNET & SUBNET
 variable "iaas_vnet_name" {
     type        = string
@@ -37,6 +59,7 @@ variable "node_worker_ssh_public_key_name" {
 }
 
 ## IAAS NODE MASTER
+
 variable "net_int_node_master_name" {
     type        = string
     description = "The network interface for the Node Master"

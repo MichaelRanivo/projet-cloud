@@ -1,13 +1,13 @@
 # Créer cette interface après le subnet et l'adresse 
 # Create network interface
 resource "azurerm_network_interface" "node_worker_nic" {
-  count               = 3
+  count               = var.nomber_of_vm_worker
   name                = "${var.net_int_node_worker_name}-${count.index}"
   location            = azurerm_resource_group.iaas_resource_group.location
   resource_group_name = azurerm_resource_group.iaas_resource_group.name
 
   ip_configuration {
-    name                          = var.net_int_ip_config_worker_name
+    name                          = "${var.net_int_ip_config_worker_name}-${count.index}"
     subnet_id                     = azurerm_subnet.iaas_subnet.id
     private_ip_address_allocation = "Dynamic"
   }
@@ -20,7 +20,7 @@ resource "azurerm_network_interface" "node_worker_nic" {
 # Créer arpès l'interface réseau en meme temps que l'ip public et le groupe de securité
 # Create virtual machine
 resource "azurerm_linux_virtual_machine" "node_worker_vm" {
-  count                             = 3
+  count                             = var.nomber_of_vm_worker
   name                              = "${var.vm_node_worker_name}-${count.index}"
   location                          = azurerm_resource_group.iaas_resource_group.location
   resource_group_name               = azurerm_resource_group.iaas_resource_group.name
@@ -40,7 +40,7 @@ resource "azurerm_linux_virtual_machine" "node_worker_vm" {
     version   = var.vm_node_worker_image_version
   }
 
-  computer_name         = "worker"
+  computer_name         = "worker-${count.index}"
   admin_username        = var.node_worker_username
 
   admin_ssh_key {
@@ -74,8 +74,32 @@ resource "azurerm_network_security_group" "node_worker_sg" {
   }
 
   security_rule {
-    name                       = "KubeletAPI"
+    name                       = "HTTP"
     priority                   = 101
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "80"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "HTTPS"
+    priority                   = 102
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "443"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "KubeletAPI"
+    priority                   = 103
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"
@@ -87,7 +111,7 @@ resource "azurerm_network_security_group" "node_worker_sg" {
 
   security_rule {
     name                       = "NodePortService"
-    priority                   = 102
+    priority                   = 104
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"
@@ -102,7 +126,7 @@ resource "azurerm_network_security_group" "node_worker_sg" {
 
 # Connect the security group to the network interface
 resource "azurerm_network_interface_security_group_association" "ni_node_worker_sg" {
-  count                     = 3
+  count                     = var.nomber_of_vm_worker
   network_interface_id      = azurerm_network_interface.node_worker_nic[count.index].id
   network_security_group_id = azurerm_network_security_group.node_worker_sg.id
 }

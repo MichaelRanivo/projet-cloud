@@ -17,7 +17,7 @@ resource "azapi_resource_action" "node_master_ssh_public_key_gen" {
 }
 
 resource "azapi_resource" "node_worker_ssh_public_key" {
-  count       = 3
+  count       = var.nomber_of_vm_worker
   type        = var.node_ssh_public_key_type
   name        = "${var.node_worker_ssh_public_key_name}-${count.index}"
   location    = var.resource_group_location
@@ -26,7 +26,7 @@ resource "azapi_resource" "node_worker_ssh_public_key" {
 }
 
 resource "azapi_resource_action" "node_worker_ssh_public_key_gen" {
-  count                     = 3
+  count                     = var.nomber_of_vm_worker
   type                      = var.node_ssh_public_key_type
   resource_id               = azapi_resource.node_worker_ssh_public_key[count.index].id
   action                    = "generateKeyPair"

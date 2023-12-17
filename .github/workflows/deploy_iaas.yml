@@ -1,12 +1,12 @@
-name: Pipeline Set Up AKS
+name: Pipeline Set Up IaaS
 
-run-name: ${{ github.actor }} is launching the AKS set up
+run-name: ${{ github.actor }} is launching the IaaS set up
 
 on:
   push:
     branches: [terraform]
-    paths:
-      - terraform/paas/*
+    # paths:
+    #   - terraform/iaas/*
  
 permissions:
   contents: read
@@ -20,8 +20,8 @@ env:
   ARM_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
 jobs:
-  paas-plan:
-    name: Plan Paas
+  iaas-plan:
+    name: Plan IaaS
     runs-on: self-hosted
     steps:
       - name: Checkout the repo
@@ -30,10 +30,10 @@ jobs:
       - name: Use Terraform Action
         uses: hashicorp/setup-terraform@v2
 
-      - name: Terraform Paas plan
+      - name: Terraform IaaS plan
         run: |
           terraform --version
-          cd ${{ vars.TF_PAAS_ROOT }}
+          cd ${{ vars.TF_IAAS_ROOT }}
           terraform init -backend-config="resource_group_name=${{ vars.RESOURCE_GROUP_NAME }}" -backend-config="storage_account_name=${{ vars.STORAGE_ACCOUNT_NAME }}" -backend-config="container_name=${{ vars.STORAGE_CONTAINER_NAME }}"
           terraform validate
           terraform plan -var-file="../env/$GITHUB_REF_NAME.tfvars" -out tfplan
@@ -42,11 +42,11 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: tfplan
-          path: ${{ vars.TF_PAAS_ROOT }}/tfplan
+          path: ${{ vars.TF_IAAS_ROOT }}/tfplan
 
-  paas-apply:
-    needs: paas-plan
-    name: Apply paas
+  iaas-apply:
+    needs: iaas-plan
+    name: Apply iaas
     runs-on: self-hosted
     steps:
       - name: Checkout the repo
@@ -61,23 +61,14 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: tfplan
-          path: ${{ vars.TF_PAAS_ROOT }}/
+          path: ${{ vars.TF_IAAS_ROOT }}/
 
-      - name: Terraform paas apply
+      - name: Terraform iaas apply
         run: |
           terraform --version
-          cd ${{ vars.TF_PAAS_ROOT }}
+          cd ${{ vars.TF_IAAS_ROOT }}
           terraform init -backend-config="resource_group_name=${{ vars.RESOURCE_GROUP_NAME }}" -backend-config="storage_account_name=${{ vars.STORAGE_ACCOUNT_NAME }}" -backend-config="container_name=${{ vars.STORAGE_CONTAINER_NAME }}"
           terraform validate
           terraform apply -input=false -auto-approve tfplan
-
-      - name: Get kube config
-        run: |
-          cd ${{ vars.TF_PAAS_ROOT }}
-          terraform output -raw kube_config | base64 > config
-
-      - name: Upload kube config as artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: kubeconfig
-          path: ${{ vars.TF_PAAS_ROOT }}/config
+# après ça les fichiers de .pem dans le dossier iaas!
+# il faut les récupérer pour Ansible plus tard!

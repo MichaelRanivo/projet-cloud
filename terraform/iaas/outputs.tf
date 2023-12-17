@@ -1,8 +1,3 @@
-output "node_master_public_ip_address" {
-  value = azurerm_linux_virtual_machine.node_master_vm.public_ip_address
-  sensitive = true
-}
-
 output "node_master_private_ip_address" {
   value = azurerm_linux_virtual_machine.node_master_vm.private_ip_address
 }

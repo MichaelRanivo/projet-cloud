@@ -29,6 +29,41 @@ variable "iaas_lb_Public_IP_Address_name" {
     type        = string
     description = "The name of the public IP address of the LB"
 }
+
+variable "iaas_lb_backend_pool_name" {
+    type        = string
+    description = "The name of the backend pool of the Iaas LB"
+}
+
+variable "iaas_lb_backend_pool_master" {
+    type        = string
+    description = "The name of the association between backend pool of the LB and the Network Interface of the master node" 
+}
+
+variable "iaas_lb_backend_pool_worker" {
+    type        = string 
+    description = "The name of associations between backend pool of the LB and the Network Interfaces of worker node"
+}
+
+variable "iaas_lb_probe_name" {
+    type        = string
+    description = "The name of the probe for the LB"  
+}
+
+variable "iaas_lb_rule_80_name" {
+    type        = string
+    description = "The name of the rule incoming from port 80"
+}
+
+variable "iaas_lb_rule_443_name" {
+    type        = string
+    description = "The name of the rule incoming from port 443"
+}
+
+variable "iaas_lb_nat_rule_name" {
+    type        = string
+    description = "The name of the nat rule incoming to the backend pool"
+}
 #
 
 ## IAAS VNET & SUBNET
@@ -131,6 +166,11 @@ variable "net_int_ip_config_worker_name" {
 }
 
 ## IAAS NODE WORKER
+variable "nomber_of_vm_worker" {
+    type        = number
+    description = "The number of Node Worker we need"
+}
+
 variable "vm_node_worker_name" {
     type        = string
     description = "Prefix of node worker name"

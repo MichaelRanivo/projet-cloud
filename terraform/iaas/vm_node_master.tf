@@ -1,12 +1,3 @@
-# Create public IPs
-resource "azurerm_public_ip" "node_master_vm_public_ip" {
-  name                = var.node_master_public_ip_name
-  location            = azurerm_resource_group.iaas_resource_group.location
-  resource_group_name = azurerm_resource_group.iaas_resource_group.name
-  allocation_method   = "Dynamic"
-  depends_on          = [ azurerm_resource_group.iaas_resource_group ]
-}
-
 # Créer cette interface après le subnet et l'adresse 
 # Create network interface
 resource "azurerm_network_interface" "node_master_nic" {
@@ -18,12 +9,10 @@ resource "azurerm_network_interface" "node_master_nic" {
     name                          = var.net_int_ip_config_name
     subnet_id                     = azurerm_subnet.iaas_subnet.id
     private_ip_address_allocation = "Dynamic"
-    public_ip_address_id          = azurerm_public_ip.node_master_vm_public_ip.id
   }
 
   depends_on = [ 
-    azurerm_subnet.iaas_subnet,
-    azurerm_public_ip.node_master_vm_public_ip 
+    azurerm_subnet.iaas_subnet
   ]
 }
 
@@ -84,8 +73,32 @@ resource "azurerm_network_security_group" "node_master_sg" {
   }
 
   security_rule {
-    name                       = "KubernetesAPIserver"
+    name                       = "HTTP"
     priority                   = 101
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "80"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "HTTPS"
+    priority                   = 102
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "443"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "KubernetesAPIserver"
+    priority                   = 103
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"
@@ -97,7 +110,7 @@ resource "azurerm_network_security_group" "node_master_sg" {
 
   security_rule {
     name                       = "etcdserverclientAPI"
-    priority                   = 102
+    priority                   = 104
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"
@@ -109,7 +122,7 @@ resource "azurerm_network_security_group" "node_master_sg" {
 
   security_rule {
     name                       = "KubeletAPI"
-    priority                   = 103
+    priority                   = 105
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"
@@ -121,7 +134,7 @@ resource "azurerm_network_security_group" "node_master_sg" {
 
   security_rule {
     name                       = "kubescheduler"
-    priority                   = 104
+    priority                   = 106
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"
@@ -133,7 +146,7 @@ resource "azurerm_network_security_group" "node_master_sg" {
 
   security_rule {
     name                       = "kubeControllerManager"
-    priority                   = 105
+    priority                   = 107
     direction                  = "Inbound"
     access                     = "Allow"
     protocol                   = "Tcp"

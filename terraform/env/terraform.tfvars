@@ -28,6 +28,15 @@ iaas_subnet_name                        = "iaas-subnet"
 ## IAAS IP LB
 rg_iaas_address_ip_name                 = "dns"
 iaas_address_ip_name                    = "lb-ip-iaas"
+iaas_lb_name                            = "iaas-lb"
+iaas_lb_Public_IP_Address_name          = "iaas-lb-front-IP"
+iaas_lb_backend_pool_name               = "lb-backend-pool"
+iaas_lb_backend_pool_master             = "addMasterNodeBackendPool"
+iaas_lb_backend_pool_worker             = "addWorkerNode"
+iaas_lb_probe_name                      = "healtProbeLB"
+iaas_lb_rule_80_name                    = "inboundrule80"
+iaas_lb_rule_443_name                   = "inboundrule443"
+iaas_lb_nat_rule_name                   = "inboundNatRules"
 
 ######### NODE MASTER ##############
 
@@ -59,6 +68,8 @@ net_int_ip_config_name                  = "nodeMasterNetIntConfigIp"
 net_int_node_master_name                = "nodemasternetinte"
 
 ######### NODE WORKER ##############
+
+nomber_of_vm_worker                     = 3
 
 ## Network Interface Node Worker
 net_int_node_worker_name                = "NetIntNodeWorker"

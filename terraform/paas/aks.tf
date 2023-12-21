@@ -15,7 +15,7 @@ resource "azurerm_kubernetes_cluster" "sample-app-AKS" {
     private_cluster_enabled   = var.aks_api_private
     node_resource_group       = "${var.aks-cluster-name}-nodepool-rc"
     oidc_issuer_enabled       = false
-        
+    
     default_node_pool {
         name                    = "akspool"
         #Le nombre initial de Node (doit être entre min_count et max_count)

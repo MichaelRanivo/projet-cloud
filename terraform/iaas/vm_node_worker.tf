@@ -1,7 +1,8 @@
 # Créer en meme temps que la VM apres l'interface réseau
 # Create Network Security Group and rule
 resource "azurerm_network_security_group" "node_worker_sg" {
-  name                = var.node_worker_network_sg_name
+  count               = var.nomber_of_vm_worker
+  name                = "${var.node_worker_network_sg_name}-${count.index}"
   location            = azurerm_resource_group.iaas_resource_group.location
   resource_group_name = azurerm_resource_group.iaas_resource_group.name
 
@@ -86,8 +87,11 @@ resource "azurerm_network_interface" "node_worker_nic" {
   }
 
   depends_on = [ 
+    azurerm_resource_group.iaas_resource_group,
     azurerm_subnet.iaas_subnet,
-    azurerm_network_security_group.node_worker_sg
+    azurerm_network_security_group.node_worker_sg[0],
+    azurerm_network_security_group.node_worker_sg[1],
+    azurerm_network_security_group.node_worker_sg[2],
   ]
 }
 
@@ -95,9 +99,16 @@ resource "azurerm_network_interface" "node_worker_nic" {
 resource "azurerm_network_interface_security_group_association" "ni_node_worker_sg" {
   count                     = var.nomber_of_vm_worker
   network_interface_id      = azurerm_network_interface.node_worker_nic[count.index].id
-  network_security_group_id = azurerm_network_security_group.node_worker_sg.id
+  network_security_group_id = azurerm_network_security_group.node_worker_sg[count.index].id
 
   depends_on = [ 
+    azurerm_resource_group.iaas_resource_group,
+    azurerm_subnet.iaas_subnet,
+    azurerm_network_security_group.node_worker_sg[0],
+    azurerm_network_security_group.node_worker_sg[1],
+    azurerm_network_security_group.node_worker_sg[2],
+    azurerm_network_interface.node_worker_nic[0],
+    azurerm_network_interface.node_worker_nic[1],
     azurerm_network_interface.node_worker_nic[2]
   ]
 }
@@ -134,8 +145,14 @@ resource "azurerm_linux_virtual_machine" "node_worker_vm" {
   }
 
   depends_on          = [ 
-    azapi_resource_action.node_worker_ssh_public_key_gen,
+    azurerm_resource_group.iaas_resource_group,
     azurerm_subnet.iaas_subnet,
-    azurerm_network_interface_security_group_association.ni_node_worker_sg[2]
+    azurerm_network_interface_security_group_association.ni_node_worker_sg[0],
+    azurerm_network_interface_security_group_association.ni_node_worker_sg[1],
+    azurerm_network_interface_security_group_association.ni_node_worker_sg[2],
+    azurerm_network_interface.node_worker_nic[0],
+    azurerm_network_interface.node_worker_nic[1],
+    azurerm_network_interface.node_worker_nic[2],
+    azapi_resource_action.node_worker_ssh_public_key_gen
   ]
 }

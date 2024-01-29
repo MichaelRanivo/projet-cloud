@@ -36,7 +36,8 @@ iaas_lb_backend_pool_worker             = "addWorkerNode"
 iaas_lb_probe_name                      = "healtProbeLB"
 iaas_lb_rule_80_name                    = "inboundrule80"
 iaas_lb_rule_443_name                   = "inboundrule443"
-iaas_lb_nat_rule_name                   = "inboundNatRules"
+iaas_lb_nat_rule_name_ssh               = "inboundNatRulesSsh"
+iaas_lb_nat_rule_name_Kube              = "inboundNatRulesApiKubeEndpoint"
 
 ######### NODE MASTER ##############
 
@@ -46,16 +47,16 @@ node_master_ssh_public_key_name         = "VMNodeMasterPublicKey"
 node_worker_ssh_public_key_name         = "VMNodeWorkerPublicKey"
 
 ## NODE MASTER
-vm_node_master_name                     = "NodeMaster"
+vm_node_master_name                     = "master"
 vm_node_master_size                     = "Standard_D2as_v4"
 vm_node_master_os_disk_name             = "NodeMasterVMOsDisk"
-vm_node_master_image_pub                = "debian"
-vm_node_master_image_offer              = "debian-12"
-vm_node_master_image_sku                = "12-gen2"
+vm_node_master_image_pub                = "canonical"
+vm_node_master_image_offer              = "0001-com-ubuntu-server-jammy"
+vm_node_master_image_sku                = "22_04-lts-gen2"
 vm_node_master_image_version            = "latest"
 
 ## Node Master username
-node_master_username                    = "k8smaster"
+node_master_username                    = "master_user"
 
 ## Public IP for the node master
 node_master_public_ip_name              = "NodeMasterPublicIP"
@@ -69,23 +70,23 @@ net_int_node_master_name                = "nodemasternetinte"
 
 ######### NODE WORKER ##############
 
-nomber_of_vm_worker                     = 3
+nomber_of_vm_worker                     = 2
 
 ## Network Interface Node Worker
 net_int_node_worker_name                = "NetIntNodeWorker"
 net_int_ip_config_worker_name           = "NetIntIpCongNodeWorker"
 
 ## VM Node Worker
-vm_node_worker_name                     = "NodeWorker"
-vm_node_worker_size                     = "Standard_B1s"
+vm_node_worker_name                     = "worker"
+vm_node_worker_size                     = "Standard_B2s"
 vm_node_worker_os_disk_name             = "NodeWorkerVMOsDisk"
-vm_node_worker_image_pub                = "debian"
-vm_node_worker_image_offer              = "debian-12"
-vm_node_worker_image_sku                = "12-gen2"
+vm_node_worker_image_pub                = "canonical"
+vm_node_worker_image_offer              = "0001-com-ubuntu-server-jammy"
+vm_node_worker_image_sku                = "22_04-lts-gen2"
 vm_node_worker_image_version            = "latest"
 
 ## Node Worker username
-node_worker_username                    = "k8sworker"
+node_worker_username                    = "worker_user"
 
 ## Node Worker Network Security Group and rule
 node_worker_network_sg_name             = "nodeWorkerSg"

@@ -66,6 +66,102 @@ resource "azurerm_network_security_group" "node_worker_sg" {
     destination_address_prefix = "*"
   }
 
+  security_rule {
+    name                       = "CalicoNetworking"
+    priority                   = 105
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "179"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "CalicoNetworkingWithVXLANEnabled"
+    priority                   = 106
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Udp"
+    source_port_range          = "*"
+    destination_port_range     = "4789"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "CalicoNetworkingWithTyphaEnabled"
+    priority                   = 107
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "5473"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "CalicoNetworkingWithIPv4WireguardEnabled"
+    priority                   = 108
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Udp"
+    source_port_range          = "*"
+    destination_port_range     = "51820"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "CalicoNetworkingWithIPv6WireguardEnabled"
+    priority                   = 109
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Udp"
+    source_port_range          = "*"
+    destination_port_range     = "51821"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "CertmanagerMetrics"
+    priority                   = 110
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "9402"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "IngressController"
+    priority                   = 111
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "5443"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
+    name                       = "OutboundRule"
+    priority                   = 100
+    direction                  = "Outbound"
+    access                     = "Allow"
+    protocol                   = "*"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
   depends_on = [ 
     azurerm_resource_group.iaas_resource_group,
     azurerm_subnet.iaas_subnet 
@@ -136,7 +232,7 @@ resource "azurerm_linux_virtual_machine" "node_worker_vm" {
     version   = var.vm_node_worker_image_version
   }
 
-  computer_name         = "worker-${count.index}"
+  computer_name         = "${var.vm_node_worker_name}-${count.index}"
   admin_username        = var.node_worker_username
 
   admin_ssh_key {

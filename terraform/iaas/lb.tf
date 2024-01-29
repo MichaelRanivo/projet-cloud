@@ -34,11 +34,19 @@ resource "azurerm_network_interface_backend_address_pool_association" "add-worke
 }
 
 ## Health probe
-resource "azurerm_lb_probe" "healt-probe" {
-  name                = var.iaas_lb_probe_name
+resource "azurerm_lb_probe" "healt-probe-80" {
+  name                = "${var.iaas_lb_probe_name}-80"
   loadbalancer_id     = azurerm_lb.iaas-lb.id
   protocol            = "Tcp"
   port                = 80
+  interval_in_seconds = 5
+}
+
+resource "azurerm_lb_probe" "healt-probe-443" {
+  name                = "${var.iaas_lb_probe_name}-443"
+  loadbalancer_id     = azurerm_lb.iaas-lb.id
+  protocol            = "Tcp"
+  port                = 443
   interval_in_seconds = 5
 }
 
@@ -51,9 +59,9 @@ resource "azurerm_lb_rule" "http_rules" {
   protocol                        = "Tcp"
   frontend_port                   = 80
   backend_port                    = 80
-  probe_id                        = azurerm_lb_probe.healt-probe.id
+  probe_id                        = azurerm_lb_probe.healt-probe-80.id
   load_distribution               = "SourceIPProtocol"
-  idle_timeout_in_minutes         = 20
+  idle_timeout_in_minutes         = 5
   enable_tcp_reset                = true
   disable_outbound_snat           = true
 }
@@ -66,16 +74,16 @@ resource "azurerm_lb_rule" "https_rules" {
   protocol                        = "Tcp"
   frontend_port                   = 443
   backend_port                    = 443
-  probe_id                        = azurerm_lb_probe.healt-probe.id
+  probe_id                        = azurerm_lb_probe.healt-probe-443.id
   load_distribution               = "SourceIPProtocol"
-  idle_timeout_in_minutes         = 20
+  idle_timeout_in_minutes         = 5
   enable_tcp_reset                = true
   disable_outbound_snat           = true
 }
 
-## Inbound NAT rule
-resource "azurerm_lb_nat_rule" "iaas_lb_nat_rules" {
-  name                            = var.iaas_lb_nat_rule_name
+## Inbound NAT rule SSH
+resource "azurerm_lb_nat_rule" "iaas_lb_nat_rules_ssh" {
+  name                            = var.iaas_lb_nat_rule_name_ssh
   resource_group_name             = azurerm_resource_group.iaas_resource_group.name
   loadbalancer_id                 = azurerm_lb.iaas-lb.id
   backend_address_pool_id         = azurerm_lb_backend_address_pool.lb-backend-pool.id
@@ -86,6 +94,32 @@ resource "azurerm_lb_nat_rule" "iaas_lb_nat_rules" {
   backend_port                    = 22
   enable_tcp_reset                = true
   idle_timeout_in_minutes         = 20
+}
+
+## Inbound NAT rule Kube Api Server Endpoint
+resource "azurerm_lb_nat_rule" "iaas_lb_nat_rules_kubeApiEndpoint" {
+  name                            = var.iaas_lb_nat_rule_name_Kube
+  resource_group_name             = azurerm_resource_group.iaas_resource_group.name
+  loadbalancer_id                 = azurerm_lb.iaas-lb.id
+  frontend_ip_configuration_name  = var.iaas_lb_Public_IP_Address_name
+  protocol                        = "Tcp"
+  frontend_port                   = 6443
+  backend_port                    = 6443
+  enable_tcp_reset                = true
+  idle_timeout_in_minutes         = 5
+}
+
+## NIC association LB Nat rule
+resource "azurerm_network_interface_nat_rule_association" "ip_configuration_nat_rule_kube_api_endpoint" {
+  ip_configuration_name = var.net_int_ip_config_name
+  network_interface_id  = azurerm_network_interface.node_master_nic.id
+  nat_rule_id           = azurerm_lb_nat_rule.iaas_lb_nat_rules_kubeApiEndpoint.id
+
+  depends_on = [ 
+    azurerm_lb.iaas-lb,
+    azurerm_lb_nat_rule.iaas_lb_nat_rules_kubeApiEndpoint,
+    azurerm_network_interface.node_master_nic
+   ]
 }
 
 ## Outbound LB rules

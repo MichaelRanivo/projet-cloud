@@ -60,9 +60,14 @@ variable "iaas_lb_rule_443_name" {
     description = "The name of the rule incoming from port 443"
 }
 
-variable "iaas_lb_nat_rule_name" {
+variable "iaas_lb_nat_rule_name_ssh" {
     type        = string
-    description = "The name of the nat rule incoming to the backend pool"
+    description = "The name of the ssh nat rule incoming to the backend pool"
+}
+
+variable "iaas_lb_nat_rule_name_Kube" {
+    type        = string
+    description = "The name of the kube api server endpoint nat rule incoming to the backend pool"
 }
 #
 

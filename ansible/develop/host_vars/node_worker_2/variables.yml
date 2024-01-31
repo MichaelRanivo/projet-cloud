@@ -1,3 +1,0 @@
-ansible_port: 501
-ansible_user: k8sworker
-ansible_ssh_private_key_file: /home/michael/Documents/Epitech/CLO/T-CLO-901-LYO_13/terraform/iaas/node_worker_2_private_key.pem

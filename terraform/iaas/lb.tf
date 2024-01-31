@@ -90,7 +90,7 @@ resource "azurerm_lb_nat_rule" "iaas_lb_nat_rules_ssh" {
   frontend_ip_configuration_name  = var.iaas_lb_Public_IP_Address_name
   protocol                        = "Tcp"
   frontend_port_start             = 500
-  frontend_port_end               = 503
+  frontend_port_end               = 510
   backend_port                    = 22
   enable_tcp_reset                = true
   idle_timeout_in_minutes         = 20

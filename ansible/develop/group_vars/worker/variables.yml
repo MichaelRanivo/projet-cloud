@@ -1,0 +1,1 @@
+ansible_user: workeruser #à changer si l'utilisateur des VMs worker changent

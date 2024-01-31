@@ -1,8 +1,0 @@
-## Ce playbook va préparer le cluster
-### Il va mettre à jours tous les VMs
-#### sudo apt update && sudo apt upgrade -y
-#### sudo apt-get update && sudo apt-get upgrade -y
-### Il va desinstaller le swap de tous les VMs
-### Il va installer Docker sur tous les VMs
-### Il va installer CRI Docker sur tous les VMs
-### Il va installer kubeadm, kubelet et kubectl sur tous les VMs

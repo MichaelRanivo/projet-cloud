@@ -1,0 +1,5 @@
+- name: Initiate Dependencies
+  remote_user: root
+  hosts: all
+  roles:
+    - delete_cluster

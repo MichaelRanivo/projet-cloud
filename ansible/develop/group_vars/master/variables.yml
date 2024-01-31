@@ -1,0 +1,1 @@
+ansible_user: masteruser #à changer si l'utilisateur de la VMs master change

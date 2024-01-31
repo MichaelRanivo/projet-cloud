@@ -1,1 +1,1 @@
-ansible_host: "20.54.32.240"
+ansible_host: "20.54.32.240" #à modifier si l'address ip du load balancer change

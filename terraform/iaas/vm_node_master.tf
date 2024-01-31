@@ -186,7 +186,7 @@ resource "azurerm_network_security_group" "node_master_sg" {
   }
 
   security_rule {
-    name                       = "IngressController"
+    name                       = "WebhookValidation"
     priority                   = 115
     direction                  = "Inbound"
     access                     = "Allow"

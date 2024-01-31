@@ -186,6 +186,18 @@ resource "azurerm_network_security_group" "node_master_sg" {
   }
 
   security_rule {
+    name                       = "IngressController"
+    priority                   = 115
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "Tcp"
+    source_port_range          = "*"
+    destination_port_range     = "8443"
+    source_address_prefix      = "*"
+    destination_address_prefix = "*"
+  }
+
+  security_rule {
     name                       = "OutboundRule"
     priority                   = 100
     direction                  = "Outbound"

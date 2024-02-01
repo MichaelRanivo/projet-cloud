@@ -7,3 +7,4 @@
   hosts: worker
   roles:
     - worker_join
+ 

@@ -1,0 +1,30 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sample-app-ingress
+  namespace: sample-app-kub-namespace
+  labels:
+    app: sample-app
+  annotations:
+    cert-manager.io/issuer: "cert-manager-issuer"
+    # nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+    kubernetes.io/tls-acme: "true"
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  tls:
+  - hosts:
+    - terracloud.access.ly
+    secretName: sample-app-tls
+  ingressClassName: nginx
+  rules:
+  - host: terracloud.access.ly
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: sample-app-service-clusterip
+            port:
+              number: 443

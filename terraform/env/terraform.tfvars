@@ -1,9 +1,9 @@
 # default
-resource_group_location                 = "eastus" #"northeurope"
+resource_group_location                 = "northeurope"
 
 #Infra Backend
 backend_resource_group_name             = "tf-back-rg"
-azure_cloud_location                    = "East Us" #"North Europe"
+azure_cloud_location                    = "North Europe"
 backend_storage_account_name            = "tfbackstorageaccount"
 storage_account_tier                    = "Standard"
 storage_account_replication_type        = "LRS"
@@ -26,7 +26,7 @@ iaas_vnet_name                          = "iaas-vnet"
 iaas_subnet_name                        = "iaas-subnet"
 
 ## IAAS IP LB
-rg_iaas_address_ip_name                 = "dns-test" #"dns"
+rg_iaas_address_ip_name                 = "dns"
 iaas_address_ip_name                    = "lb-ip-iaas"
 iaas_lb_name                            = "iaas-lb"
 iaas_lb_Public_IP_Address_name          = "iaas-lb-front-IP"

@@ -1,0 +1,73 @@
+name: CD Deploy aks Manifeste
+
+run-name: ${{ github.actor }} is launching the deployment of manifeste to the AKS Cluster
+
+on:
+  workflow_run:
+    workflows:
+      ["Build Docker image"]
+    types:
+      - completed
+  # push:
+  #   branches:
+  #     - "main"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy-AKS:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Téléchargez l'artefact
+        uses: dawidd6/action-download-artifact@v2
+        with:
+          github_token: ${{ secrets.TOKEN_PERSO }}
+          workflow: deploy_paas.yml
+          workflow_conclusion: success
+          branch: terraform
+          name: kubeconfig
+          path: ./
+
+      - uses: azure/setup-kubectl@v3
+        with:
+          version: "v1.28.2"
+        id: install
+
+      - name: set up the kube config
+        run: |
+          base64 --decode ./config > ${HOME}/.kube/config
+
+      - name: Deploy ingress controller to cluster Kubernetes
+        run: |
+          kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.2/cert-manager.yaml
+          kubectl apply -f k8s/nginx-ingress-controller-cloud.yaml
+          kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+
+      - name: Sleep for 10 seconds
+        run: sleep 10s
+        shell: bash
+
+      - name: Deploy all ours manifests to cluster Kubernetes
+        run: |
+          kubectl apply -f k8s/namespace.yaml
+          kubectl apply -f k8s/common/
+          kubectl apply -f k8s/deployement.yaml
+          kubectl apply -f k8s/service_clusterip.yaml
+          kubectl apply -f k8s/horizontalPodAutoscaler.yaml
+
+      - name: Sleep for 20 seconds
+        run: sleep 20s
+        shell: bash
+
+      - name: Deploy the ingress manifest to cluster Kubernetes
+        run: |
+          kubectl apply -f k8s/cert-manager/issuer_sample_app_dashboard.yaml
+          kubectl apply -f k8s/cert-manager/issuer_sample_app.yaml
+          kubectl apply -f k8s/ingress.yaml
+          kubectl apply -f k8s/dashboard_ingress.yaml

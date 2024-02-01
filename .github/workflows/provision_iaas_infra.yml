@@ -27,11 +27,11 @@ jobs:
           skip_unpack: false
           if_no_artifact_found: fail
       
-      # - name: Test the ping
-      #   run: |
-      #     cd ansible/
-      #     sudo apt update
-      #     sudo apt install ansible tree -y
-      #     tree
-      #     ansible all --list-hosts -vvv
+      - name: Test the ping
+        run: |
+          cd ansible/
+          sudo apt update
+          sudo apt install ansible tree -y
+          tree
+          ansible all --list-hosts -vvv
 #ansible all -m ping -i develop/inventory.yml

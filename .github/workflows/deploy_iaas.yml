@@ -70,16 +70,11 @@ jobs:
           terraform init -backend-config="resource_group_name=${{ vars.RESOURCE_GROUP_NAME }}" -backend-config="storage_account_name=${{ vars.STORAGE_ACCOUNT_NAME }}" -backend-config="container_name=${{ vars.STORAGE_CONTAINER_NAME }}"
           terraform validate
           terraform apply -input=false -auto-approve tfplan
-          ls -al
-          mkdir key/ 
-          ls -al key/
+          mkdir key/
           mv *.pem key/
-          ls -al key/
       
       - name: Artefact the ssh key
         uses: actions/upload-artifact@v2
         with:
           name: sshkeys
           path: ${{ vars.TF_IAAS_ROOT }}/key/
-
-      # mettre le directory iaas en artefact pour avoir les clés ssh

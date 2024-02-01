@@ -1,0 +1,33 @@
+name: Pipeline Configuration of IaaS Infra
+
+run-name: ${{ github.actor }} is launching the IaaS configuration
+
+on:
+  push:
+    branches: [terraform]
+    paths:
+      - ansible/**
+
+jobs:
+    apply-playbook:
+        name: Apply playbook
+        runs-on: self-hosted
+        steps:
+            - name: Download ssh key artifact
+              uses: dawidd6/action-download-artifact@v3
+              with:
+                github_token: ${{secrets.GITHUB_TOKEN}}
+                workflow: deploy_iaas.yml
+                workflow_conclusion: success
+                branch: terraform
+                name: sshkeys
+                repo: ${{ github.repository }}
+                check_artifacts: true
+                search_artifacts: true
+                skip_unpack: false
+                if_no_artifact_found: fail
+            
+            - name: test the downloaded artefact
+              run: |
+                ls -al 
+                ls -al key/

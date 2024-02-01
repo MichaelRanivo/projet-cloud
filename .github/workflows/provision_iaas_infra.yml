@@ -27,7 +27,9 @@ jobs:
           skip_unpack: false
           if_no_artifact_found: fail
       
-      - name: test the downloaded artefact
+      - name: Test the ping 
         run: |
-          pwd 
-          ls -al
+          sudo apt update
+          sudo apt install -y ansible
+          cd ansible/
+          ansible all -m ping -i develop/inventory.yml

@@ -80,6 +80,6 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: sshkeys
-          path: ${{ vars.TF_PAAS_ROOT }}/key/
+          path: ${{ vars.TF_IAAS_ROOT }}/key/
 
       # mettre le directory iaas en artefact pour avoir les clés ssh

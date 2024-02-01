@@ -35,9 +35,3 @@ jobs:
       #     tree
       #     ansible all --list-hosts -vvv
 #ansible all -m ping -i develop/inventory.yml
-      - name: Test the ping
-        uses: tomasnorre/ansible-cli-action@0.0.5
-        with:
-          command: |
-            cd ansible/
-            ansible all --list-hosts -vvv

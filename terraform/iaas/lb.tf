@@ -11,7 +11,7 @@ resource "azurerm_lb" "iaas-lb" {
 
   sku_tier            = "Regional"
   tags                = var.tags
-} 
+}
 
 ## Backend pools
 resource "azurerm_lb_backend_address_pool" "lb-backend-pool" {

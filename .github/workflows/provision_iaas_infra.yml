@@ -26,9 +26,6 @@ jobs:
           search_artifacts: true
           skip_unpack: false
           if_no_artifact_found: fail
-
-      - name: Install Ansible
-        uses: ansible/setup-ansible@v2
       
       - name: Test the ping
         run: |

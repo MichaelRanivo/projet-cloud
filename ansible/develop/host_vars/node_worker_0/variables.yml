@@ -1,3 +1,4 @@
 ansible_port: 502 #à changer après avoir set up l'infra!!!
+ansible_ssh_private_key_file:
 #ansible_ssh_private_key_file: /home/michael/Documents/Epitech/CLO/T-CLO-901-LYO_13/terraform/iaas/worker_key.pem #à changer après avoir set up l'infra!!!
-ansible_ssh_private_key_file: /mnt/d/Epitech/T-CLO-901-LYO_13/terraform/iaas/worker_key.pem #à changer après avoir set up l'infra!!!
+#ansible_ssh_private_key_file: /mnt/d/Epitech/T-CLO-901-LYO_13/terraform/iaas/worker_key.pem #à changer après avoir set up l'infra!!!

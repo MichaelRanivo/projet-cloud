@@ -11,4 +11,3 @@ all:
           hosts:
             node_worker_0:
             node_worker_1:
-#à changer si on ajoute des nodes master et worker!!!

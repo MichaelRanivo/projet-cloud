@@ -1,4 +1,2 @@
-ansible_port: 501 #à changer après avoir set up l'infra!!!
+ansible_port: 501 
 ansible_ssh_private_key_file: /tmp/github-runner-your-repo/T-CLO-901-LYO_13/T-CLO-901-LYO_13/node_worker_0_private_key.pem
-#ansible_ssh_private_key_file: /home/michael/Documents/Epitech/CLO/T-CLO-901-LYO_13/terraform/iaas/worker_key.pem #à changer après avoir set up l'infra!!!
-#ansible_ssh_private_key_file: /mnt/d/Epitech/T-CLO-901-LYO_13/terraform/iaas/worker_key.pem #à changer après avoir set up l'infra!!!

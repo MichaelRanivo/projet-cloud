@@ -1,7 +1,3 @@
-## Ce playbook va initiliaser le cluster
-### Il va se connecter aux VMs Worker et faire la commande :
-#### Init un node worker
-#### Join le node master
 - name: Initiate Dependencies
   remote_user: root
   hosts: worker

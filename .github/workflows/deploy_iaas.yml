@@ -6,7 +6,7 @@ on:
   push:
     branches: [terraform]
     paths:
-      - terraform/iaas/*
+      - terraform/iaas/**
 
 permissions:
   contents: read

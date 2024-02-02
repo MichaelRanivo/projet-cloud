@@ -41,7 +41,7 @@ jobs:
           ls -al
           cd ansible/
           ansible all --list-hosts -i ./develop/inventory.yml -vvv
-      # ansible all -m ping -i ./develop/inventory.yml -vvv
+          ansible all -m ping -i ./develop/inventory.yml -vvv
       # cd ansible/
       # sudo apt update
       # sudo apt install ansible tree -y

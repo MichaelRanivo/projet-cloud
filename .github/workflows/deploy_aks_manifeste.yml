@@ -2,10 +2,12 @@ name: CD Deploy aks Manifeste
 
 run-name: ${{ github.actor }} is launching the deployment of manifeste to the AKS Cluster
 
-# on:
-#   push:
-#     branches:
-#       - "k8s"
+on:
+  push:
+    branches:
+      - "k8s"
+    paths:
+      - k8s/paas/**
 
 permissions:
   contents: read

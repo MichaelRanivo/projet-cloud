@@ -2,15 +2,12 @@ name: CD Deploy iaas Manifeste
 
 run-name: ${{ github.actor }} is launching the deployment of manifeste to the iaas Cluster
 
-# on:
-#   push:
-#     branches:
-#       - "k8s"
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+on:
+  push:
+    branches:
+      - "k8s"
+    # paths:
+    #   - k8s/iaas/**
 
 jobs:
     deploy-AKS:

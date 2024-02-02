@@ -29,7 +29,8 @@ jobs:
       
       - name: Test the ping
         run: |
-          cat /etc/ansible/ansible.cfg
+          echo "$ANSIBLE_CONFIG"
+          ansible-config -c view
           ansible all --list-hosts -i ./develop/inventory.yml -vvv
           ansible all -m ping -i ./develop/inventory.yml -vvv
       # cd ansible/

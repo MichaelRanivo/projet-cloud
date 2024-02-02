@@ -5,8 +5,8 @@ run-name: ${{ github.actor }} is launching the IaaS configuration
 on:
   push:
     branches: [terraform]
-    # paths:
-    #   - ansible/**
+    paths:
+      - ansible/**
 
 jobs:
   apply-playbook:

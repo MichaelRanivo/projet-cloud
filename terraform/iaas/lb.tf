@@ -11,12 +11,23 @@ resource "azurerm_lb" "iaas-lb" {
 
   sku_tier            = "Regional"
   tags                = var.tags
+
+  depends_on = [ 
+    azurerm_linux_virtual_machine.node_master_vm,
+    azurerm_linux_virtual_machine.node_worker_vm
+   ]
 }  
   
 ## Backend pools
 resource "azurerm_lb_backend_address_pool" "lb-backend-pool" {
   name            = var.iaas_lb_backend_pool_name
   loadbalancer_id = azurerm_lb.iaas-lb.id
+
+  depends_on = [ 
+    azurerm_linux_virtual_machine.node_master_vm,
+    azurerm_linux_virtual_machine.node_worker_vm,
+    azurerm_lb.iaas-lb
+  ]
 }
 
 ## add Network Interfaces to the Backend pools
@@ -24,6 +35,11 @@ resource "azurerm_network_interface_backend_address_pool_association" "add-maste
   ip_configuration_name   = var.net_int_ip_config_name
   backend_address_pool_id = azurerm_lb_backend_address_pool.lb-backend-pool.id
   network_interface_id    = azurerm_network_interface.node_master_nic.id
+
+  depends_on = [ 
+    azurerm_lb_backend_address_pool.lb-backend-pool,
+    azurerm_lb.iaas-lb
+  ]
 }
 
 resource "azurerm_network_interface_backend_address_pool_association" "add-worker-node-backend-pool" {
@@ -31,6 +47,11 @@ resource "azurerm_network_interface_backend_address_pool_association" "add-worke
   ip_configuration_name   = "${var.net_int_ip_config_worker_name}-${count.index}"
   backend_address_pool_id = azurerm_lb_backend_address_pool.lb-backend-pool.id
   network_interface_id    = azurerm_network_interface.node_worker_nic[count.index].id
+
+  depends_on = [ 
+    azurerm_lb_backend_address_pool.lb-backend-pool,
+    azurerm_lb.iaas-lb
+  ]
 }
 
 ## Health probe
@@ -40,6 +61,12 @@ resource "azurerm_lb_probe" "healt-probe-80" {
   protocol            = "Tcp"
   port                = 80
   interval_in_seconds = 5
+
+  depends_on = [ 
+    azurerm_network_interface_backend_address_pool_association.add-master-node-backend-pool,
+    azurerm_network_interface_backend_address_pool_association.add-worker-node-backend-pool,
+    azurerm_lb.iaas-lb
+  ]
 }
 
 resource "azurerm_lb_probe" "healt-probe-443" {
@@ -48,6 +75,13 @@ resource "azurerm_lb_probe" "healt-probe-443" {
   protocol            = "Tcp"
   port                = 443
   interval_in_seconds = 5
+
+
+  depends_on = [ 
+    azurerm_network_interface_backend_address_pool_association.add-master-node-backend-pool,
+    azurerm_network_interface_backend_address_pool_association.add-worker-node-backend-pool,
+    azurerm_lb.iaas-lb
+  ]
 }
 
 ## Load Balancer rules
@@ -64,6 +98,12 @@ resource "azurerm_lb_rule" "http_rules" {
   idle_timeout_in_minutes         = 5
   enable_tcp_reset                = true
   disable_outbound_snat           = true
+
+  depends_on = [ 
+    azurerm_network_interface_backend_address_pool_association.add-master-node-backend-pool,
+    azurerm_network_interface_backend_address_pool_association.add-worker-node-backend-pool,
+    azurerm_lb.iaas-lb
+  ]
 }
 
 resource "azurerm_lb_rule" "https_rules" {
@@ -79,6 +119,13 @@ resource "azurerm_lb_rule" "https_rules" {
   idle_timeout_in_minutes         = 5
   enable_tcp_reset                = true
   disable_outbound_snat           = true
+
+
+  depends_on = [ 
+    azurerm_network_interface_backend_address_pool_association.add-master-node-backend-pool,
+    azurerm_network_interface_backend_address_pool_association.add-worker-node-backend-pool,
+    azurerm_lb.iaas-lb
+  ]
 }
 
 ## Inbound NAT rule SSH
@@ -93,7 +140,13 @@ resource "azurerm_lb_nat_rule" "iaas_lb_nat_rules_ssh" {
   frontend_port_end               = 510
   backend_port                    = 22
   enable_tcp_reset                = true
-  idle_timeout_in_minutes         = 20
+  idle_timeout_in_minutes         = 5
+
+  depends_on = [ 
+    azurerm_network_interface_backend_address_pool_association.add-master-node-backend-pool,
+    azurerm_network_interface_backend_address_pool_association.add-worker-node-backend-pool,
+    azurerm_lb.iaas-lb
+  ]
 }
 
 ## Inbound NAT rule Kube Api Server Endpoint
@@ -107,6 +160,12 @@ resource "azurerm_lb_nat_rule" "iaas_lb_nat_rules_kubeApiEndpoint" {
   backend_port                    = 6443
   enable_tcp_reset                = true
   idle_timeout_in_minutes         = 5
+
+  depends_on = [ 
+    azurerm_network_interface_backend_address_pool_association.add-master-node-backend-pool,
+    azurerm_network_interface_backend_address_pool_association.add-worker-node-backend-pool,
+    azurerm_lb.iaas-lb
+  ]
 }
 
 ## NIC association LB Nat rule
@@ -135,4 +194,10 @@ resource "azurerm_lb_outbound_rule" "outbound_lb_rules" {
   idle_timeout_in_minutes = 15
   enable_tcp_reset        = true
   backend_address_pool_id = azurerm_lb_backend_address_pool.lb-backend-pool.id
+
+  depends_on = [ 
+    azurerm_network_interface_backend_address_pool_association.add-master-node-backend-pool,
+    azurerm_network_interface_backend_address_pool_association.add-worker-node-backend-pool,
+    azurerm_lb.iaas-lb
+  ]
 }

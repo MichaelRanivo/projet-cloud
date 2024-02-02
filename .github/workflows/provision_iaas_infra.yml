@@ -34,12 +34,24 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install ansible
-
-      - name: Test the ping
-        run: |
           chmod 600 *.pem 
+
+      - name: Configure VMs
+        run: |
           cd ansible/
           ansible-playbook config_cluster_dep.yml -i ./develop/inventory.yml
+
+      - name: Init the cluster
+        run: |
+          cd ansible/
           ansible-playbook init_cluster_node_master.yml -i ./develop/inventory.yml
+
+      - name: Worker Join the Cluster
+        run: |
+          cd ansible/
           ansible-playbook init_cluster_node_workers.yml -i ./develop/inventory.yml
+
+      - name: Install the network plugin on the Cluster
+        run: |
+          cd ansible/
           ansible-playbook install_cluster_networking.yml -i ./develop/inventory.yml

@@ -37,12 +37,8 @@ jobs:
 
       - name: Test the ping
         run: |
-          pwd 
-          ls -al
           chmod 600 *.pem 
           cd ansible/
-          ansible all --list-hosts -i ./develop/inventory.yml -vvv
-          ansible all -m ping -i ./develop/inventory.yml -vvv
-      # cd ansible/
-      # sudo apt update
-      # sudo apt install ansible tree -y
+          ansible-playbook all config_cluster_dep.yml -i ./develop/inventory.yml
+          ansible-playbook master init_cluster_node_master.yml -i ./develop/inventory.yml
+          ansible-playbook worker init_cluster_node_master.yml -i ./develop/inventory.yml

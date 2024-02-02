@@ -39,6 +39,6 @@ jobs:
         run: |
           chmod 600 *.pem 
           cd ansible/
-          ansible-playbook all config_cluster_dep.yml -i ./develop/inventory.yml
-          ansible-playbook master init_cluster_node_master.yml -i ./develop/inventory.yml
-          ansible-playbook worker init_cluster_node_master.yml -i ./develop/inventory.yml
+          ansible-playbook config_cluster_dep.yml all -i ./develop/inventory.yml
+          ansible-playbook init_cluster_node_master.yml master -i ./develop/inventory.yml
+          ansible-playbook init_cluster_node_master.yml worker -i ./develop/inventory.yml

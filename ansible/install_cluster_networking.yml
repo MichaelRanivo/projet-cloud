@@ -1,0 +1,5 @@
+- name: Initiate Dependencies
+  remote_user: root
+  hosts: master
+  roles:
+    - cluster_network

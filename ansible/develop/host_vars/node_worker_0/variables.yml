@@ -1,2 +1,2 @@
 ansible_port: 501 
-ansible_ssh_private_key_file: /tmp/github-runner-your-repo/T-CLO-901-LYO_13/T-CLO-901-LYO_13/node_worker_0_private_key.pem
+ansible_ssh_private_key_file: /home/runner/work/T-CLO-901-LYO_13/T-CLO-901-LYO_13/node_worker_0_private_key.pem

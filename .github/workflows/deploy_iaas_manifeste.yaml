@@ -6,11 +6,12 @@ on:
   push:
     branches:
       - "k8s"
-    # paths:
-    #   - k8s/iaas/**
+    paths:
+      - k8s/iaas/**
 
 jobs:
-    deploy-AKS:
+    deploy-iaas:
+        name: Deploy Iaas
         runs-on: self-hosted
         steps:
           - name: Checkout repository

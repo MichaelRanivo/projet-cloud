@@ -5107,4 +5107,3 @@ spec:
               - /usr/bin/check-status
               - -r
             periodSeconds: 10
-

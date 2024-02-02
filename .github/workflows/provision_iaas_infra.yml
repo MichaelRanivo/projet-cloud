@@ -33,6 +33,8 @@ jobs:
 
       - name: Test the ping
         run: |
+          pwd 
+          ls -al
           cd ansible/
           ansible all --list-hosts -i ./develop/inventory.yml -vvv
       # ansible all -m ping -i ./develop/inventory.yml -vvv

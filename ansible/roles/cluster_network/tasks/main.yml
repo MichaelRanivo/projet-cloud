@@ -1,7 +1,6 @@
 # tasks file for roles/cluster_network
 - name: Desable the taint on master node
-  run: |
-    kubectl taint nodes --all node-role.kubernetes.io/control-plane-
+  run: kubectl taint nodes --all node-role.kubernetes.io/control-plane-
 
 - pause: seconds=30
 
@@ -15,5 +14,4 @@
     mode: 0644
 
 - name: Install the network pluging to the cluster
-  run: |
-    kubectl apply -f /home/{{ ansible_user }}/calico.yaml
+  run: kubectl apply -f /home/{{ ansible_user }}/calico.yaml

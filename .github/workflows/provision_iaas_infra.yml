@@ -11,7 +11,7 @@ on:
 jobs:
   apply-playbook:
     name: Apply playbook
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
       - name: Download ssh key artifact
         uses: dawidd6/action-download-artifact@v3
@@ -27,6 +27,10 @@ jobs:
           skip_unpack: false
           if_no_artifact_found: fail
       
+      - name: Run ansible-lint
+        # replace `main` with any valid ref, or tags like `v6`
+        uses: ansible/ansible-lint-action@v6
+
       - name: Test the ping
         run: |
           echo "$ANSIBLE_CONFIG"

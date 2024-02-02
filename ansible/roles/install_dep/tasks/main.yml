@@ -200,16 +200,27 @@
 #   shell: |
 #     curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
 
-- name: Add Google official GPG key
-  become: true
+# - name: Add Google official GPG key
+#   become: true
+#   apt_key:
+#     url: https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key
+#     state: present
+
+# - name: put the k8s url on the apt file
+#   become: true
+#   shell: |
+#     echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+
+- name: Add an apt signing key for Kubernetes
   apt_key:
-    url: https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key
+    url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
     state: present
 
-- name: put the k8s url on the apt file
-  become: true
-  shell: |
-    echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
+- name: Adding apt repository for Kubernetes
+  apt_repository:
+    repo: deb https://apt.kubernetes.io/ kubernetes-xenial main
+    state: present
+    filename: kubernetes.list
 
 - name: apt update
   become: true

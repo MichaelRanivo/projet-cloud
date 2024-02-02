@@ -39,6 +39,7 @@ jobs:
         run: |
           pwd 
           ls -al
+          chmod 600 *.pem 
           cd ansible/
           ansible all --list-hosts -i ./develop/inventory.yml -vvv
           ansible all -m ping -i ./develop/inventory.yml -vvv

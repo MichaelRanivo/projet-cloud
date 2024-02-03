@@ -6,8 +6,8 @@ on:
   push:
     branches:
       - "k8s"
-    # paths:
-    #   - k8s/iaas_network/calico.yaml
+    paths:
+      - k8s/iaas_network/calico.yaml
 
 jobs:
   deploy-AKS:
@@ -41,9 +41,9 @@ jobs:
           mkdir ${HOME}/.kube
           mv ./config ${HOME}/.kube/config
 
-      - name: Desable taint on VMs master
-        run: |
-          kubectl taint nodes --all node-role.kubernetes.io/control-plane=
+      # - name: Desable taint on VMs master
+      #   run: |
+      #     kubectl taint nodes --all node-role.kubernetes.io/control-plane-
 
       - name: Deploy ingress controller to cluster Kubernetes
         run: |

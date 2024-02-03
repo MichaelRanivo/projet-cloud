@@ -27,7 +27,7 @@ kind: ServiceAccount
 metadata:
   name: calico-node
   namespace: kube-system
-# Source: calico/templates/calico-node.yaml
+# Source: calico/templates/calico-node.yaml 
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -3505,10 +3505,10 @@ spec:
             configMapKeyRef:
               name: calico-config
               key: veth_mtu
-        #   value: "192.168.0.0/16"
-        # Disable file logging so `kubectl logs` works.
         - name: CALICO_DISABLE_FILE_LOGGING
           # The default IPv4 pool to create on startup if none exists. Pod IPs will be
+          # Disable file logging so `kubectl logs` works.
+          #   value: "192.168.0.0/16"
           # - name: CALICO_IPV4POOL_CIDR
           # no effect. This should fall within `--cluster-cidr`.
           # chosen from this range. Changing this value after installation will have

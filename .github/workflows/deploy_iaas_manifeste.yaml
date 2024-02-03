@@ -59,3 +59,29 @@ jobs:
           kubectl apply -f kubernetes-ingress/config/crd/bases/k8s.nginx.org_globalconfigurations.yaml
           kubectl apply -f kubernetes-ingress/deployments/daemon-set/nginx-ingress.yaml
           kubectl apply -f k8s/iaas/nginx-loadbalancer.yaml
+
+      - name: Install Cert-manager
+        run: |
+          kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.2/cert-manager.yaml
+
+      - name: Install Kubernetes Dashboard
+        run: |
+          kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+
+      - name: Install Kubernetes Dashboard Issuer and Ingress
+        run: |
+          kubectl apply -f k8s/iaas/cert-manager/issuer_sample_app_dashboard.yaml
+          kubectl apply -f k8s/iaas/dashboard_ingress.yaml
+
+      - name: Install Sample App
+        run: |
+          kubectl apply -f k8s/iaas/namespace.yaml
+          kubectl apply -f k8s/iaas/common/
+          kubectl apply -f k8s/iaas/deployement.yaml
+          kubectl apply -f k8s/iaas/service_clusterip_https.yaml
+          kubectl apply -f k8s/iaas/horizontalPodAutoscaler.yaml
+
+      - name: Install Sample App Issuer and Ingress
+        run: |
+          kubectl apply -f k8s/iaas/cert-manager/issuer_sample_app.yaml
+          kubectl apply -f k8s/iaas/ingress.yaml

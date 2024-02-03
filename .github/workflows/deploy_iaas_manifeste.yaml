@@ -6,8 +6,8 @@ on:
   push:
     branches:
       - "k8s"
-    # paths:
-    #   - k8s/iaas/**
+    paths:
+      - k8s/iaas/**
 
 jobs:
   deploy-iaas:
@@ -58,7 +58,7 @@ jobs:
           kubectl delete -f kubernetes-ingress/config/crd/bases/k8s.nginx.org_policies.yaml
           kubectl delete -f kubernetes-ingress/config/crd/bases/k8s.nginx.org_globalconfigurations.yaml
           kubectl delete -f kubernetes-ingress/deployments/daemon-set/nginx-ingress.yaml
-          kubectl delete -f k8s/iaas/nginx-nodeport.yaml
+          kubectl delete -f kubernetes-ingress/deployments/service/nodeport.yaml
 
       - name: Install Cert-manager
         run: |

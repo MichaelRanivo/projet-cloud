@@ -47,27 +47,27 @@ jobs:
 
       - name: Install all Nginx Ingress Controller manifest
         run: |
-          kubectl apply -f kubernetes-ingress/deployments/common/ns-and-sa.yaml
-          kubectl apply -f kubernetes-ingress/deployments/rbac/rbac.yaml
-          kubectl apply -f kubernetes-ingress/examples/shared-examples/default-server-secret/default-server-secret.yaml
-          kubectl apply -f kubernetes-ingress/deployments/common/nginx-config.yaml
-          kubectl apply -f k8s/iaas/ingress-class.yaml
-          kubectl apply -f kubernetes-ingress/config/crd/bases/k8s.nginx.org_virtualservers.yaml
-          kubectl apply -f kubernetes-ingress/config/crd/bases/k8s.nginx.org_virtualserverroutes.yaml
-          kubectl apply -f kubernetes-ingress/config/crd/bases/k8s.nginx.org_virtualserverroutes.yaml
-          kubectl apply -f kubernetes-ingress/config/crd/bases/k8s.nginx.org_policies.yaml
-          kubectl apply -f kubernetes-ingress/config/crd/bases/k8s.nginx.org_globalconfigurations.yaml
-          kubectl apply -f kubernetes-ingress/deployments/daemon-set/nginx-ingress.yaml
-          kubectl apply -f k8s/iaas/nginx-nodeport.yaml
-          kubectl apply -f k8s/iaas/nginx-loadbalancer.yaml
+          kubectl delete -f kubernetes-ingress/deployments/common/ns-and-sa.yaml
+          kubectl delete -f kubernetes-ingress/deployments/rbac/rbac.yaml
+          kubectl delete -f kubernetes-ingress/examples/shared-examples/default-server-secret/default-server-secret.yaml
+          kubectl delete -f kubernetes-ingress/deployments/common/nginx-config.yaml
+          kubectl delete -f k8s/iaas/ingress-class.yaml
+          kubectl delete -f kubernetes-ingress/config/crd/bases/k8s.nginx.org_virtualservers.yaml
+          kubectl delete -f kubernetes-ingress/config/crd/bases/k8s.nginx.org_virtualserverroutes.yaml
+          kubectl delete -f kubernetes-ingress/config/crd/bases/k8s.nginx.org_virtualserverroutes.yaml
+          kubectl delete -f kubernetes-ingress/config/crd/bases/k8s.nginx.org_policies.yaml
+          kubectl delete -f kubernetes-ingress/config/crd/bases/k8s.nginx.org_globalconfigurations.yaml
+          kubectl delete -f kubernetes-ingress/deployments/daemon-set/nginx-ingress.yaml
+          kubectl delete -f k8s/iaas/nginx-nodeport.yaml
+          kubectl delete -f k8s/iaas/nginx-loadbalancer.yaml
 
       - name: Install Cert-manager
         run: |
-          kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.2/cert-manager.yaml
+          kubectl delete -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.2/cert-manager.yaml
 
       - name: Install Kubernetes Dashboard
         run: |
-          kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+          kubectl delete -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
 
       - name: Sleep for 20 seconds
         run: sleep 20s
@@ -75,18 +75,18 @@ jobs:
 
       - name: Install Kubernetes Dashboard Issuer and Ingress
         run: |
-          kubectl apply -f k8s/iaas/cert-manager/issuer_sample_app_dashboard.yaml
-          kubectl apply -f k8s/iaas/dashboard_ingress.yaml
+          kubectl delete -f k8s/iaas/cert-manager/issuer_sample_app_dashboard.yaml
+          kubectl delete -f k8s/iaas/dashboard_ingress.yaml
 
       - name: Install Sample App
         run: |
-          kubectl apply -f k8s/iaas/namespace.yaml
-          kubectl apply -f k8s/iaas/common/
-          kubectl apply -f k8s/iaas/deployement.yaml
-          kubectl apply -f k8s/iaas/service_clusterip_https.yaml
-          kubectl apply -f k8s/iaas/horizontalPodAutoscaler.yaml
+          kubectl delete -f k8s/iaas/namespace.yaml
+          kubectl delete -f k8s/iaas/common/
+          kubectl delete -f k8s/iaas/deployement.yaml
+          kubectl delete -f k8s/iaas/service_clusterip_https.yaml
+          kubectl delete -f k8s/iaas/horizontalPodAutoscaler.yaml
 
       - name: Install Sample App Issuer and Ingress
         run: |
-          kubectl apply -f k8s/iaas/cert-manager/issuer_sample_app.yaml
-          kubectl apply -f k8s/iaas/ingress.yaml
+          kubectl delete -f k8s/iaas/cert-manager/issuer_sample_app.yaml
+          kubectl delete -f k8s/iaas/ingress.yaml

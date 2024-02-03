@@ -43,7 +43,7 @@ jobs:
 
       - name: Desable taint on VMs master
         run: |
-          kubectl taint nodes --all node-role.kubernetes.io/control-plane-
+          kubectl taint nodes --all node-role.kubernetes.io/control-plane=
 
       - name: Deploy ingress controller to cluster Kubernetes
         run: |

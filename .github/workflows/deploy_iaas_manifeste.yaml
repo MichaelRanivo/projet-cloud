@@ -59,7 +59,6 @@ jobs:
           kubectl delete -f kubernetes-ingress/config/crd/bases/k8s.nginx.org_globalconfigurations.yaml
           kubectl delete -f kubernetes-ingress/deployments/daemon-set/nginx-ingress.yaml
           kubectl delete -f k8s/iaas/nginx-nodeport.yaml
-          kubectl delete -f k8s/iaas/nginx-loadbalancer.yaml
 
       - name: Install Cert-manager
         run: |

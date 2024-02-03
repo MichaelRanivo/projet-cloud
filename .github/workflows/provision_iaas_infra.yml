@@ -5,8 +5,8 @@ run-name: ${{ github.actor }} is launching the IaaS configuration
 on:
   push:
     branches: [terraform]
-    # paths:
-    #   - ansible/**
+    paths:
+      - ansible/**
 
 jobs:
   apply-playbook:
@@ -34,7 +34,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install ansible
-          chmod 600 *.pem 
+          chmod 600 *.pem
 
       - name: Configure VMs
         run: |
@@ -45,7 +45,7 @@ jobs:
         run: |
           cd ansible/
           ansible-playbook init_cluster_node_master.yml -i ./develop/inventory.yml
-        
+
       - name: Worker Join the Cluster
         run: |
           cd ansible/

@@ -47,16 +47,16 @@ jobs:
 
       - name: Install all Nginx Ingress Controller manifest
         run: |
-          cd kubernetes-ingress/deployments
-          kubectl apply -f common/ns-and-sa.yaml
-          kubectl apply -f rbac/rbac.yaml
+          cd kubernetes-ingress/
+          kubectl apply -f deployments/common/ns-and-sa.yaml
+          kubectl apply -f deployments/rbac/rbac.yaml
           kubectl apply -f examples/shared-examples/default-server-secret/default-server-secret.yaml
-          kubectl apply -f common/nginx-config.yaml
+          kubectl apply -f deployments/common/nginx-config.yaml
           kubectl apply -f k8s/ingress-class.yaml
           kubectl apply -f config/crd/bases/k8s.nginx.org_virtualservers.yaml
           kubectl apply -f config/crd/bases/k8s.nginx.org_virtualserverroutes.yaml
           kubectl apply -f config/crd/bases/k8s.nginx.org_virtualserverroutes.yaml
           kubectl apply -f config/crd/bases/k8s.nginx.org_policies.yaml
           kubectl apply -f config/crd/bases/k8s.nginx.org_globalconfigurations.yaml
-          kubectl apply -f daemon-set/nginx-ingress.yaml
+          kubectl apply -f deployments/daemon-set/nginx-ingress.yaml
           kubectl apply -f k8s/nginx-loadbalancer.yaml

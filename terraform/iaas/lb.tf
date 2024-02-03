@@ -39,7 +39,7 @@ resource "azurerm_network_interface_backend_address_pool_association" "add-maste
   depends_on = [ 
     azurerm_lb_backend_address_pool.lb-backend-pool,
     azurerm_lb.iaas-lb
-  ]
+  ] 
 }
 
 resource "azurerm_network_interface_backend_address_pool_association" "add-worker-node-backend-pool" {

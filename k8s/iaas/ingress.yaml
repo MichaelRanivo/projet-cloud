@@ -14,11 +14,11 @@ metadata:
 spec:
   tls:
   - hosts:
-    - terracloud.access.ly
+    - sample-iaas.access.ly
     secretName: sample-app-tls
   ingressClassName: nginx
   rules:
-  - host: terracloud.access.ly
+  - host: sample-iaas.access.ly
     http:
       paths:
       - path: /

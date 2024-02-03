@@ -14,11 +14,11 @@ metadata:
 spec:
   tls:
   - hosts:
-    - kubedash.access.ly
+    - app-dashboard.access.ly
     secretName: sample-app-dashboard-tls
   ingressClassName: nginx
   rules:
-  - host: kubedash.access.ly
+  - host: app-dashboard.access.ly
     http:
       paths:
       - path: /

@@ -6,13 +6,38 @@ on:
   push:
     branches:
       - "k8s"
-    paths:
-      - k8s/iaas/**
+    # paths:
+    #   - k8s/iaas/**
 
 jobs:
-    deploy-iaas:
-        name: Deploy Iaas
-        runs-on: self-hosted
-        steps:
-          - name: Checkout repository
-            uses: actions/checkout@v3
+  deploy-iaas:
+    name: Deploy Iaas
+    runs-on: ubuntu-latest
+    steps:
+      - uses: azure/setup-kubectl@v3
+        with:
+          version: "v1.28.6"
+        id: install
+
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Clone the Nginx Ingress Controller
+        run: |
+          git clone https://github.com/nginxinc/kubernetes-ingress.git
+
+      - name: Install all Nginx Ingress Controller manifest
+        run: |
+          cd kubernetes-ingress/deployments
+          kubectl apply -f deployments/common/ns-and-sa.yaml
+          kubectl apply -f deployments/rbac/rbac.yaml
+          kubectl apply -f examples/shared-examples/default-server-secret/default-server-secret.yaml
+          kubectl apply -f deployments/common/nginx-config.yaml
+          kubectl apply -f k8s/ingress-class.yaml
+          kubectl apply -f config/crd/bases/k8s.nginx.org_virtualservers.yaml
+          kubectl apply -f config/crd/bases/k8s.nginx.org_virtualserverroutes.yaml
+          kubectl apply -f config/crd/bases/k8s.nginx.org_virtualserverroutes.yaml
+          kubectl apply -f config/crd/bases/k8s.nginx.org_policies.yaml
+          kubectl apply -f config/crd/bases/k8s.nginx.org_globalconfigurations.yaml
+          kubectl apply -f deployments/daemon-set/nginx-ingress.yaml
+          kubectl apply -f k8s/nginx-loadbalancer.yaml

@@ -10,37 +10,37 @@ on:
       - k8s/iaas_network/calico.yaml
 
 jobs:
-    deploy-AKS:
-        name: Deploy Calico on the cluster
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@v3
+  deploy-AKS:
+    name: Deploy Calico on the cluster
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-            - name: Download ssh key artifact
-              uses: dawidd6/action-download-artifact@v3
-              with:
-                github_token: ${{secrets.GITHUB_TOKEN}}
-                workflow: provision_iaas_infra.yml
-                workflow_conclusion: success
-                branch: terraform
-                name: clusterConfig
-                repo: ${{ github.repository }}
-                check_artifacts: true
-                search_artifacts: true
-                skip_unpack: false
-                if_no_artifact_found: fail
+      - name: Download Kube config file artifact
+        uses: dawidd6/action-download-artifact@v3
+        with:
+          github_token: ${{secrets.GITHUB_TOKEN}}
+          workflow: provision_iaas_infra.yml
+          workflow_conclusion: success
+          branch: terraform
+          name: clusterConfig
+          repo: ${{ github.repository }}
+          check_artifacts: true
+          search_artifacts: true
+          skip_unpack: false
+          if_no_artifact_found: fail
 
-            - uses: azure/setup-kubectl@v3
-              with:
-                version: "v1.28.6"
-              id: install
+      - uses: azure/setup-kubectl@v3
+        with:
+          version: "v1.28.6"
+        id: install
 
-            - name: set up the kube config
-              run: |
-                mkdir ${HOME}/.kube
-                mv ./config ${HOME}/.kube/config
-        
-            - name: Deploy ingress controller to cluster Kubernetes
-              run: |
-                kubectl apply -f k8s/iaas_network/calico.yaml
+      - name: set up the kube config
+        run: |
+          mkdir ${HOME}/.kube
+          mv ./config ${HOME}/.kube/config
+
+      - name: Deploy ingress controller to cluster Kubernetes
+        run: |
+          kubectl apply -f k8s/iaas_network/calico.yaml

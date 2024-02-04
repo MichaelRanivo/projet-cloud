@@ -43,7 +43,7 @@ jobs:
 
       - name: Clone the Nginx Ingress Controller
         run: |
-          git clone https://github.com/nginxinc/kubernetes-ingress.git
+          git clone https://github.com/nginxinc/kubernetes-ingress.git --branch v3.4.2
 
       - name: Install all Nginx Ingress Controller manifest
         run: |
@@ -54,7 +54,7 @@ jobs:
           kubectl apply -f k8s/iaas/ingress-class.yaml
           kubectl apply -f kubernetes-ingress/config/crd/bases/k8s.nginx.org_virtualservers.yaml
           kubectl apply -f kubernetes-ingress/config/crd/bases/k8s.nginx.org_virtualserverroutes.yaml
-          kubectl apply -f kubernetes-ingress/config/crd/bases/k8s.nginx.org_virtualserverroutes.yaml
+          kubectl apply -f kubernetes-ingress/config/crd/bases/k8s.nginx.org_transportservers.yaml
           kubectl apply -f kubernetes-ingress/config/crd/bases/k8s.nginx.org_policies.yaml
           kubectl apply -f kubernetes-ingress/config/crd/bases/k8s.nginx.org_globalconfigurations.yaml
           kubectl apply -f kubernetes-ingress/deployments/daemon-set/nginx-ingress.yaml

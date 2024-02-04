@@ -58,10 +58,14 @@ jobs:
           kubectl apply -f kubernetes-ingress/config/crd/bases/k8s.nginx.org_policies.yaml
           kubectl apply -f kubernetes-ingress/config/crd/bases/k8s.nginx.org_globalconfigurations.yaml
           kubectl apply -f kubernetes-ingress/deployments/daemon-set/nginx-ingress.yaml
-          kubectl apply -f kubernetes-ingress/deployments/service/nodeport.yaml
+
+      - name: Sleep for 20 seconds
+        run: sleep 20s
+        shell: bash
 
       - name: Install Cert-manager
         run: |
+          kubectl apply -f kubernetes-ingress/deployments/service/nodeport.yaml
           kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.2/cert-manager.yaml
 
       - name: Install Kubernetes Dashboard

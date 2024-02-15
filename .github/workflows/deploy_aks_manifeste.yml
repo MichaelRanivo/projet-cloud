@@ -43,7 +43,7 @@ jobs:
       - name: Deploy ingress controller to cluster Kubernetes
         run: |
           kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.2/cert-manager.yaml
-          kubectl apply -f k8s/nginx-ingress-controller-cloud.yaml
+          kubectl apply -f k8s/paas/nginx-ingress-controller-cloud.yaml
           kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
 
       - name: Sleep for 10 seconds

@@ -52,11 +52,11 @@ jobs:
 
       - name: Deploy all ours manifests to cluster Kubernetes
         run: |
-          kubectl apply -f k8s/namespace.yaml
-          kubectl apply -f k8s/common/
-          kubectl apply -f k8s/deployement.yaml
-          kubectl apply -f k8s/service_clusterip.yaml
-          kubectl apply -f k8s/horizontalPodAutoscaler.yaml
+          kubectl apply -f k8s/paas/namespace.yaml
+          kubectl apply -f k8s/paas/common/
+          kubectl apply -f k8s/paas/deployement.yaml
+          kubectl apply -f k8s/paas/service_clusterip.yaml
+          kubectl apply -f k8s/paas/horizontalPodAutoscaler.yaml
 
       - name: Sleep for 20 seconds
         run: sleep 20s
@@ -64,7 +64,7 @@ jobs:
 
       - name: Deploy the ingress manifest to cluster Kubernetes
         run: |
-          kubectl apply -f k8s/cert-manager/issuer_sample_app_dashboard.yaml
-          kubectl apply -f k8s/cert-manager/issuer_sample_app.yaml
-          kubectl apply -f k8s/ingress.yaml
-          kubectl apply -f k8s/dashboard_ingress.yaml
+          kubectl apply -f k8s/paas/cert-manager/issuer_sample_app_dashboard.yaml
+          kubectl apply -f k8s/paas/cert-manager/issuer_sample_app.yaml
+          kubectl apply -f k8s/paas/ingress.yaml
+          kubectl apply -f k8s/paas/dashboard_ingress.yaml

@@ -13,7 +13,7 @@ metadata:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
   tls:
-  - hosts: 
+  - hosts:
     - kubedash.access.ly
     secretName: sample-app-dashboard-tls
   ingressClassName: nginx

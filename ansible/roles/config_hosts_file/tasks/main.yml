@@ -6,6 +6,6 @@
     line: "{{ item.private_ip }} {{ item.hostname }} {{ item.first_domain }} {{ item.second_domain }}"
     state: present
   loop:
-  - {private_ip: 10.0.2.4, hostname: master, first_domain: app-dashboard.access.ly, second_domain: sample-iaas.access.ly}
-  - {private_ip: 10.0.2.6, hostname: worker-0, first_domain: app-dashboard.access.ly, second_domain: sample-iaas.access.ly}
-  - {private_ip: 10.0.2.5, hostname: worker-1, first_domain: app-dashboard.access.ly, second_domain: sample-iaas.access.ly}
+  - {private_ip: 10.0.2.6, hostname: master, first_domain: app-dashboard.access.ly, second_domain: sample-iaas.access.ly}
+  - {private_ip: 10.0.2.5, hostname: worker-0, first_domain: app-dashboard.access.ly, second_domain: sample-iaas.access.ly}
+  - {private_ip: 10.0.2.4, hostname: worker-1, first_domain: app-dashboard.access.ly, second_domain: sample-iaas.access.ly}

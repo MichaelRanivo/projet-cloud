@@ -403,6 +403,7 @@ metadata:
   name: ingress-nginx-controller
   namespace: ingress-nginx
 spec:
+  replicas: 2
   minReadySeconds: 0
   revisionHistoryLimit: 10
   selector:
@@ -486,7 +487,7 @@ spec:
         resources:
           requests:
             cpu: 100m
-            memory: 90Mi
+            memory: 128Mi
         securityContext:
           allowPrivilegeEscalation: true
           capabilities:

@@ -3474,7 +3474,7 @@ spec:
         - name: CLUSTER_TYPE
           # Cluster type to identify the deployment type
           value: "k8s,bgp"
-        - name: IP
+        - name: IP 
           # Auto-detect the BGP IP address.
           value: "autodetect"
         - name: CALICO_IPV4POOL_IPIP

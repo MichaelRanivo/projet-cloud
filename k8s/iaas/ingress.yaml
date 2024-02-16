@@ -4,7 +4,7 @@ metadata:
   name: sample-app-ingress
   namespace: sample-app-kub-namespace
   labels:
-    app: sample-app
+    app: sample-app 
   annotations:
     cert-manager.io/issuer: "cert-manager-issuer"
     acme.cert-manager.io/http01-edit-in-place: "true"
